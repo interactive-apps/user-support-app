@@ -1,1 +1,52 @@
-<div app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)"></div>
+<!-- <div app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)"></div> -->
+<div class="fluid-container">
+  <h2 class="text-center">Messaging application</h2>
+<div class="page__container">
+
+    <div class="selection__TabsContainer" id="status-buttons">
+      <ul class="nav nav-tabs selection__Tabs" id="myTab">
+          <div class="liner"></div>
+
+          <!-- circular user icon -->
+          <li>
+              <a uiSrefActive="active" uiSref="home.action" data-toggle="tab" title="personal" class="tab__link">
+                  <span class="round-tabs one">
+                      <i class="glyphicon glyphicon-user"></i>
+                  </span>
+              </a>
+          </li>
+
+          <!-- circular tasks icon -->
+           <li>
+              <a uiSrefActive="active" uiSref="home.data-sets" data-toggle="tab" title="work" class="tab__link">
+                  <span class="round-tabs two">
+                      <i class="glyphicon glyphicon-tasks"></i>
+                  </span>
+              </a>
+          </li>
+
+          <!-- circular home icon -->
+          <li>
+              <a uiSrefActive="active" uiSref="home.org-units" data-toggle="tab" title="address" class="tab__link">
+                  <span class="round-tabs three">
+                      <i class="glyphicon glyphicon-home"></i>
+                  </span>
+              </a>
+          </li>
+
+          <!-- circular ok icon -->
+          <li>
+              <a uiSrefActive="active" uiSref="home.results" data-toggle="tab" title="completed" class="tab__link">
+                  <span class="round-tabs four">
+                      <i class="glyphicon glyphicon-ok"></i>
+                  </span>
+              </a>
+          </li>
+
+      </ul>
+      <div class="clearfix"></div>
+  </div>
+</div>
+
+  <ui-view></ui-view>
+</div>

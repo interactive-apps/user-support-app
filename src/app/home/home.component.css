@@ -1,0 +1,25 @@
+.page__container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.selection__TabsContainer {
+  width: 80%;
+}
+
+.selection__Tabs {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.selection__Tabs li {
+  width: 25%;
+}
+
+.tab__link {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
