@@ -3,6 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { TreeModule } from 'angular-tree-component';
+import { CommonModule, HashLocationStrategy, Location, LocationStrategy } from '@angular/common';
+import { UIRouterModule} from "@uirouter/angular";
+import { Routes, RouterModule, PreloadAllModules} from '@angular/router';
+
 
 import { AppComponent } from './app.component';
 import {StoreModule} from "@ngrx/store";
@@ -16,7 +20,10 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import { SharedModule } from './shared/shared.module';
 import { ServicesModule } from './services/services.module';
 import { ComponentsModule } from './components/components.module';
-import { AppRoutingModule } from './app.routing';
+
+import { UIRouterConfigFn }   from "./app.router";
+
+import { appStates } from "./app.route-states";
 
 
 //components
@@ -37,7 +44,7 @@ import { ResultsComponent } from './home/results/results.component';
     ActionComponent,
     OrgUnitsComponent,
     DataSetsComponent,
-    ResultsComponent
+    ResultsComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,10 +53,14 @@ import { ResultsComponent } from './home/results/results.component';
     SharedModule,
     ServicesModule,
     ComponentsModule,
-    AppRoutingModule,
     TreeModule,
     StoreModule.provideStore({uiState: uiStateReducer,storeData: storeDataReducer},INITIAL_APPLICATION_STATE),
-    StoreDevtoolsModule.instrumentOnlyWithExtension()
+    StoreDevtoolsModule.instrumentOnlyWithExtension(),
+    UIRouterModule.forRoot({
+      states: appStates,
+      useHash: true,
+      config: UIRouterConfigFn
+    })
   ],
   providers: [
     {provide: 'rootApi', useValue: '../../../api/'},
