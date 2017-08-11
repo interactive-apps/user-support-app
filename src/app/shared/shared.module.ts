@@ -3,14 +3,16 @@ import { CommonModule } from '@angular/common';
 
 
 //services
-import {SharedDataService} from './shared-data.service';
+import { SharedDataService } from './shared-data.service';
+import { FormDataService } from './form-data.service';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   providers: [
-    SharedDataService
+    SharedDataService,
+    FormDataService
   ],
   declarations: []
 })

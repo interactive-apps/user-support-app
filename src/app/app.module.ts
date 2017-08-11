@@ -6,6 +6,7 @@ import { TreeModule } from 'angular-tree-component';
 import { CommonModule, HashLocationStrategy, Location, LocationStrategy } from '@angular/common';
 import { UIRouterModule} from "@uirouter/angular";
 import { Routes, RouterModule, PreloadAllModules} from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 import { AppComponent } from './app.component';
@@ -53,6 +54,7 @@ import { ResultsComponent } from './home/results/results.component';
     SharedModule,
     ServicesModule,
     ComponentsModule,
+    ReactiveFormsModule,
     TreeModule,
     StoreModule.provideStore({uiState: uiStateReducer,storeData: storeDataReducer},INITIAL_APPLICATION_STATE),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),

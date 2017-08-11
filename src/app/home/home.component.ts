@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 import { SharedDataService } from './../shared/shared-data.service';
 import { UserService } from './../services/user.service'
-import { User } from './../models/user';
+import { User } from './../models/user.model';
+
+import {FormDataService} from './../shared/form-data.service';
 
 @Component({
   selector: 'app-home',
@@ -10,21 +12,20 @@ import { User } from './../models/user';
 })
 
 export class HomeComponent implements OnInit {
-
+  title = "home";
   private user: User;
-  constructor(private _sharedDataService: SharedDataService, private _userService: UserService) { }
+  @Input() formData;
+
+  constructor(private _sharedDataService: SharedDataService,
+    private _userService: UserService, private _formDataService: FormDataService) {
+
+    }
 
   ngOnInit() {
-
-
-    this._userService.getCurrentUserDatasets().subscribe(response => {
-      console.log(response);
+    this.formData = this._formDataService.getFormData();
+    this._userService.getUserInformation().subscribe(response => {
+      this.user = response;
     });
-  }
-
-
-  setSelectedOrgunit( value) {
-    console.log(value);
   }
 
 }

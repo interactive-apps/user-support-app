@@ -1,0 +1,69 @@
+.actionForm {
+  margin-top: 50px;
+}
+
+.radio-list-left input[type="radio"], .check-list-left input[type="checkbox"], .radio-list-right input[type="radio"], .check-list-right input[type="checkbox"] {
+  opacity: 0;
+  float: left;
+  width: 1px;
+  margin: 0;
+}
+.radio-list-left input[type="radio"] + label, .check-list-left input[type="checkbox"] + label, .radio-list-right input[type="radio"] + label, .check-list-right input[type="checkbox"] + label {
+  position: relative;
+  margin: 0;
+  display: block;
+  width: 100%;
+  padding: 10px;
+  color: #222;
+  background: #fff;
+}
+.radio-list-left input[type="radio"] + label:before, .check-list-left input[type="checkbox"] + label:before, .radio-list-right input[type="radio"] + label:before, .check-list-right input[type="checkbox"] + label:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  background: #ddd;
+  border: 1px solid #aaa;
+}
+.radio-list-left input[type="radio"]:checked + label, .check-list-left input[type="checkbox"]:checked + label, .radio-list-right input[type="radio"]:checked + label, .check-list-right input[type="checkbox"]:checked + label {
+  color: #2ea34e;
+}
+.radio-list-left input[type="radio"]:checked + label:before, .check-list-left input[type="checkbox"]:checked + label:before, .radio-list-right input[type="radio"]:checked + label:before, .check-list-right input[type="checkbox"]:checked + label:before {
+  background: #3dc863;
+  border-color: #2ea44e;
+}
+
+.radio-list-left input[type="radio"]:focus + label, .check-list-left input[type="checkbox"]:focus + label, .radio-list-right input[type="radio"]:focus + label, .check-list-right input[type="checkbox"]:focus + label {
+  box-shadow: inset 0 0 3px #eee;
+}
+
+dl {
+  width: 100%;
+  margin: 35px auto;
+  display: flex;
+  justify-content: space-between;
+}
+dl dt {
+  margin: 3em 0 5px;
+  font-size: 18px;
+}
+dl dd {
+  margin: 0;
+  display: inline-block;
+}
+dd {
+  border: 1px solid #2ea34e;
+}
+
+.action__icon {
+  margin: 0 10px;
+}
+.radio-list-left input[type="radio"] + label {
+  padding-left: 50px;
+}
+.radio-list-left input[type="radio"] + label:before {
+  height: 20px;
+  width: 20px;
+  margin-top: -11px;
+  left: 10px;
+  border-radius: 100%;
+}
