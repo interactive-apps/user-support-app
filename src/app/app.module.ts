@@ -7,6 +7,7 @@ import { CommonModule, HashLocationStrategy, Location, LocationStrategy } from '
 import { UIRouterModule} from "@uirouter/angular";
 import { Routes, RouterModule, PreloadAllModules} from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 
 
 import { AppComponent } from './app.component';
@@ -20,6 +21,7 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 //custom defined modules
 import { SharedModule } from './shared/shared.module';
 import { ServicesModule } from './services/services.module';
+import { OrgUnitService } from './components/org-unit-filter/org-unit.service'
 import { ComponentsModule } from './components/components.module';
 
 import { UIRouterConfigFn }   from "./app.router";
@@ -35,6 +37,7 @@ import { ActionComponent } from './home/action/action.component';
 import { OrgUnitsComponent } from './home/org-units/org-units.component';
 import { DataSetsComponent } from './home/data-sets/data-sets.component';
 import { ResultsComponent } from './home/results/results.component';
+import { MessagesComponent } from './home/messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +49,7 @@ import { ResultsComponent } from './home/results/results.component';
     OrgUnitsComponent,
     DataSetsComponent,
     ResultsComponent,
+    MessagesComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,8 +57,8 @@ import { ResultsComponent } from './home/results/results.component';
     HttpModule,
     SharedModule,
     ServicesModule,
-    ComponentsModule,
     ReactiveFormsModule,
+    BootstrapModalModule.forRoot({container: document.body}),
     TreeModule,
     StoreModule.provideStore({uiState: uiStateReducer,storeData: storeDataReducer},INITIAL_APPLICATION_STATE),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
@@ -66,7 +70,8 @@ import { ResultsComponent } from './home/results/results.component';
   ],
   providers: [
     {provide: 'rootApi', useValue: '../../../api/'},
-    {provide: 'rootDir', useValue: '../../../'}],
+    {provide: 'rootDir', useValue: '../../../'}, OrgUnitService],
+  exports: [OrgUnitFilterComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

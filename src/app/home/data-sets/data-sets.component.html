@@ -20,11 +20,13 @@
   <div class="forms__add" *ngIf="isAddingForm">
     <section class="loaders" *ngIf="loading"><span class="loader loader-quart"> </span> Loading...</section>
     <section *ngIf="dataLoaded">
-      <h3 class="text-center"> Please select form you want to add</h3>
+      <h3 class="text-center">Please select form you want to add</h3>
     </section>
   </div>
   <div class="user__user" *ngIf="isCreatingUser">
-    <section class="loaders"><span class="loader loader-quart"> </span> Loading...</section>
     <h3 class="text-center"> You can now create new users</h3>
+    <div class="org-data-filter">
+      <div app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)" (onOrgUnitInit)="setSelectedOrgunit($event)"></div>
+    </div>
   </div>
 </div>

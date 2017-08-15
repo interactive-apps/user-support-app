@@ -1,7 +1,3 @@
-.actionForm {
-  margin-top: 50px;
-}
-
 .radio-list-left input[type="radio"], .check-list-left input[type="checkbox"], .radio-list-right input[type="radio"], .check-list-right input[type="checkbox"] {
   opacity: 0;
   float: left;
@@ -66,4 +62,10 @@ dd {
   margin-top: -11px;
   left: 10px;
   border-radius: 100%;
+}
+
+.action__wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }

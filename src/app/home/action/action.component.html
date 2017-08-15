@@ -1,6 +1,6 @@
-<div class="container-fluid">
+<div class="container-fluid action__wrapper">
   <form novalidate (ngSubmit)="onSubmitNext(actionTypeForm)" [formGroup]="actionTypeForm" class="col-sm-8 col-sm-offset-2 actionForm">
-    <h3 class="wellcome__messaging">Welcome {{currentUser.name}}, How can we help you today? </h3>
+    <!-- <h3 class="wellcome__messaging">Welcome {{currentUser.name}}, How can we help you today? </h3> -->
     <div class="form-group">
       <dl class="radio-list-left">
         <dd *ngFor="let action of actions">
@@ -9,8 +9,6 @@
         </dd>
       </dl>
     </div>
-    <!-- <div class="text-center space-20">
-      <button class="btn btn-outline-rounded btn-info" (click)="onSubmitNext(actionTypeForm)"> Next <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
-    </div> -->
   </form>
+  <app-messages></app-messages>
 </div>
