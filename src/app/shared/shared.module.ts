@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 //services
 import { SharedDataService } from './shared-data.service';
 import { FormDataService } from './form-data.service';
+import { LimitToPipe } from './limit-to.pipe';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { FormDataService } from './form-data.service';
     SharedDataService,
     FormDataService
   ],
-  declarations: []
+  declarations: [LimitToPipe],
+  exports: [LimitToPipe]
 })
 export class SharedModule { }

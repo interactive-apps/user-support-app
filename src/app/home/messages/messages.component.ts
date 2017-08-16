@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MessageConversationService } from '../../services/message-conversation.service';
+import * as _ from 'lodash';
+import { Observable } from 'rxjs/Observable';
+import { MessageConversation } from '../../models/message-conversation.model'
 
 @Component({
   selector: 'app-messages',
@@ -7,9 +11,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MessagesComponent implements OnInit {
 
-  constructor() { }
+  public isActive = 'all';
+  public messages:any = [];
+  messageConversation: Observable<MessageConversation[]>;
+
+
+  constructor(private _messageConversationService: MessageConversationService) {
+
+    this.getAllUserMessageConversations();
+
+  }
 
   ngOnInit() {
+
+  }
+
+  messagesFilters(filter){
+    this.isActive = filter;
+    console.log(filter);
+  }
+
+  getAllUserMessageConversations(){
+    this._messageConversationService.loadAll();
+    this.messageConversation = this._messageConversationService.messageConversation;
   }
 
 }

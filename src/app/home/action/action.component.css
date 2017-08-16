@@ -69,3 +69,8 @@ dd {
   flex-direction: column;
   width: 100%;
 }
+
+
+.cursor__pointer {
+  cursor: pointer;
+}

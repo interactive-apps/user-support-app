@@ -22,6 +22,7 @@ export class ActionComponent implements OnInit {
   public actions = [
     { value: 'createUser', display: 'Create User(s)', iconClass: 'fa fa-user-o action__icon' },
     { value: 'writeFeedback', display: 'Write Feedback', iconClass: 'fa fa-pencil-square-o action__icon'},
+    { value: 'resetPassword', display: 'Reset Password', iconClass: 'fa fa-wpforms action__icon'},
     { value: 'addForm', display: 'Add Form', iconClass: 'fa fa-wpforms action__icon'}
 ];
 
