@@ -12,24 +12,21 @@
       </div>
     </div>
     <div *ngFor="let message of messageConversation | async">
-      <div class="mail-wrapper" style="display:none">
-        <div class="mail-top shadow">
-          <div class="mail-subject">FW:Jobs to Apply for</div>
+      <div class="mail-wrapper" *ngIf="message.id === openedMessage">
+        <div class="mail-top shadow" (click)="closeMessage()">
+          <div class="mail-subject">{{message.subject}}</div>
           <div class="mail-action"></div>
         </div>
-        <div class="mail-body ">
+        <div class="mail-body" *ngFor="let messagebody of message.messages">
           <div class="image">
             <img src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/avatars/avatar_tile_k_56.png" />
           </div>
           <div class="someClass">
-            <div class="sender">
-              <span>Kennedy</span>
+            <div class="sender" *ngIf="message.user">
+              <span>{{message.userFirstname}}</span>
               <span> to me </span>
             </div>
-            <div class="message">
-              The only thing I can think to do is trigger an event when the window resizes and dynamically set a new fixed width on text-div, but this just feels inelegant, especially considering padding and other neighboring artifacts I'd have to subtract out to get
-              a proper width.
-            </div>
+            <div class="message" [innerHTML]="messagebody.text"></div>
           </div>
         </div>
         <div class="mail-footer shadow">
@@ -46,23 +43,23 @@
           </div>
         </div>
       </div>
-      <div class="content-wrapper">
-        <div class="image">
+      <div class="content-wrapper" *ngIf="message.id !== openedMessage">
+        <div class="image" (click)="openMessage(message)">
           <img src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/avatars/avatar_tile_k_56.png" />
         </div>
-        <div class="name"><span>{{message.userFirstname +" "+message.userSurname}}</span></div>
+        <div class="name" (click)="openMessage(message)"><span>{{message.userFirstname +" "+message.userSurname}}</span></div>
         <div class="subject">
           <div class="actions">
             <a href="#" class="pinned-msg"><i class="fa fa-thumb-tack"></i></a>
             <ul>
-              <li><a href="#"><i class="fa fa-thumb-tack"></i></a></li>
-              <li><a href="#"><i class="fa fa-clock-o"></i></a></li>
-              <li><a href="#"><i class="fa fa-check"></i></a></li>
-              <li><a href="#"><i class="fa fa-ellipsis-v"></i></a></li>
+              <li><a href="#" (click)="markAsRead(message)"><i class="fa fa-check"></i></a></li>
+              <li><a href="#"><i class="fa fa-trash" (click)="deleteMessage(message)"></i></a></li>
             </ul>
           </div>
-          <div class="content">
-            <span class="fs">{{message.subject}}</span><span class="sn">{{message.created | date:'medium'}}</span>
+          <div class="content" (click)="openMessage(message)">
+            <span [ngClass]="{fs: true, bold: !message.read}">{{message.subject}}</span>
+            <span *ngIf="message.status!=='NONE'" [ngClass]="{label: true, 'label-info': message.status === 'PENDING', 'label-success': message.status === 'SOLVED', 'label-warning': message.status === 'OPEN'}">{{message.status}}</span>
+            <span class="sn">{{message.created | date:'medium'}}</span>
           </div>
         </div>
       </div>

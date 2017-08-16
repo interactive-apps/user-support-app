@@ -68,11 +68,11 @@ export class MessageConversationService {
       }, error => this.handleError(error));
   }
 
-  update(messageConversation: MessageConversation) {
-    this.http.put(`${this.baseUrl}api/messageConversations/${messageConversation.id}`, JSON.stringify(messageConversation), this.options)
+  markAsRead(messageConversation: MessageConversation) {
+    this.http.post(`${this.baseUrl}api/messageConversations/read`, JSON.stringify([messageConversation.id]), this.options)
       .map(response => response.json()).subscribe(data => {
         this.dataStore.messageConversation.forEach((t, i) => {
-          if (t.id === data.id) { this.dataStore.messageConversation[i] = data; }
+          if (data.markedRead.indexOf(t.id) > -1) { this.dataStore.messageConversation[i].read = true; }
         });
 
         this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
@@ -80,14 +80,19 @@ export class MessageConversationService {
   }
 
 
-  delete(MessageConversationId: number) {
-   this.http.delete(`${this.baseUrl}api/messageConversations/${MessageConversationId}`).subscribe(response => {
-     this.dataStore.messageConversation.forEach((t, i) => {
-       if (t.id === MessageConversationId) { this.dataStore.messageConversation.splice(i, 1); }
-     });
+  deleteConversation(MessageConversationId: number) {
+  //  this.http.delete(`${this.baseUrl}api/messageConversations/${MessageConversationId}`).subscribe(response => {
+  //    this.dataStore.messageConversation.forEach((t, i) => {
+  //      if (t.id === MessageConversationId) { this.dataStore.messageConversation.splice(i, 1); }
+  //    });
+   //
+  //    this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
+  //  }, error => this.handleError(error));
 
-     this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
-   }, error => this.handleError(error));
+  this.dataStore.messageConversation.forEach((t, i) => {
+    if (t.id === MessageConversationId) { this.dataStore.messageConversation.splice(i, 1); }
+  });
+  this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
  }
 
  private handleError (error: Response) {

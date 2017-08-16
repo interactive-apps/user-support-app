@@ -104,9 +104,13 @@
   padding-top: 16px;
 }
 .wrapper .content-wrapper .subject .content .fs {
-  font-weight: bold;
   padding-right: 5px;
 }
+
+.bold {
+  font-weight: bold;
+}
+
 .wrapper .content-wrapper .subject .content .sn {
   display: inline-block;
   color: #757575;
@@ -913,4 +917,9 @@ span.fab .rotate {
 [tooltip]:hover:before {
   visibility: visible;
   opacity: 1;
+}
+
+span.label {
+  padding-top: 2px !important;
+  margin: 0 10px;
 }
