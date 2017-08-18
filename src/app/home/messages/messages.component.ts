@@ -45,6 +45,7 @@ export class MessagesComponent implements OnInit {
   }
 
   deleteMessage(message) {
+    console.log(message);
     this._messageConversationService.deleteConversation(message.id);
   }
   closeMessage() {

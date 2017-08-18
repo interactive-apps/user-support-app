@@ -13,7 +13,6 @@ export class MessageConversationService {
   private baseUrl: string;
   private dataStore: {
     messageConversation: MessageConversation[]
-
   };
 
 
@@ -81,18 +80,13 @@ export class MessageConversationService {
 
 
   deleteConversation(MessageConversationId: number) {
-  //  this.http.delete(`${this.baseUrl}api/messageConversations/${MessageConversationId}`).subscribe(response => {
-  //    this.dataStore.messageConversation.forEach((t, i) => {
-  //      if (t.id === MessageConversationId) { this.dataStore.messageConversation.splice(i, 1); }
-  //    });
-   //
-  //    this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
-  //  }, error => this.handleError(error));
+   this.http.delete(`${this.baseUrl}api/messageConversations?mc=${MessageConversationId}`).subscribe(response => {
+     this.dataStore.messageConversation.forEach((t, i) => {
+       if (t.id === MessageConversationId) { this.dataStore.messageConversation.splice(i, 1); }
+     });
 
-  this.dataStore.messageConversation.forEach((t, i) => {
-    if (t.id === MessageConversationId) { this.dataStore.messageConversation.splice(i, 1); }
-  });
-  this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
+     this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
+   }, error => this.handleError(error));
  }
 
  private handleError (error: Response) {

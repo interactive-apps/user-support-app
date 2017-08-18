@@ -889,11 +889,15 @@
 span.fab{
   width: 100%;
   height: 100%;
+  display: flex;
   border-radius: 50%;
 }
 span.fab .rotate {
   background: #DB4437 url("https://cbwconline.com/IMG/Codepen/Add.svg") center no-repeat;
   position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
   transform: rotate(90deg);
   transition: .3s;
 }

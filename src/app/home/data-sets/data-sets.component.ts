@@ -17,7 +17,7 @@ export class DataSetsComponent implements OnInit {
   choosenAction: ActionType;
   isWritingFeedback: boolean = false;
   isAddingForm: boolean = false;
-  isCreatingUser: boolean = false;
+  isCreatingUser: boolean = true;
   currentUserDataSets: any;
   loading: boolean = true;
   dataLoaded: boolean = false;

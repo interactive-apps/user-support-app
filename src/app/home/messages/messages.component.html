@@ -52,11 +52,12 @@
           <div class="actions">
             <a href="#" class="pinned-msg"><i class="fa fa-thumb-tack"></i></a>
             <ul>
-              <li><a href="#" (click)="markAsRead(message)"><i class="fa fa-check"></i></a></li>
-              <li><a href="#"><i class="fa fa-trash" (click)="deleteMessage(message)"></i></a></li>
+              <li (click)="markAsRead(message)"><i class="fa fa-check"></i></li>
+              <li (click)="deleteMessage(message)" ><i class="fa fa-trash"></i></li>
             </ul>
           </div>
           <div class="content" (click)="openMessage(message)">
+            <span *ngIf="message.priority!=='NONE'" [ngClass]="{label: true, 'label-warning': message.priority === 'MEDIUM', 'label-danger': message.priority === 'HIGH', 'label-info': message.priority === 'LOW'}">{{message.priority}}</span>
             <span [ngClass]="{fs: true, bold: !message.read}">{{message.subject}}</span>
             <span *ngIf="message.status!=='NONE'" [ngClass]="{label: true, 'label-info': message.status === 'PENDING', 'label-success': message.status === 'SOLVED', 'label-warning': message.status === 'OPEN'}">{{message.status}}</span>
             <span class="sn">{{message.created | date:'medium'}}</span>
