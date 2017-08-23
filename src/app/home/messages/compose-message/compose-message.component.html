@@ -1,0 +1,33 @@
+<div class="template">
+  <div class="cell">
+    <div class="wrap">
+      <div class="msg-compose">
+        <div class="msg-compose-wrapper">
+          <div class="msg-title-bar">
+            <div class="icon left"><i class="fa fa-envelope"></i></div>
+            <div class="compose-actions right row">
+              <button type="button" class="close" (click)="close()"><i class="fa fa-times white"></i></button>
+              <button type="button" class="close" (click)="close()"><i class="fa fa-minus white"></i></button>
+            </div>
+          </div>
+          <form class="" (ngSubmit)="onSendEmail(emailComposeForm)" [formGroup]="emailComposeForm" novalidate>
+            <div class="msg-subject">
+              <input type="text" placeholder="Subject" formControlName="subject"/>
+            </div>
+            <div class="msg-body">
+              <textarea placeholder="Say something" formControlName="text"></textarea>
+            </div>
+            <div class="msg-footer">
+              <div class="left">
+                <button type="button submit" class="btn send-btn btn-primary">SEND</button>
+              </div>
+              <div class="right">
+                <a href="#" (click)="close()" ><i class="fa fa-trash"></i></a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

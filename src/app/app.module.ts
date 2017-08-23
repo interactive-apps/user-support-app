@@ -38,6 +38,7 @@ import { OrgUnitsComponent } from './home/org-units/org-units.component';
 import { DataSetsComponent } from './home/data-sets/data-sets.component';
 import { ResultsComponent } from './home/results/results.component';
 import { MessagesComponent } from './home/messages/messages.component';
+import { ComposeMessageComponent } from './home/messages/compose-message/compose-message.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { MessagesComponent } from './home/messages/messages.component';
     DataSetsComponent,
     ResultsComponent,
     MessagesComponent,
+    ComposeMessageComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +60,7 @@ import { MessagesComponent } from './home/messages/messages.component';
     SharedModule,
     ServicesModule,
     ReactiveFormsModule,
-    BootstrapModalModule.forRoot({container: document.body}),
+    BootstrapModalModule,
     TreeModule,
     StoreModule.provideStore({uiState: uiStateReducer,storeData: storeDataReducer},INITIAL_APPLICATION_STATE),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
@@ -72,6 +74,7 @@ import { MessagesComponent } from './home/messages/messages.component';
     {provide: 'rootApi', useValue: '../../../api/'},
     {provide: 'rootDir', useValue: '../../../'}, OrgUnitService],
   exports: [OrgUnitFilterComponent],
+  entryComponents: [ComposeMessageComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

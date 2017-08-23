@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MessageConversationService } from '../../services/message-conversation.service';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
-import { MessageConversation } from '../../models/message-conversation.model'
+import { MessageConversation } from '../../models/message-conversation.model';
+import { DialogService } from 'ng2-bootstrap-modal';
+import { ComposeMessageComponent } from './compose-message/compose-message.component';
+
 
 @Component({
   selector: 'app-messages',
@@ -17,7 +20,7 @@ export class MessagesComponent implements OnInit {
   messageConversation: Observable<MessageConversation[]>;
 
 
-  constructor(private _messageConversationService: MessageConversationService) {
+  constructor(private _messageConversationService: MessageConversationService, private _dialogService: DialogService) {
 
     this.getAllUserMessageConversations();
 
@@ -59,6 +62,22 @@ export class MessagesComponent implements OnInit {
     this.messageConversation.subscribe(val => {
       console.log(val);
     })
+  }
+
+  showComposeMessage(subject?:string, text?:string) {
+    let disposable = this._dialogService.addDialog(ComposeMessageComponent, {
+      subject: subject,
+      text: text
+    })
+      .subscribe((isConfirmed) => {
+        // //We get dialog result
+        // if (isConfirmed) {
+        //   alert('accepted');
+        // }
+        // else {
+        //   alert('declined');
+        // }
+      });
   }
 
 }

@@ -67,10 +67,12 @@
     </div>
   </article>
   <nav class="fab__container">
-    <a class="buttons" href="#" tooltip="Write Feedback"></a>
-    <a class="buttons" href="#" tooltip="Write Message"></a>
-    <a class="buttons" href="#" tooltip="Compose">
+    <a class="buttons" href="#" (click)="showComposeMessage()" tooltip="Write Feedback"></a>
+    <a class="buttons" href="#" (click)="showComposeMessage()" tooltip="Write Message"></a>
+    <a class="buttons" (click)="showComposeMessage()" tooltip="Compose">
       <span class="fab"><span class="rotate"></span></span>
     </a>
   </nav>
 </section>
+
+<!-- <app-compose-email></app-compose-email> -->
