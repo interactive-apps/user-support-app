@@ -1,0 +1,3 @@
+[submodule "src/app/components/menu"]
+	path = src/app/components/menu
+	url = git@github.com:hisptz/ng2-dhis-menu-module.git

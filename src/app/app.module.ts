@@ -23,6 +23,7 @@ import { SharedModule } from './shared/shared.module';
 import { ServicesModule } from './services/services.module';
 import { OrgUnitService } from './components/org-unit-filter/org-unit.service'
 import { ComponentsModule } from './components/components.module';
+import { MenuModule } from './components/menu/menu.module';
 
 import { UIRouterConfigFn }   from "./app.router";
 
@@ -62,6 +63,7 @@ import { ComposeMessageComponent } from './home/messages/compose-message/compose
     ReactiveFormsModule,
     BootstrapModalModule,
     TreeModule,
+    MenuModule,
     StoreModule.provideStore({uiState: uiStateReducer,storeData: storeDataReducer},INITIAL_APPLICATION_STATE),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
     UIRouterModule.forRoot({
