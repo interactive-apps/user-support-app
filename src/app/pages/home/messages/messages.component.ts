@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageConversationService } from '../../services/message-conversation.service';
+import { MessageConversationService } from '../../../services/message-conversation.service';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
-import { MessageConversation } from '../../models/message-conversation.model';
+import { MessageConversation } from '../../../models/message-conversation.model';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { ComposeMessageComponent } from './compose-message/compose-message.component';
 
@@ -59,9 +59,9 @@ export class MessagesComponent implements OnInit {
     this._messageConversationService.loadAll();
     this.messageConversation = this._messageConversationService.messageConversation;
 
-    this.messageConversation.subscribe(val => {
-      console.log(val);
-    })
+    // this.messageConversation.subscribe(val => {
+    //   console.log(val);
+    // })
   }
 
   showComposeMessage(subject?:string, text?:string) {
@@ -70,13 +70,7 @@ export class MessagesComponent implements OnInit {
       text: text
     })
       .subscribe((isConfirmed) => {
-        // //We get dialog result
-        // if (isConfirmed) {
-        //   alert('accepted');
-        // }
-        // else {
-        //   alert('declined');
-        // }
+        
       });
   }
 

@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 
 //services
 import { UserService } from './user.service';
-import { TabsWorkflowService } from './tabs-workflow.service';
 import { MessageConversationService } from './message-conversation.service'
 
 @NgModule({
@@ -13,7 +12,6 @@ import { MessageConversationService } from './message-conversation.service'
   ],
   providers: [
     UserService,
-    TabsWorkflowService,
     MessageConversationService
   ],
   declarations: []

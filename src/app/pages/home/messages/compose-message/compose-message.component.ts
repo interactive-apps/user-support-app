@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
-import { EmailMessage } from '../../../models/email-message.model';
+import { EmailMessage } from '../../../../models/email-message.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({

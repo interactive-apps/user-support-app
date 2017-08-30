@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 
 //services
 import { SharedDataService } from './shared-data.service';
-import { FormDataService } from './form-data.service';
 import { LimitToPipe } from './limit-to.pipe';
 import { FilterLevelPipe } from './filter-level.pipe';
 
@@ -13,8 +12,7 @@ import { FilterLevelPipe } from './filter-level.pipe';
     CommonModule
   ],
   providers: [
-    SharedDataService,
-    FormDataService
+    SharedDataService
   ],
   declarations: [LimitToPipe, FilterLevelPipe],
   exports: [LimitToPipe, FilterLevelPipe]
