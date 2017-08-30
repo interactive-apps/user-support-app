@@ -8,6 +8,7 @@ import { UIRouterModule} from "@uirouter/angular";
 import { Routes, RouterModule, PreloadAllModules} from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 import { AppComponent } from './app.component';
@@ -31,15 +32,15 @@ import { appStates } from "./app.route-states";
 
 
 //components
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './pages/home/home.component';
 import { OrgUnitFilterComponent } from  './components/org-unit-filter/org-unit-filter.component';
 import { MultiselectComponent } from './components/org-unit-filter/multiselect/multiselect.component';
-import { ActionComponent } from './home/action/action.component';
-import { OrgUnitsComponent } from './home/org-units/org-units.component';
-import { DataSetsComponent } from './home/data-sets/data-sets.component';
-import { ResultsComponent } from './home/results/results.component';
-import { MessagesComponent } from './home/messages/messages.component';
-import { ComposeMessageComponent } from './home/messages/compose-message/compose-message.component';
+import { ActionComponent } from './pages/home/action/action.component';
+import { MessagesComponent } from './pages/home/messages/messages.component';
+import { ComposeMessageComponent } from './pages/home/messages/compose-message/compose-message.component';
+import { CreateUsersComponent } from './pages/create-users/create-users.component';
+import { AddFormComponent } from './pages/add-form/add-form.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -48,11 +49,11 @@ import { ComposeMessageComponent } from './home/messages/compose-message/compose
     MultiselectComponent,
     OrgUnitFilterComponent,
     ActionComponent,
-    OrgUnitsComponent,
-    DataSetsComponent,
-    ResultsComponent,
     MessagesComponent,
-    ComposeMessageComponent
+    ComposeMessageComponent,
+    CreateUsersComponent,
+    AddFormComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -62,6 +63,7 @@ import { ComposeMessageComponent } from './home/messages/compose-message/compose
     ServicesModule,
     ReactiveFormsModule,
     BootstrapModalModule,
+    NgxPaginationModule,
     TreeModule,
     MenuModule,
     StoreModule.provideStore({uiState: uiStateReducer,storeData: storeDataReducer},INITIAL_APPLICATION_STATE),
