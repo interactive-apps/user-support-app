@@ -8,8 +8,10 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class MessageConversationService {
   messageConversation: Observable<MessageConversation[]>;
+  pager: Observable<any>;
   options: any;
   private _messageConversation: BehaviorSubject<MessageConversation[]>;
+  private _pager: BehaviorSubject<any>;
   private baseUrl: string;
   private dataStore: {
     messageConversation: MessageConversation[]
@@ -20,17 +22,20 @@ export class MessageConversationService {
     this.baseUrl = _rootDir;
     this.dataStore = { messageConversation: [] };
     this._messageConversation = <BehaviorSubject<MessageConversation[]>>new BehaviorSubject([]);
+    this._pager = <BehaviorSubject<any>>new BehaviorSubject({});
     this.messageConversation = this._messageConversation.asObservable();
+    this.pager = this._pager.asObservable();
     let headers = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
     this.options = new RequestOptions({ headers: headers }); // Create a request option
   }
 
   //this loads all messageConversation
 
-  loadAll(pageNumber?: number | string) {
+  loadAll(pageNumber?: Number | String) {
 
     let pageNo = pageNumber ? pageNumber: 1;
     this.http.get(`${this.baseUrl}api/messageConversations?fields=*,messages[*]&page=${pageNo}&pageSize=20`).map(response => response.json()).subscribe(result => {
+      this._pager.next(Object.assign({}, result).pager);
       this.dataStore.messageConversation = result.messageConversations;
       this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
     }, error => this.handleError(error));

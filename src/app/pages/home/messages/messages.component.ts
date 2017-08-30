@@ -15,8 +15,12 @@ import { ComposeMessageComponent } from './compose-message/compose-message.compo
 export class MessagesComponent implements OnInit {
 
   public isActive = 'all';
+  public isDataLoaded = false;
+  public isLoadingMessagesPagination = false;
   public messages: any = [];
   public openedMessage: string = null;
+  public currentPage: Number;
+  public pager: any = {};
   messageConversation: Observable<MessageConversation[]>;
 
 
@@ -55,10 +59,14 @@ export class MessagesComponent implements OnInit {
     this.openedMessage = null;
   }
 
-  getAllUserMessageConversations() {
-    this._messageConversationService.loadAll();
+  getAllUserMessageConversations(pageNumber?:Number) {
+    this._messageConversationService.loadAll(pageNumber);
     this.messageConversation = this._messageConversationService.messageConversation;
-
+    //this.pager = this._messageConversationService.pager;
+    this._messageConversationService.pager.subscribe(val => {
+      this.pager = val;
+      this.isDataLoaded = true;
+    });
     // this.messageConversation.subscribe(val => {
     //   console.log(val);
     // })
@@ -70,8 +78,15 @@ export class MessagesComponent implements OnInit {
       text: text
     })
       .subscribe((isConfirmed) => {
-        
+
       });
   }
+
+  getPage(page) {
+       this.currentPage = page;
+       this.isDataLoaded = false;
+       this.isLoadingMessagesPagination = true;
+       this.getAllUserMessageConversations(page);
+   }
 
 }

@@ -8,6 +8,7 @@ import { UIRouterModule} from "@uirouter/angular";
 import { Routes, RouterModule, PreloadAllModules} from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 import { AppComponent } from './app.component';
@@ -62,6 +63,7 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
     ServicesModule,
     ReactiveFormsModule,
     BootstrapModalModule,
+    NgxPaginationModule,
     TreeModule,
     MenuModule,
     StoreModule.provideStore({uiState: uiStateReducer,storeData: storeDataReducer},INITIAL_APPLICATION_STATE),

@@ -10,6 +10,11 @@ export class AddFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    
+  }
+
+  setSelectedOrgunit(event){
+    console.log(event);
   }
 
 }

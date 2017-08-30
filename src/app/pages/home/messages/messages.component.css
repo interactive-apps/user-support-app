@@ -716,3 +716,11 @@ span.label {
   padding-top: 2px !important;
   margin: 0 10px;
 }
+
+
+.pagination_number_container{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 20px;
+}

@@ -12,4 +12,8 @@ export class CreateUsersComponent implements OnInit {
   ngOnInit() {
   }
 
+  setSelectedOrgunit(event){
+    console.log(event);
+  }
+
 }

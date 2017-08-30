@@ -11,7 +11,7 @@
         <i class="fa fa-tags"></i><span>Assigned</span><span class="taille"></span>
       </div>
     </div>
-    <div *ngFor="let message of messageConversation | async">
+    <div *ngFor="let message of messageConversation | async | paginate: {id:'messageConvo', itemsPerPage: pager.pageSize, currentPage: pager.page, totalItems: pager.total}">
       <div class="mail-wrapper" *ngIf="message.id === openedMessage">
         <div class="mail-top shadow" (click)="closeMessage()">
           <div class="mail-subject">{{message.subject}}</div>
@@ -73,9 +73,12 @@
       <span class="fab"><span class="rotate"></span></span>
     </a>
   </nav>
+  <div class="has-text-centered pagination_number_container" *ngIf="isDataLoaded">
+      <div class="spinner" [ngClass]="{ 'hidden': !isLoadingMessagesPagination }"></div>
+      <pagination-controls (pageChange)="getPage($event)" id="messageConvo"></pagination-controls>
+  </div>
 </section>
 <!-- TODO:
   add pagination
   http://michaelbromley.github.io/ngx-pagination/#/
  -->
-<!-- <app-compose-email></app-compose-email> -->
