@@ -1,10 +1,9 @@
-import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
+import {Component, OnInit, Input, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter} from '@angular/core';
 import {Response, Http} from "@angular/http";
-//import {TreeComponent, TREE_ACTIONS, IActionMapping} from "angular2-tree-component";
-import {Observable} from "rxjs";
+import 'rxjs/Rx';
+import {Observable} from 'rxjs';
 import {OrgUnitService} from "./org-unit.service";
-import {TreeComponent} from "angular-tree-component/dist/components/tree.component";
-import {IActionMapping,TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
+import {TreeNode, TREE_ACTIONS, IActionMapping, TreeComponent} from 'angular-tree-component';
 
 @Component({
   selector: 'app-org-unit-filter',
@@ -12,10 +11,11 @@ import {IActionMapping,TREE_ACTIONS} from "angular-tree-component/dist/models/tr
   styleUrls: ['./org-unit-filter.component.css'],
   providers:[OrgUnitService]
 })
+
 export class OrgUnitFilterComponent implements OnInit {
   // the object that will carry the output value you can send one from outside to config start values
   @Input() orgunit_model: any =  {
-    selection_mode: "Usr_orgUnit",
+    selection_mode: "orgUnit",
     selected_level: "",
     show_update_button:true,
     selected_group: "",
@@ -34,7 +34,7 @@ export class OrgUnitFilterComponent implements OnInit {
     level: null,
     loading: true,
     loading_message: 'Loading Organisation units...',
-    multiple: false,
+    multiple: true,
     multiple_key:"none", //can be control or shift
     placeholder: "Select Organisation Unit"
   };
@@ -42,6 +42,7 @@ export class OrgUnitFilterComponent implements OnInit {
   @Input() disabled: boolean = false;
 
   @Output() onOrgUnitUpdate : EventEmitter<any> = new EventEmitter<any>();
+  @Output() onOrgUnitUpdateNames: EventEmitter<any> = new EventEmitter<any>();
   @Output() onOrgUnitInit : EventEmitter<any> = new EventEmitter<any>();
 
   orgUnit: any = {};
@@ -311,7 +312,8 @@ export class OrgUnitFilterComponent implements OnInit {
     if(value.indexOf("LEVEL") > -1){
       value = this.orgunit_model.selected_orgunits[0].id;
     }
-    this.onOrgUnitUpdate.emit({name: 'ou', value: value});
+    this.onOrgUnitUpdate.emit({name: 'ou', value: this.orgunit_model.selected_orgunits});
+    this.displayOrgTree();
   }
 
   // prepare a proper name for updating the organisation unit display area.

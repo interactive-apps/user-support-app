@@ -80,8 +80,8 @@
             [nodes]="organisationunits"
             [focused]="true"
             [options]="customTemplateStringOrgunitOptions"
-            (onActivate)="activateOrg($event)"
-            (onDeactivate)="deactivateOrg($event)"
+            (activate)="activateOrg($event)"
+            (deactivate)="deactivateOrg($event)"
           >
             <template #treeNodeTemplate let-node>
               <span (click)="updateModelOnSelect(node.data)">{{ node.data.name }}</span>

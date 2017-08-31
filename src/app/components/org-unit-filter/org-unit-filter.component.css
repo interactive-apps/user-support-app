@@ -249,6 +249,11 @@ span.selected-item {
 
 
 /* dhis2 Styling structure*/
+div#tree_view {
+  position: relative;
+  width: 100%;
+}
+
 #tree_view .tree-node-active > .node-content-wrapper {
   background: none !important;
   color: orange !important;

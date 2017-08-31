@@ -1,5 +1,50 @@
-<div class="container-fluid">
-  <div class="org-data-filter">
-    <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)"></app-org-unit-filter>
+<div class="container-fluid create__user--page">
+  <div class="content__wrapper">
+    <div class="org-data-filter">
+      <h4 class="text-center">Please select Organisation unit to create user(s)</h4>
+      <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)"></app-org-unit-filter>
+    </div>
+    <section class="user__details" *ngIf="isOrganizationUnitSelected">
+      <div class="user__details--title padding_15">
+        <p>Enter user details for the following organization units:  {{selectedOrgUnitNames.join(', ')}}</p>
+      </div>
+      <form novalidate (ngSubmit)="onSubmit(userDetails)" [formGroup]="userDetails">
+            <div class="form-group padding_15" formGroupName="userCredentials">
+              <label for="inputUsername" class="col-form-label">Username</label>
+              <input type="text" class="form-control" id="inputUsername" placeholder="username" formControlName="username">
+            </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputFirstname" class="col-form-label">First Name</label>
+              <input type="text" class="form-control" id="inputFirstname" placeholder="First Name" formControlName="firstName">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="inputSurname" class="col-form-label">Surname</label>
+              <input type="text" class="form-control" id="inputSurname" placeholder="Surname" formControlName="surname">
+            </div>
+          </div>
+          <div class="form-group padding_15">
+            <label for="inputAddress" class="col-form-label">Email</label>
+            <input type="text" class="form-control" id="inputAddress" placeholder="someone@email.com" formControlName="email">
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6" formGroupName="userCredentials">
+              <label for="inputPassword" class="col-form-label">Password</label>
+              <input type="password" class="form-control" id="inputPassword" placeholder="Password" formControlName="password">
+            </div>
+            <div class="form-group col-md-6" formGroupName="userCredentials">
+              <label for="inputPasswordRetype" class="col-form-label">Retype Passoword</label>
+              <input type="password" class="form-control" id="inputPasswordRetype" placeholder="Retype password" formControlName="confirm">
+            </div>
+          </div>
+          <div class="form-group padding_15">
+            <label for="inputPhoneNumber" class="col-form-label">Mobile Phone Number</label>
+            <input type="text" class="form-control" id="inputPhoneNumber" placeholder="+25512342342" formControlName="phoneNumber">
+          </div>
+          <div class="padding_15">
+            <button type="submit" class="btn btn-primary">Sign in</button>
+          </div>
+        </form>
+    </section>
   </div>
 </div>

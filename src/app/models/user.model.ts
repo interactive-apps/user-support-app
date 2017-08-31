@@ -1,7 +1,15 @@
 export class User {
   id: String;
   firstName: string = '';
-  lastName: string = '';
+  surname: string = '';
   email: string = '';
-  phoneNumber: string = '';
+  organisationUnits: any = [];
+  phoneNumber: string;
+  userCredentials: {
+    username: string;
+    password: string;
+    userRoles: any;
+  };
+  userGroups: String[];
+
 }
