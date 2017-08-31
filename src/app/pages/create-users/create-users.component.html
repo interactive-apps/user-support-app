@@ -9,40 +9,60 @@
         <p>Enter user details for the following organization units:  {{selectedOrgUnitNames.join(', ')}}</p>
       </div>
       <form novalidate (ngSubmit)="onSubmit(userDetails)" [formGroup]="userDetails">
-            <div class="form-group padding_15" formGroupName="userCredentials">
+            <div class="form-group padding_15" formGroupName="userCredentials" [ngClass]="{'has-error': userDetails.get('userCredentials').get('username').hasError('required') && userDetails.get('userCredentials').get('username').touched}">
               <label for="inputUsername" class="col-form-label">Username</label>
-              <input type="text" class="form-control" id="inputUsername" placeholder="username" formControlName="username">
+              <input type="text" class="form-control" id="inputUsername" placeholder="username" formControlName="username" aria-describedby="helpUsername">
+              <span id="helpUsername" class="help-block" *ngIf="userDetails.get('userCredentials').get('username').hasError('required') && userDetails.get('userCredentials').get('username').touched">
+                Username is required
+              </span>
             </div>
           <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-6" [ngClass]="{'has-error': userDetails.get('firstName').hasError('required') && userDetails.get('firstName').touched}">
               <label for="inputFirstname" class="col-form-label">First Name</label>
-              <input type="text" class="form-control" id="inputFirstname" placeholder="First Name" formControlName="firstName">
+              <input type="text" class="form-control" id="inputFirstname" placeholder="First Name" formControlName="firstName" aria-describedby="helpFirstName">
+              <span id="helpFirstName" class="help-block" *ngIf="userDetails.get('firstName').hasError('required') && userDetails.get('firstName').touched">
+                First name is required
+              </span>
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-6" [ngClass]="{'has-error': userDetails.get('surname').hasError('required') && userDetails.get('surname').touched}">
               <label for="inputSurname" class="col-form-label">Surname</label>
-              <input type="text" class="form-control" id="inputSurname" placeholder="Surname" formControlName="surname">
+              <input type="text" class="form-control" id="inputSurname" placeholder="Surname" formControlName="surname" aria-describedby="helpSurname">
+              <span id="helpSurname" class="help-block" *ngIf="userDetails.get('surname').hasError('required') && userDetails.get('surname').touched">
+                Surname is required
+              </span>
             </div>
           </div>
+
           <div class="form-group padding_15">
             <label for="inputAddress" class="col-form-label">Email</label>
             <input type="text" class="form-control" id="inputAddress" placeholder="someone@email.com" formControlName="email">
           </div>
+
           <div class="form-row">
-            <div class="form-group col-md-6" formGroupName="userCredentials">
+            <div class="form-group col-md-6" formGroupName="userCredentials" [ngClass]="{'has-error': userDetails.get('userCredentials').get('password').hasError('required') && userDetails.get('userCredentials').get('password').touched}">
               <label for="inputPassword" class="col-form-label">Password</label>
-              <input type="password" class="form-control" id="inputPassword" placeholder="Password" formControlName="password">
+              <input type="password" class="form-control" id="inputPassword" placeholder="Password" formControlName="password" aria-describedby="helpPassword">
+              <span id="helpPassword" class="help-block" *ngIf="userDetails.get('userCredentials').get('password').hasError('required') && userDetails.get('userCredentials').get('password').touched">
+                Password is required
+              </span>
             </div>
-            <div class="form-group col-md-6" formGroupName="userCredentials">
+            <div class="form-group col-md-6" formGroupName="userCredentials" [ngClass]="{'has-error': userDetails.get('userCredentials').get('confirm').hasError('required') && userDetails.get('userCredentials').get('confirm').touched}">
               <label for="inputPasswordRetype" class="col-form-label">Retype Passoword</label>
-              <input type="password" class="form-control" id="inputPasswordRetype" placeholder="Retype password" formControlName="confirm">
+              <input type="password" class="form-control" id="inputPasswordRetype" placeholder="Retype password" formControlName="confirm" aria-describedby="helpConfirm">
+              <span id="helpConfirm" class="help-block" *ngIf="userDetails.get('userCredentials').get('confirm').hasError('required') && userDetails.get('userCredentials').get('confirm').touched">
+                Confirm is required
+              </span>
             </div>
           </div>
-          <div class="form-group padding_15">
+          <div class="form-group padding_15" [ngClass]="{'has-error': userDetails.get('phoneNumber').hasError('required') && userDetails.get('phoneNumber').touched}">
             <label for="inputPhoneNumber" class="col-form-label">Mobile Phone Number</label>
-            <input type="text" class="form-control" id="inputPhoneNumber" placeholder="+25512342342" formControlName="phoneNumber">
+            <input type="text" class="form-control" id="inputPhoneNumber" placeholder="+25512342342" formControlName="phoneNumber" aria-describedby="helpPhoneNumber">
+            <span id="helpMobileNumber" class="help-block" *ngIf="userDetails.get('phoneNumber').hasError('required') && userDetails.get('phoneNumber').touched">
+              Mobile phone number is required
+            </span>
           </div>
           <div class="padding_15">
-            <button type="submit" class="btn btn-primary">Sign in</button>
+            <button type="submit" [disabled]="userDetails.invalid" class="btn btn-primary">Sign in</button>
           </div>
         </form>
     </section>

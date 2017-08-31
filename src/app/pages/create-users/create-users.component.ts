@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user.model';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import * as _ from 'lodash';
 
@@ -21,14 +21,14 @@ export class CreateUsersComponent implements OnInit {
   ngOnInit() {
 
     this.userDetails = new FormGroup({
-      firstName: new FormControl(''),
-      surname: new FormControl(''),
-      email: new FormControl(''),
-      phoneNumber: new FormControl(''),
+      firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      surname: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      email: new FormControl('', [Validators.minLength(2)]),
+      phoneNumber: new FormControl('', [Validators.minLength(2)]),
       userCredentials: new FormGroup({
-        username: new FormControl(''),
-        password: new FormControl(''),
-        confirm: new FormControl('')
+        username: new FormControl('', [Validators.required, Validators.minLength(2)]),
+        password: new FormControl('', [Validators.required, Validators.minLength(2)]),
+        confirm: new FormControl('', [Validators.required, Validators.minLength(2)])
       })
     });
   }
