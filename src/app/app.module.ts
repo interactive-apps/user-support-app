@@ -25,6 +25,7 @@ import { ServicesModule } from './services/services.module';
 import { OrgUnitService } from './components/org-unit-filter/org-unit.service'
 import { ComponentsModule } from './components/components.module';
 import { MenuModule } from './components/menu/menu.module';
+import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
 import { UIRouterConfigFn }   from "./app.router";
 
@@ -34,7 +35,6 @@ import { appStates } from "./app.route-states";
 //components
 import { HomeComponent } from './pages/home/home.component';
 import { OrgUnitFilterComponent } from  './components/org-unit-filter/org-unit-filter.component';
-import { MultiselectComponent } from './components/org-unit-filter/multiselect/multiselect.component';
 import { ActionComponent } from './pages/home/action/action.component';
 import { MessagesComponent } from './pages/home/messages/messages.component';
 import { ComposeMessageComponent } from './pages/home/messages/compose-message/compose-message.component';
@@ -46,7 +46,6 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
   declarations: [
     AppComponent,
     HomeComponent,
-    MultiselectComponent,
     OrgUnitFilterComponent,
     ActionComponent,
     MessagesComponent,
@@ -64,6 +63,7 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
     ReactiveFormsModule,
     BootstrapModalModule,
     NgxPaginationModule,
+    MultiselectDropdownModule,
     TreeModule,
     MenuModule,
     StoreModule.provideStore({uiState: uiStateReducer,storeData: storeDataReducer},INITIAL_APPLICATION_STATE),

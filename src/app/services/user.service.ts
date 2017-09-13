@@ -28,7 +28,14 @@ export class UserService {
   }
 
   getCurrentUserDatasets () {
-    return this.http.get(this._rootDir + '/api/me/dataSets.json')
+    return this.http.get(this._rootDir + '/api/me/dataSets.json?fields=forms')
+          .map((response: Response) => response.json())
+          .catch(this.handleError);
+  }
+
+
+  getAllSystemForms () {
+    return this.http.get(this._rootDir + '/api/dataSets.json?paging=false')
           .map((response: Response) => response.json())
           .catch(this.handleError);
   }

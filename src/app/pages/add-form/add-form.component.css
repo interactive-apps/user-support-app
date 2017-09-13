@@ -24,3 +24,14 @@
 .create__user--page .content__wrapper  .content__details {
   margin-top: 50px;
 }
+
+
+.multiselect__forms > button.dropdown-toggle.btn.btn-default.btn-block.select_btn {
+    min-width: 300px !important;
+}
+
+.multiselect__forms {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}

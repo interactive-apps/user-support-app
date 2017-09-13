@@ -2,10 +2,16 @@
   <div class="content__wrapper">
   <div class="org-data-filter">
     <h4 class="text-center">Please select Organisation unit to to add form(s)</h4>
-    <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)" [orgunit_tree_config]="orgunit_tree_config"></app-org-unit-filter>
+    <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)"></app-org-unit-filter>
   </div>
   <div class="content__details" *ngIf="isOrganizationUnitSelected">
-    <p>{{selectedOrgUnitNames.join(', ')}}</p>
+    <p>Please select forms that you want to add to <b>{{selectedOrgUnitNames.join(', ')}}</b></p>
+    <div class="multiselect__forms">
+      <form novalidate (ngSubmit)="onSubmit(f)" #f="ngForm">
+        <ss-multiselect-dropdown [texts]="myTexts" [options]="myOptions" [settings]="mySettings" [(ngModel)]="optionsModel" (ngModelChange)="onChange($event)" name="selectedFormsIDs" required></ss-multiselect-dropdown>
+        <button type="submit" class="btn btn-success" [disabled]="f.invalid">Submit</button>
+      </form>
+    </div>
   </div>
 </div>
 </div>
