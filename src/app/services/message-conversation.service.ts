@@ -11,6 +11,7 @@ export class MessageConversationService {
   messageConversation: Observable<MessageConversation[]>;
   pager: Observable<any>;
   options: any;
+  plainTextOption: any;
   private _messageConversation: BehaviorSubject<MessageConversation[]>;
   private _pager: BehaviorSubject<any>;
   private baseUrl: string;
@@ -26,8 +27,10 @@ export class MessageConversationService {
     this._pager = <BehaviorSubject<any>>new BehaviorSubject({});
     this.messageConversation = this._messageConversation.asObservable();
     this.pager = this._pager.asObservable();
-    let headers = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-    this.options = new RequestOptions({ headers: headers }); // Create a request option
+    let jsonHeaders = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
+    let plainTextHeaders = new Headers({'Content-Type': 'text/plain'});
+    this.options = new RequestOptions({ headers: jsonHeaders }); // Create a request option
+    this.plainTextOption = new RequestOptions({headers: plainTextHeaders})
   }
 
   //this loads all messageConversation
@@ -37,7 +40,6 @@ export class MessageConversationService {
     let pageNo = pageNumber ? pageNumber : 1;
     this.http.get(`${this.baseUrl}api/messageConversations?fields=*,messages[*]&page=${pageNo}&pageSize=20`).map(response => response.json()).subscribe(result => {
       this._pager.next(Object.assign({}, result).pager);
-      console.log(result)
       this.dataStore.messageConversation = result.messageConversations;
       this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
     }, error => this.handleError(error));
@@ -72,6 +74,15 @@ export class MessageConversationService {
         this.loadAll();
         // this.dataStore.messageConversation.push(data.data);
         // this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
+      }, error => this.handleError(error));
+  }
+
+
+  replyConversation(conversationID: String, message: String) {
+    this.http.post(`${this.baseUrl}api/messageConversations/${conversationID}`, message, this.plainTextOption)
+      .map(response => response.json()).subscribe(data => {
+        // response does not contain the imported data rather statuses;
+        this.loadAll();
       }, error => this.handleError(error));
   }
 

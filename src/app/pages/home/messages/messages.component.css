@@ -203,7 +203,7 @@
 .wrapper .mail-wrapper .mail-footer .replybox a:nth-child(2) {
   transform: rotate(-45deg);
 }
-.wrapper .mail-wrapper .mail-footer .replybox a.send-btn {
+.wrapper .mail-wrapper .mail-footer .replybox button.send-btn {
   cursor: pointer;
   background: #4285f4;
   text-decoration: none;
@@ -215,7 +215,7 @@
   font-weight: normal;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.14), 0 4px 6px rgba(0, 0, 0, 0.24);
 }
-.wrapper .mail-wrapper .mail-footer .replybox a.send-btn:hover {
+.wrapper .mail-wrapper .mail-footer .replybox button.send-btn:hover {
   background: #2a75f3;
   text-shadow: 2px 2px rgba(0, 0, 0, 0.15);
   box-shadow: 0 3px 4px rgba(0, 0, 0, 0.14), 0 6px 8px rgba(0, 0, 0, 0.24);

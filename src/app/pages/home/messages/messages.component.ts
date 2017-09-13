@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { MessageConversation } from '../../../models/message-conversation.model';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { ComposeMessageComponent } from './compose-message/compose-message.component';
+import { FormControl, FormGroup, Validators} from '@angular/forms';
 
 
 @Component({
@@ -21,7 +22,8 @@ export class MessagesComponent implements OnInit {
   public openedMessage: string = null;
   public currentPage: Number;
   public pager: any = {};
-  messageConversation: Observable<MessageConversation[]>;
+  public messageConversation: Observable<MessageConversation[]>;
+  public messageReplyFormGroup: FormGroup;
 
 
   constructor(private _messageConversationService: MessageConversationService, private _dialogService: DialogService) {
@@ -31,6 +33,10 @@ export class MessagesComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.messageReplyFormGroup = new FormGroup({
+      message: new FormControl('')
+    });
 
   }
 
@@ -52,9 +58,10 @@ export class MessagesComponent implements OnInit {
   }
 
   deleteMessage(message) {
-    console.log(message);
     this._messageConversationService.deleteConversation(message.id);
   }
+
+
   closeMessage() {
     this.openedMessage = null;
   }
@@ -62,14 +69,10 @@ export class MessagesComponent implements OnInit {
   getAllUserMessageConversations(pageNumber?:Number) {
     this._messageConversationService.loadAll(pageNumber);
     this.messageConversation = this._messageConversationService.messageConversation;
-    //this.pager = this._messageConversationService.pager;
     this._messageConversationService.pager.subscribe(val => {
       this.pager = val;
       this.isDataLoaded = true;
     });
-    // this.messageConversation.subscribe(val => {
-    //   console.log(val);
-    // })
   }
 
   showComposeMessage(subject?:string, text?:string) {
@@ -87,6 +90,13 @@ export class MessagesComponent implements OnInit {
        this.isDataLoaded = false;
        this.isLoadingMessagesPagination = true;
        this.getAllUserMessageConversations(page);
+   }
+
+
+   onReplyMessage(conversationID:String ,{ value, valid }: { value: any, valid: boolean }) {
+     this._messageConversationService.replyConversation(conversationID,value.message);
+     this.messageReplyFormGroup.reset();
+     this.closeMessage();
    }
 
 }

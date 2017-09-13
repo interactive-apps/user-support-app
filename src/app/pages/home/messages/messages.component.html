@@ -33,14 +33,14 @@
           <div class="image">
             <img src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/avatars/avatar_tile_s_56.png" />
           </div>
-          <div class="replybox">
+          <form class="replybox" novalidate (ngSubmit)="onReplyMessage(message.id, messageReplyFormGroup)" [formGroup]="messageReplyFormGroup">
             <div class="draft"><span>Draft </span><span>to, Kennedy <i class="fa fa-angle-down"></i></span></div>
-            <textarea></textarea>
+            <textarea formControlName="message"></textarea>
             <div class="left">
-              <a href="#" class="send-btn">SEND</a>
+              <button class="btn btn-success" type="submit">SEND</button>
               <a href="#"><i class="fa fa-paperclip"></i></a>
             </div>
-          </div>
+          </form>
         </div>
       </div>
       <div class="content-wrapper" *ngIf="message.id !== openedMessage">
