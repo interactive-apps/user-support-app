@@ -1,5 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
-import { MessageConversation }  from '../models/message-conversation.model';
+import { MessageConversation } from '../models/message-conversation.model';
+import { Message } from '../models/message.model';
 import { Http, Response, Headers, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -33,9 +34,10 @@ export class MessageConversationService {
 
   loadAll(pageNumber?: Number | String) {
 
-    let pageNo = pageNumber ? pageNumber: 1;
+    let pageNo = pageNumber ? pageNumber : 1;
     this.http.get(`${this.baseUrl}api/messageConversations?fields=*,messages[*]&page=${pageNo}&pageSize=20`).map(response => response.json()).subscribe(result => {
       this._pager.next(Object.assign({}, result).pager);
+      console.log(result)
       this.dataStore.messageConversation = result.messageConversations;
       this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
     }, error => this.handleError(error));
@@ -63,12 +65,13 @@ export class MessageConversationService {
 
   //create the secific messageConversation-owrnershi-tye
 
-  create(messageConversation: MessageConversation) {
-    console.log(messageConversation);
+  create(messageConversation: Message) {
     this.http.post(`${this.baseUrl}api/messageConversations/`, JSON.stringify(messageConversation), this.options)
       .map(response => response.json()).subscribe(data => {
-        this.dataStore.messageConversation.push(data.data);
-        this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
+        // response does not contain the imported data rather statuses;
+        this.loadAll();
+        // this.dataStore.messageConversation.push(data.data);
+        // this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
       }, error => this.handleError(error));
   }
 
@@ -85,17 +88,17 @@ export class MessageConversationService {
 
 
   deleteConversation(MessageConversationId: number) {
-   this.http.delete(`${this.baseUrl}api/messageConversations?mc=${MessageConversationId}`).subscribe(response => {
-     this.dataStore.messageConversation.forEach((t, i) => {
-       if (t.id === MessageConversationId) { this.dataStore.messageConversation.splice(i, 1); }
-     });
+    this.http.delete(`${this.baseUrl}api/messageConversations?mc=${MessageConversationId}`).subscribe(response => {
+      this.dataStore.messageConversation.forEach((t, i) => {
+        if (t.id === MessageConversationId) { this.dataStore.messageConversation.splice(i, 1); }
+      });
 
-     this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
-   }, error => this.handleError(error));
- }
+      this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
+    }, error => this.handleError(error));
+  }
 
- private handleError (error: Response) {
-   return Observable.throw(error || "Server Error");
- }
+  private handleError(error: Response) {
+    return Observable.throw(error || "Server Error");
+  }
 
 }

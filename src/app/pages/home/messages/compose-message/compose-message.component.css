@@ -352,3 +352,17 @@
 .close {
   color: white !important;
 }
+
+.organisationUnitsSelect{
+  margin: 5px;
+}
+
+
+.userToSendSelect {
+  padding: 5px;
+  margin: 10px;
+}
+
+.userToSendSelect label {
+  display: block;
+}

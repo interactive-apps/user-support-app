@@ -41,6 +41,18 @@ export class UserService {
   }
 
 
+  getAllUsers () {
+    return this.http.get(this._rootDir + '/api/users.json?paging=false')
+          .map((response: Response) => response.json())
+          .catch(this.handleError);
+  }
+
+  getAllUserGroups () {
+    return this.http.get(this._rootDir + '/api/userGroups.json?paging=false')
+          .map((response: Response) => response.json())
+          .catch(this.handleError);
+  }
+
   private handleError (error: Response) {
     return Observable.throw(error || "Server Error");
   }

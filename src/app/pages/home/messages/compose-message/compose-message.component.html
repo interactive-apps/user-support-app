@@ -11,6 +11,14 @@
             </div>
           </div>
           <form class="" (ngSubmit)="onSendEmail(emailComposeForm)" [formGroup]="emailComposeForm" novalidate>
+            <div class="organisationUnitsSelect">
+              <label for="selectOrgUnit">Organisation unit selection</label>
+              <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)" name="selectOrgUnit"></app-org-unit-filter>
+            </div>
+            <div class="userToSendSelect">
+              <label>To user(s):</label>
+              <ss-multiselect-dropdown [options]="myOptions" [texts]="myTexts" [settings]="mySettings" formControlName="users"></ss-multiselect-dropdown>
+            </div>
             <div class="msg-subject">
               <input type="text" placeholder="Subject" formControlName="subject"/>
             </div>

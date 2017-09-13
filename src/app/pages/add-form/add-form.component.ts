@@ -35,7 +35,7 @@ export class AddFormComponent implements OnInit {
       searchPlaceholder: 'Find',
       searchEmptyResult: 'Nothing found...',
       searchNoRenderText: 'Type in search box to see results...',
-      defaultTitle: 'Select forms from the list of data',
+      defaultTitle: 'Select forms from the',
       allSelected: 'All selected',
   };
 
@@ -68,7 +68,7 @@ export class AddFormComponent implements OnInit {
 
 
   onChange() {
-    
+
   }
 
 

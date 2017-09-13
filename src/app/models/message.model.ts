@@ -1,4 +1,7 @@
 export class Message {
-  subject: string = '';
-  message: string = '';
+  users: String[] = [];
+  organisationUnits: String []= [];
+  userGroups: String [] = [];
+  subject: String = '';
+  message: String = '';
 }
