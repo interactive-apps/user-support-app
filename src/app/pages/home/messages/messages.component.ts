@@ -42,7 +42,6 @@ export class MessagesComponent implements OnInit {
 
   messagesFilters(filter) {
     this.isActive = filter;
-    console.log(filter);
   }
 
   openMessage(message) {

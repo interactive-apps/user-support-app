@@ -47,7 +47,7 @@ export class CreateUsersComponent implements OnInit {
 
   onSubmit({ value, valid }: { value: User, valid: boolean }) {
     value.organisationUnits = this.selectedOrgUnitIDs;
-    console.log(value, valid);
+    //console.log(value, valid);
   }
 
 }
