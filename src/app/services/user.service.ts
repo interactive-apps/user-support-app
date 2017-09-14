@@ -22,33 +22,33 @@ export class UserService {
   }
 
   getCurrentUserOrganizationUnits () {
-    return this.http.get(this._rootDir + '/api/me/organisationUnits.json')
+    return this.http.get(this._rootDir + 'api/me/organisationUnits.json')
           .map((response: Response) => response.json())
           .catch(this.handleError);
   }
 
   getCurrentUserDatasets () {
-    return this.http.get(this._rootDir + '/api/me/dataSets.json?fields=forms')
+    return this.http.get(this._rootDir + 'api/me/dataSets.json?fields=forms')
           .map((response: Response) => response.json())
           .catch(this.handleError);
   }
 
 
   getAllSystemForms () {
-    return this.http.get(this._rootDir + '/api/dataSets.json?paging=false')
+    return this.http.get(this._rootDir + 'api/dataSets.json?paging=false')
           .map((response: Response) => response.json())
           .catch(this.handleError);
   }
 
 
   getAllUsers () {
-    return this.http.get(this._rootDir + '/api/users.json?paging=false')
+    return this.http.get(this._rootDir + 'api/users.json?paging=false')
           .map((response: Response) => response.json())
           .catch(this.handleError);
   }
 
   getAllUserGroups () {
-    return this.http.get(this._rootDir + '/api/userGroups.json?paging=false')
+    return this.http.get(this._rootDir + 'api/userGroups.json?paging=false')
           .map((response: Response) => response.json())
           .catch(this.handleError);
   }

@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 
 //services
 import { UserService } from './user.service';
-import { MessageConversationService } from './message-conversation.service'
+import { MessageConversationService } from './message-conversation.service';
+import { OrganisationUnitsService } from './organisation-units.service';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { MessageConversationService } from './message-conversation.service'
   ],
   providers: [
     UserService,
-    MessageConversationService
+    MessageConversationService,
+    OrganisationUnitsService
   ],
   declarations: []
 })
