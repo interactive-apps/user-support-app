@@ -17,7 +17,7 @@ export class OrgUnitFilterComponent implements OnInit {
   @Input() orgunit_model: any =  {
     selection_mode: "orgUnit",
     selected_level: "",
-    show_update_button:true,
+    show_update_button:false,
     selected_group: "",
     orgunit_levels: [],
     orgunit_groups: [],
@@ -34,12 +34,13 @@ export class OrgUnitFilterComponent implements OnInit {
     level: null,
     loading: true,
     loading_message: 'Loading Organisation units...',
-    multiple: true,
+    multiple: false,
     multiple_key:"none", //can be control or shift
     placeholder: "Select Organisation Unit"
   };
 
   @Input() disabled: boolean = false;
+  @Input() selected: string;
 
   @Output() onOrgUnitUpdate : EventEmitter<any> = new EventEmitter<any>();
   @Output() onOrgUnitUpdateNames: EventEmitter<any> = new EventEmitter<any>();
@@ -72,7 +73,7 @@ export class OrgUnitFilterComponent implements OnInit {
     if(!this.orgunit_model.show_update_button){
       setTimeout((data) => {
         this.onOrgUnitUpdate.emit({name: 'ou', value: this.getOrgUnitsForAnalytics(this.orgunit_model,false)});
-        this.displayOrgTree()
+        //this.displayOrgTree()
       },0);
     }
   }
@@ -313,7 +314,7 @@ export class OrgUnitFilterComponent implements OnInit {
       value = this.orgunit_model.selected_orgunits[0].id;
     }
     this.onOrgUnitUpdate.emit({name: 'ou', value: this.orgunit_model.selected_orgunits});
-    this.displayOrgTree();
+    //this.displayOrgTree();
   }
 
   // prepare a proper name for updating the organisation unit display area.

@@ -87,6 +87,7 @@
               <span (click)="updateModelOnSelect(node.data)">{{ node.data.name }}</span>
             </template>
           </Tree>
+          <app-list-datasets [selected]="selected" *ngIf="!orgunit_tree_config.loading"></app-list-datasets>
         </div>
         <div class="close-area">
           <button class="btn btn-default pull-right" style="height: 30px"  (click)="displayOrgTree()">
