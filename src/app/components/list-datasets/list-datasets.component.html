@@ -8,7 +8,7 @@
   <div class="multiselect__forms" *ngIf="!loading">
     <form novalidate (ngSubmit)="onSubmit(f)" #f="ngForm">
       <ss-multiselect-dropdown [texts]="myTexts" [options]="myOptions" [settings]="mySettings" [(ngModel)]="optionsModel" (ngModelChange)="onDataSetSelectChange($event)" name="selectedFormsIDs" required></ss-multiselect-dropdown>
-      <button type="submit" class="btn btn-success" [disabled]="f.invalid">Request for approval</button>
+      <button type="submit" class="btn btn-success" [disabled]="f.invalid || disableRequestToApproval">Request for approval</button>
     </form>
   </div>
 </div>

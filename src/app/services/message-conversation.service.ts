@@ -40,6 +40,7 @@ export class MessageConversationService {
     let pageNo = pageNumber ? pageNumber : 1;
     this.http.get(`${this.baseUrl}api/messageConversations?fields=*,messages[*]&page=${pageNo}&pageSize=20`).map(response => response.json()).subscribe(result => {
       this._pager.next(Object.assign({}, result).pager);
+      console.log(result.messageConversations);
       this.dataStore.messageConversation = result.messageConversations;
       this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
     }, error => this.handleError(error));

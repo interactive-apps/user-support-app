@@ -34,13 +34,6 @@ export class UserService {
   }
 
 
-  getAllSystemForms () {
-    return this.http.get(this._rootDir + 'api/dataSets.json?paging=false')
-          .map((response: Response) => response.json())
-          .catch(this.handleError);
-  }
-
-
   getAllUsers () {
     return this.http.get(this._rootDir + 'api/users.json?paging=false')
           .map((response: Response) => response.json())

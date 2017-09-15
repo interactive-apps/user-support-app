@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { UserService } from './user.service';
 import { MessageConversationService } from './message-conversation.service';
 import { OrganisationUnitsService } from './organisation-units.service';
+import { DataSetsService } from './data-sets.service';
+import { DataStoreService } from './data-store.service';
 
 @NgModule({
   imports: [
@@ -14,7 +16,9 @@ import { OrganisationUnitsService } from './organisation-units.service';
   providers: [
     UserService,
     MessageConversationService,
-    OrganisationUnitsService
+    OrganisationUnitsService,
+    DataSetsService,
+    DataStoreService
   ],
   declarations: []
 })

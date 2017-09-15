@@ -24,7 +24,6 @@
           <div class="someClass">
             <div class="sender" *ngIf="message.user">
               <span>{{message.userFirstname}}</span>
-              <span> to me </span>
             </div>
             <div class="message" [innerHTML]="messagebody.text"></div>
           </div>
@@ -34,7 +33,7 @@
             <img src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/avatars/avatar_tile_s_56.png" />
           </div>
           <form class="replybox" novalidate (ngSubmit)="onReplyMessage(message.id, messageReplyFormGroup)" [formGroup]="messageReplyFormGroup">
-            <div class="draft"><span>Draft </span><span>to, Kennedy <i class="fa fa-angle-down"></i></span></div>
+            <div class="draft"><span>Draft </span></div>
             <textarea formControlName="message"></textarea>
             <div class="left">
               <button class="btn btn-success" type="submit">SEND</button>
