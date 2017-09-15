@@ -108,6 +108,13 @@ export class MessageConversationService {
     }, error => this.handleError(error));
   }
 
+
+  sendFeedBackMessage(payload: any) {
+    return this.http.post(`${this.baseUrl}api/messageConversations`, payload, this.options)
+        .map((response: Response) => response)
+        .catch( this.handleError );
+  }
+
   private handleError(error: Response) {
     return Observable.throw(error || "Server Error");
   }

@@ -1,9 +1,11 @@
-import {Component, OnInit, ViewChild, Input, ApplicationRef} from '@angular/core';
+import {Component, OnInit, ViewChild, Input, ViewContainerRef} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import * as _ from 'lodash';
 import { DataSetsService } from '../../services/data-sets.service';
 import { OrganisationUnitsService } from './../../services/organisation-units.service';
 import { DataStoreService } from '../../services/data-store.service';
+import { SharedDataService } from '../../shared/shared-data.service';
+import { MessageConversationService } from '../../services/message-conversation.service';
 import { IMultiSelectOption,IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import { FormControl, FormGroup, Validators} from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -27,6 +29,7 @@ export class ListDatasetsComponent implements OnInit {
   private addedOrgDataSets: string [];
   private removedOrgDataSets: string [];
   private allDataSets: object [];
+  private feedbackRecipients: any;
 
   // Settings configuration
   public mySettings: IMultiSelectSettings = {
@@ -54,7 +57,10 @@ export class ListDatasetsComponent implements OnInit {
   constructor(private _organisationUnitsService: OrganisationUnitsService,
               private _dataSetsService: DataSetsService,
               private _dataStoreService: DataStoreService,
-              public toastr: ToastsManager, vcr: ApplicationRef) {
+              private _messageConversationService: MessageConversationService,
+              private _sharedDataService: SharedDataService,
+              public toastr: ToastsManager, vcr: ViewContainerRef) {
+                console.log(vcr);
                 //this.toastr.setRootViewContainerRef(vcr);
               }
 
@@ -66,6 +72,10 @@ export class ListDatasetsComponent implements OnInit {
            result.push({id: value['id'], name:value['displayName']});
          }, []);
     });
+
+    this._sharedDataService.getFeedbackReceipients().subscribe(response =>{
+      this.feedbackRecipients = response;
+    })
 
   }
 
@@ -114,6 +124,7 @@ export class ListDatasetsComponent implements OnInit {
         // name and periodType are requeired for any PUT payload created to the dataset
         result.push({
           url: datasetUrlTosendTo,
+          method: 'PUT',
           payload: _.pick(dataset, ['id','name', 'periodType','organisationUnits'])
         });
 
@@ -138,6 +149,7 @@ export class ListDatasetsComponent implements OnInit {
         // name and periodType are requeired for any PUT payload created to the dataset
         result.push({
           url: datasetUrlTosendTo,
+          method: 'PUT',
           payload: _.pick(dataset, ['id','name', 'periodType','organisationUnits'])
         });
 
@@ -170,22 +182,38 @@ showErrorToast(message: string) {
 
     let formatedDataStoreData = this.formatDataStorePayload();
     let dataStoreKey = this.createDataStoreObjKey();
-
+    let feedbackSubject = `${dataStoreKey}:REQUEST FOR APROVAL CHANGE IN DATASET`;
+    let text = `There is request to update datasets to xxx orgnisation unit, yyy,zzz were removed and xxx,s were added`;
+    this.disableRequestToApproval = true;
     this._dataStoreService
         .createNewKeyAndValue(dataStoreKey,formatedDataStoreData)
         .subscribe(response =>{
           // TODO: Dispaly Toast after success
           if(response.ok){
-            this.sendFeedBackMessage();
+
+            this.disableRequestToApproval = true;
+            this.sendFeedBackMessage(feedbackSubject, text);
+
+          } else {
+
+            this.disableRequestToApproval = false;
+
           }
         });
 
 
   }
+  
+  sendFeedBackMessage(subject,message){
+    let payload = {
+      subject: subject,
+      text: message,
+      userGroups: [{id: this.feedbackRecipients.id}]
+    }
+    this._messageConversationService.sendFeedBackMessage(payload).subscribe(response =>{
+      console.log(response);
+    })
 
-  // TODO: sendMessage as feedback
-  sendFeedBackMessage(){
-    
   }
 
 }

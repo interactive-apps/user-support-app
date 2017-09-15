@@ -13,7 +13,29 @@ export class SharedDataService {
     this._rootDir = _rootDir;
   }
 
-  
+  // Get current user information
+  getSystemConfiguration () {
+    return this.http.get(this._rootDir + 'api/configuration.json')
+      .map((response: Response) => response.json())
+      .catch( this.handleError );
+  }
+
+
+  // Get current user information
+  getSystemSetting () {
+    return this.http.get(this._rootDir + 'api/systemSetting.json')
+      .map((response: Response) => response.json())
+      .catch( this.handleError );
+  }
+
+
+  // Get current user information
+  getFeedbackReceipients () {
+    return this.http.get(this._rootDir + 'api/configuration/feedbackRecipients.json')
+      .map((response: Response) => response.json())
+      .catch( this.handleError );
+  }
+
 
 
   private handleError (error: Response) {
