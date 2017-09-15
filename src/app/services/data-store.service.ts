@@ -3,6 +3,7 @@ import { Http, Response, Headers, RequestOptions, RequestOptionsArgs } from '@an
 import 'rxjs/Rx';
 import {Observable} from 'rxjs';
 
+const USERSUPPORTAPPPAYLOAD = 'UserSupportApp';
 
 @Injectable()
 export class DataStoreService {
@@ -33,15 +34,15 @@ export class DataStoreService {
   }
 
   // Get Value of given namespace key
-  getValuesDataStoreNamespaceKeys(namespace: string, key: string) {
-    return this.http.get(`${this.baseUrl}api/dataStore/${namespace}/${key}.json`)
+  getValuesDataStoreNamespaceKeys(key: string) {
+    return this.http.get(`${this.baseUrl}api/dataStore/${USERSUPPORTAPPPAYLOAD}/${key}.json`)
       .map((response: Response) => response.json())
       .catch( this.handleError );
   }
 
 
-  createNewKeyAndValue(namespace: string, key: string, payload: any) {
-    return this.http.post(`${this.baseUrl}api/dataStore/${namespace}/${key}`, payload, this.options)
+  createNewKeyAndValue(key: string, payload: any) {
+    return this.http.post(`${this.baseUrl}api/dataStore/${USERSUPPORTAPPPAYLOAD}/${key}`, payload, this.options)
         .map((response: Response) => response)
         .catch( this.handleError );
   }

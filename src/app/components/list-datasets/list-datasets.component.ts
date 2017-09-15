@@ -1,10 +1,12 @@
-import {Component, OnInit, ViewChild, Input} from '@angular/core';
+import {Component, OnInit, ViewChild, Input, ApplicationRef} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import * as _ from 'lodash';
 import { DataSetsService } from '../../services/data-sets.service';
 import { OrganisationUnitsService } from './../../services/organisation-units.service';
+import { DataStoreService } from '../../services/data-store.service';
 import { IMultiSelectOption,IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import { FormControl, FormGroup, Validators} from '@angular/forms';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
   selector: 'app-list-datasets',
@@ -50,7 +52,11 @@ export class ListDatasetsComponent implements OnInit {
   public formSelectForm: FormGroup;
 
   constructor(private _organisationUnitsService: OrganisationUnitsService,
-              private _dataSetsService: DataSetsService) { }
+              private _dataSetsService: DataSetsService,
+              private _dataStoreService: DataStoreService,
+              public toastr: ToastsManager, vcr: ApplicationRef) {
+                //this.toastr.setRootViewContainerRef(vcr);
+              }
 
   ngOnInit() {
 
@@ -101,10 +107,16 @@ export class ListDatasetsComponent implements OnInit {
 
       // Add organisationUnit to all dataset that have been added to the org unit.
       dataSetOrgUnitAdded  = _.transform(dataSetOrgUnitAdded,(result, dataset) =>{
+        let datasetUrlTosendTo = `api/dataSets/${dataset.id}`;
+
         dataset.organisationUnits.push({id: this.selected})
 
         // name and periodType are requeired for any PUT payload created to the dataset
-        result.push(_.pick(dataset, ['id','name', 'periodType','organisationUnits']));
+        result.push({
+          url: datasetUrlTosendTo,
+          payload: _.pick(dataset, ['id','name', 'periodType','organisationUnits'])
+        });
+
       },[])
     }
 
@@ -112,16 +124,22 @@ export class ListDatasetsComponent implements OnInit {
     if(this.removedOrgDataSets.length){
       // Get full objects for all removed dataset
       dataSetOrgUnitRemoved = _.filter(this.allDataSets, (dataSet) =>{
+
         return _.includes(this.removedOrgDataSets, dataSet.id);
+
       })
       // Remove organisationUnit to all dataset that have been removed to the org unit.
       dataSetOrgUnitRemoved  = _.transform(dataSetOrgUnitRemoved,(result, dataset) =>{
+        let datasetUrlTosendTo = `api/dataSets/${dataset.id}`
         // Remove organisationUnit from dataSets.
         dataset.organisationUnits = _.filter(dataset.organisationUnits,(orgUnit) => {
           return orgUnit.id !== this.selected;
         })
         // name and periodType are requeired for any PUT payload created to the dataset
-        result.push(_.pick(dataset, ['id','name', 'periodType','organisationUnits']));
+        result.push({
+          url: datasetUrlTosendTo,
+          payload: _.pick(dataset, ['id','name', 'periodType','organisationUnits'])
+        });
 
       },[])
     }
@@ -130,6 +148,14 @@ export class ListDatasetsComponent implements OnInit {
     return _.concat(dataSetOrgUnitAdded, dataSetOrgUnitRemoved);
 
   }
+
+  showSuccessToast(message: string) {
+       this.toastr.success(message, 'Success!');
+     }
+
+showErrorToast(message: string) {
+       this.toastr.error(message, 'Oops!');
+     }
 
   createDataStoreObjKey(){
 
@@ -145,9 +171,21 @@ export class ListDatasetsComponent implements OnInit {
     let formatedDataStoreData = this.formatDataStorePayload();
     let dataStoreKey = this.createDataStoreObjKey();
 
-    // TODO: API call to send the payload to the datastore
-    
+    this._dataStoreService
+        .createNewKeyAndValue(dataStoreKey,formatedDataStoreData)
+        .subscribe(response =>{
+          // TODO: Dispaly Toast after success
+          if(response.ok){
+            this.sendFeedBackMessage();
+          }
+        });
 
+
+  }
+
+  // TODO: sendMessage as feedback
+  sendFeedBackMessage(){
+    
   }
 
 }

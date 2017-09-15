@@ -1,4 +1,5 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule} from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -9,6 +10,7 @@ import { Routes, RouterModule, PreloadAllModules} from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
 
 import { AppComponent } from './app.component';
@@ -58,6 +60,8 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    ToastModule.forRoot(),
     FormsModule,
     HttpModule,
     SharedModule,
