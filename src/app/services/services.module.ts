@@ -8,6 +8,7 @@ import { MessageConversationService } from './message-conversation.service';
 import { OrganisationUnitsService } from './organisation-units.service';
 import { DataSetsService } from './data-sets.service';
 import { DataStoreService } from './data-store.service';
+import { ToastService } from './toast.service';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { DataStoreService } from './data-store.service';
     MessageConversationService,
     OrganisationUnitsService,
     DataSetsService,
-    DataStoreService
+    DataStoreService,
+    ToastService
   ],
   declarations: []
 })

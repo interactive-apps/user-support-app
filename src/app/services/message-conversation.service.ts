@@ -65,7 +65,7 @@ export class MessageConversationService {
     }, error => this.handleError(error));
   }
 
-  //create the secific messageConversation-owrnershi-tye
+  //create the secific messageConversation-type
 
   create(messageConversation: Message) {
     this.http.post(`${this.baseUrl}api/messageConversations/`, JSON.stringify(messageConversation), this.options)
