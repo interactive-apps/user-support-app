@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Injectable, Inject, Component, OnInit } from '@angular/core';
 import { MessageConversationService } from '../../../services/message-conversation.service';
 import { DataStoreService } from '../../../services/data-store.service';
 import { SharedDataService } from '../../../shared/shared-data.service';
+import { Http, Response, Headers, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { MessageConversation } from '../../../models/message-conversation.model';
@@ -29,18 +30,25 @@ export class MessagesComponent implements OnInit {
   public dataStoreValues: any = [];
   public messageConversation: Observable<MessageConversation[]>;
   public messageReplyFormGroup: FormGroup;
+  private baseUrl: String;
+  private options: any;
 
 
   constructor(private _messageConversationService: MessageConversationService,
               private _dialogService: DialogService,
               private _dataStoreService: DataStoreService,
-              private _sharedDataService: SharedDataService) {
+              private _sharedDataService: SharedDataService,
+              @Inject('rootDir') _rootDir: string,
+              private http: Http) {
 
-    this.getAllUserMessageConversations();
+    let jsonHeaders = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
+    this.options = new RequestOptions({ headers: jsonHeaders }); // Create a request option
+    this.baseUrl = _rootDir;
 
   }
 
   ngOnInit() {
+    this.getAllUserMessageConversations();
 
     this.messageReplyFormGroup = new FormGroup({
       message: new FormControl('')
@@ -133,11 +141,36 @@ export class MessagesComponent implements OnInit {
   }
 
   approveChangesDataset(dataSet: any){
-    this._sharedDataService.sendMultipleAsyncRequests(dataSet).subscribe((response)=>{
+    let asyncRequestsArray = [];
+
+    if (_.isArray(dataSet)) {
+      asyncRequestsArray = _.transform(dataSet,(result, obj)=>{
+        let url = `${this.baseUrl}${obj.url}`;
+        let requestObj = this.returnObservable(url, obj);
+        result.push(requestObj);
+      },[])
+    } else {
+      
+      let url = `${this.baseUrl}${dataSet.url}`;
+      let requestObj = this.returnObservable(url,dataSet)
+      asyncRequestsArray.push(requestObj);
+    }
+
+    this._sharedDataService.sendMultipleAsyncRequests(asyncRequestsArray).subscribe((response)=>{
       console.log(response);
       //TODO: make the message solved and update the datastore value as served.
     });
 
+  }
+
+  private returnObservable(url,obj){
+    if(obj.method.toLowerCase() == 'put'){
+      return this.http.put(url, obj.payload, this.options).map(res => res.json());
+    }else if (obj.method.toLowerCase() == 'post'){
+      return this.http.post(url, obj.payload, this.options).map(res => res.json());
+    }else if (obj.method.toLowerCase() == 'patch'){
+      return this.http.patch(url, obj.payload, this.options).map(res => res.json());
+    }
   }
 
 }

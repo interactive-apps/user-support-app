@@ -42,38 +42,14 @@ export class SharedDataService {
       .catch( this.handleError );
   }
 
-  sendMultipleAsyncRequests(payload:any){
-    let arrayTosend = [];
+  sendMultipleAsyncRequests(asyncRequestsArray:any){
 
-    if (_.isArray(payload)) {
-      arrayTosend = _.transform(payload,(result, obj)=>{
-        let url = `${this.baseUrl}${obj.url}`;
-        let requestObj = this.returnObservable(url, obj);
-        result.push(requestObj);
-      },[])
-    } else {
-
-      let url = `${this.baseUrl}${payload.url}`;
-      let requestObj = this.returnObservable(url,payload)
-      arrayTosend.push(requestObj);
-    }
-
-    return Observable.forkJoin(arrayTosend);
+    return Observable.forkJoin(asyncRequestsArray);
   }
 
 
   private handleError (error: Response) {
     return Observable.throw(error || "Server Error");
   }
-
-
-  private returnObservable(url,obj){
-    if(obj.method.toLowerCase() == 'put'){
-      return this.http.put(url, obj.payload, this.options).map(res => res.json());
-    }else if (obj.method.toLowerCase() == 'post'){
-      return this.http.post(url, obj.payload, this.options).map(res => res.json());
-    }else if (obj.method.toLowerCase() == 'patch'){
-      return this.http.patch(url, obj.payload, this.options).map(res => res.json());
-    }
-  }
+  
 }
