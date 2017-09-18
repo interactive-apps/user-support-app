@@ -17,7 +17,7 @@
           <div class="mail-subject">{{message.subject}}</div>
           <div class="mail-action"></div>
         </div>
-        <div class="mail-body" *ngFor="let messagebody of message.messages">
+        <div class="mail-body" *ngFor="let messagebody of message.messages; let i = index">
           <div class="image">
             <img src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/avatars/avatar_tile_k_56.png" />
           </div>
@@ -25,7 +25,29 @@
             <div class="sender" *ngIf="message.user">
               <span>{{message.userFirstname}}</span>
             </div>
-            <div class="message" [innerHTML]="messagebody.text"></div>
+            <div class="message">
+              <section [innerHTML]="messagebody.text"></section>
+              <div class="Approval-actions" *ngIf="i==0 && isUserSupportMsg">
+                <div *ngIf="loadingDataStoreValue">
+                  <div class="col-md-12">
+                    <img src="assets/img/balls-3.svg" alt="" style="height:40px">
+                    <span style="margin-top: 20px;">Loading Actions to Approve</span>
+                  </div>
+                </div>
+                <section *ngIf="!loadingDataStoreValue">
+                  <ul class="dataStore_items__listing">
+                    <li>
+                      <span>Approve all Changes</span>
+                      <button class="btn btn-success" (click)="approveChangesDataset(dataStoreValues)">Approve All</button>
+                    </li>
+                    <li *ngFor="let value of dataStoreValues; let i = index">
+                      <span>{{value.action}}</span>
+                      <button class="btn btn-success" (click)="approveChangesDataset(value)">Approve</button>
+                    </li>
+                  </ul>
+                </section>
+              </div>
+            </div>
           </div>
         </div>
         <div class="mail-footer shadow">

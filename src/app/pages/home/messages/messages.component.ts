@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageConversationService } from '../../../services/message-conversation.service';
+import { DataStoreService } from '../../../services/data-store.service';
+import { SharedDataService } from '../../../shared/shared-data.service';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { MessageConversation } from '../../../models/message-conversation.model';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { ComposeMessageComponent } from './compose-message/compose-message.component';
-import { FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -18,15 +20,21 @@ export class MessagesComponent implements OnInit {
   public isActive = 'all';
   public isDataLoaded = false;
   public isLoadingMessagesPagination = false;
+  public isUserSupportMsg = false;
+  public loadingDataStoreValue = true;
   public messages: any = [];
   public openedMessage: string = null;
   public currentPage: Number;
   public pager: any = {};
+  public dataStoreValues: any = [];
   public messageConversation: Observable<MessageConversation[]>;
   public messageReplyFormGroup: FormGroup;
 
 
-  constructor(private _messageConversationService: MessageConversationService, private _dialogService: DialogService) {
+  constructor(private _messageConversationService: MessageConversationService,
+              private _dialogService: DialogService,
+              private _dataStoreService: DataStoreService,
+              private _sharedDataService: SharedDataService) {
 
     this.getAllUserMessageConversations();
 
@@ -46,6 +54,7 @@ export class MessagesComponent implements OnInit {
 
   openMessage(message) {
     this.openedMessage = message.id;
+    this.checkIfIsUserSupportMessage(message);
     this.markAsRead(message);
   }
 
@@ -65,7 +74,7 @@ export class MessagesComponent implements OnInit {
     this.openedMessage = null;
   }
 
-  getAllUserMessageConversations(pageNumber?:Number) {
+  getAllUserMessageConversations(pageNumber?: Number) {
     this._messageConversationService.loadAll(pageNumber);
     this.messageConversation = this._messageConversationService.messageConversation;
     this._messageConversationService.pager.subscribe(val => {
@@ -74,7 +83,7 @@ export class MessagesComponent implements OnInit {
     });
   }
 
-  showComposeMessage(subject?:string, text?:string) {
+  showComposeMessage(subject?: string, text?: string) {
     let disposable = this._dialogService.addDialog(ComposeMessageComponent, {
       subject: subject,
       text: text
@@ -85,17 +94,50 @@ export class MessagesComponent implements OnInit {
   }
 
   getPage(page) {
-       this.currentPage = page;
-       this.isDataLoaded = false;
-       this.isLoadingMessagesPagination = true;
-       this.getAllUserMessageConversations(page);
-   }
+    this.currentPage = page;
+    this.isDataLoaded = false;
+    this.isLoadingMessagesPagination = true;
+    this.getAllUserMessageConversations(page);
+  }
 
 
-   onReplyMessage(conversationID:String ,{ value, valid }: { value: any, valid: boolean }) {
-     this._messageConversationService.replyConversation(conversationID,value.message);
-     this.messageReplyFormGroup.reset();
-     this.closeMessage();
-   }
+  onReplyMessage(conversationID: String, { value, valid }: { value: any, valid: boolean }) {
+    this._messageConversationService.replyConversation(conversationID, value.message);
+    this.messageReplyFormGroup.reset();
+    this.closeMessage();
+  }
+
+
+  checkIfIsUserSupportMessage(message) {
+    let formatter = new Intl.DateTimeFormat("fr", { month: "short" }),
+        month_reg = formatter.format(new Date()).slice(0,-1),
+        regex1 = new RegExp('^'+month_reg,'i'),
+        regex2 = message.subject.includes(':'),
+        dataStoreKey = message.subject.split(':')[0];
+
+    if(regex1.test(dataStoreKey) && regex2 && dataStoreKey.includes('_')){
+      this.loadAndFormatDataStoreValue(dataStoreKey);
+      this.isUserSupportMsg = true;
+    } else {
+       this.isUserSupportMsg = false;
+    }
+
+  }
+
+  loadAndFormatDataStoreValue(dataStoreKey:string){
+    this._dataStoreService.getValuesOfDataStoreNamespaceKeys(dataStoreKey)
+        .subscribe(response =>{
+          this.loadingDataStoreValue = false;
+          this.dataStoreValues = response;
+        })
+  }
+
+  approveChangesDataset(dataSet: any){
+    this._sharedDataService.sendMultipleAsyncRequests(dataSet).subscribe((response)=>{
+      console.log(response);
+      //TODO: make the message solved and update the datastore value as served.
+    });
+
+  }
 
 }

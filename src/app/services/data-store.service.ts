@@ -34,7 +34,7 @@ export class DataStoreService {
   }
 
   // Get Value of given namespace key
-  getValuesDataStoreNamespaceKeys(key: string) {
+  getValuesOfDataStoreNamespaceKeys(key: string) {
     return this.http.get(`${this.baseUrl}api/dataStore/${USERSUPPORTAPPPAYLOAD}/${key}.json`)
       .map((response: Response) => response.json())
       .catch( this.handleError );

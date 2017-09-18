@@ -126,6 +126,8 @@ export class ListDatasetsComponent implements OnInit {
         result.push({
           url: datasetUrlTosendTo,
           method: 'PUT',
+          status: 'OPEN',
+          action: `Add ${dataset.name} form.`,
           payload: _.pick(dataset, ['id','name', 'periodType','organisationUnits'])
         });
 
@@ -152,6 +154,8 @@ export class ListDatasetsComponent implements OnInit {
         result.push({
           url: datasetUrlTosendTo,
           method: 'PUT',
+          status: 'OPEN',
+          action: `Remove ${dataset.name} form.`,
           payload: _.pick(dataset, ['id','name', 'periodType','organisationUnits'])
         });
 
@@ -166,9 +170,15 @@ export class ListDatasetsComponent implements OnInit {
   createDataStoreObjKey(){
 
     let formatter = new Intl.DateTimeFormat("fr", { month: "short" }),
-        month = formatter.format(new Date())
+        month = formatter.format(new Date()),
+        text = '',
+        possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-    return month.slice(0, -1).concat('_',Math.random().toString(36).substr(2,3));
+    for(let i=0; i < 3; i++){
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+
+    return month.slice(0, -1).toUpperCase().concat('_',text);
 
   }
 
@@ -181,15 +191,14 @@ export class ListDatasetsComponent implements OnInit {
     let removedFormsNames = this.RemovedFormsNames.length ? this.RemovedFormsNames.join() : 'None';
 
     let feedbackSubject = `${dataStoreKey}:REQUEST FOR APROVAL CHANGE IN DATASET`;
-    let text = `There is request to update datasets to ${this.selectedOrgUnitInfo.name} orgnisation unit,
-                ${addedFormsNames} were added and ${removedFormsNames} were removed`;
+    let text = `There is request to update datasets to ${this.selectedOrgUnitInfo.name} orgnisation unit, ${addedFormsNames} were added and ${removedFormsNames} were removed`;
     this.disableRequestToApproval = true;
     this._dataStoreService
         .createNewKeyAndValue(dataStoreKey,formatedDataStoreData)
         .subscribe(response =>{
 
           if(response.ok){
-            
+
             this.disableRequestToApproval = true;
             this._toastService.success('Your changes were sent for approval, Thanks.')
             this.sendFeedBackMessage(feedbackSubject, text);
@@ -211,7 +220,8 @@ export class ListDatasetsComponent implements OnInit {
       userGroups: [{id: this.feedbackRecipients.id}]
     }
     this._messageConversationService.sendFeedBackMessage(payload).subscribe(response =>{
-      console.log(response);
+      // TODO: Send notification if possible about new message.
+
     })
 
   }
