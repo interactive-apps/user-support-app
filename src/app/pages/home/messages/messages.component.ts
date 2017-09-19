@@ -1,6 +1,7 @@
 import { Injectable, Inject, Component, OnInit } from '@angular/core';
 import { MessageConversationService } from '../../../services/message-conversation.service';
 import { DataStoreService } from '../../../services/data-store.service';
+import { UserService } from '../../../services/user.service';
 import { SharedDataService } from '../../../shared/shared-data.service';
 import { Http, Response, Headers, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import * as _ from 'lodash';
@@ -44,6 +45,7 @@ export class MessagesComponent implements OnInit {
     private _dialogService: DialogService,
     private _dataStoreService: DataStoreService,
     private _sharedDataService: SharedDataService,
+    private _userService: UserService,
     @Inject('rootDir') _rootDir: string,
     private http: Http) {
 
@@ -55,14 +57,12 @@ export class MessagesComponent implements OnInit {
 
   ngOnInit() {
 
-    this.getAllUserMessageConversations();
-
     this.messageReplyFormGroup = new FormGroup({
       message: new FormControl(''),
       status: new FormControl(''),
       priority: new FormControl('')
     });
-    
+
     this.messageReplyFormGroup.controls['status'].valueChanges.subscribe(valueChange => {
       let payload = {
         status: valueChange
@@ -78,6 +78,29 @@ export class MessagesComponent implements OnInit {
       this._messageConversationService.setPriority(this.openedMessage, payload);
 
     });
+
+    async.parallel([
+      (callback) => {
+        this._sharedDataService.getFeedbackReceipients().subscribe(response => {
+          callback(null, response)
+        })
+      },
+      (callback) => {
+        this._userService.getUserInformation().subscribe(response => {
+          callback(null, response);
+        })
+      },
+      (callback) => {
+        this.getAllUserMessageConversations();
+
+        callback(null, null);
+      }
+    ], (error, results) => {
+
+      this.isCurrentUserInFeedbackGroup = _.findIndex(results[1].userGroups,{id: results[0].id}) !== -1;
+
+    })
+
 
 
   }
@@ -164,7 +187,7 @@ export class MessagesComponent implements OnInit {
       .subscribe(response => {
         this.loadingDataStoreValue = false;
         this.dataStoreValues = response;
-        this.disableApproveAll = (_.findIndex(response, {status: 'SOLVED'}) !== -1);
+        this.disableApproveAll = (_.findIndex(response, { status: 'SOLVED' }) !== -1);
       });
   }
 

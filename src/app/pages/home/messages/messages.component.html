@@ -27,7 +27,7 @@
             </div>
             <div class="message">
               <section [innerHTML]="messagebody.text"></section>
-              <div class="Approval-actions" *ngIf="i==0 && isUserSupportMsg">
+              <div class="Approval-actions" *ngIf="i==0 && isUserSupportMsg && isCurrentUserInFeedbackGroup">
                 <div *ngIf="loadingDataStoreValue">
                   <div class="col-md-12">
                     <img src="assets/img/balls-3.svg" alt="" style="height:40px">
@@ -60,10 +60,12 @@
             <div class="left">
               <button class="btn btn-success" (click)="onReplyMessage(message.id, messageReplyFormGroup)">SEND</button>
             </div>
-            <div class="pull-right pull__right--Action">
+            <div class="pull-right pull__right--Action" *ngIf="isCurrentUserInFeedbackGroup">
+              <label for="">Priority</label>
               <select class="select"  formControlName="priority">
                 <option *ngFor="let priority of priorities" [selected]="priority == message.priority">{{priority}}</option>
               </select>
+              <label for="">Status</label>
               <select class="select" formControlName="status">
                 <option *ngFor="let status of statuses" [selected]="status == message.status">{{status}}</option>
               </select>
