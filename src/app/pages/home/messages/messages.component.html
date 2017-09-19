@@ -90,7 +90,7 @@
             <span *ngIf="message.priority!=='NONE'" [ngClass]="{label: true, 'label-warning': message.priority === 'MEDIUM', 'label-danger': message.priority === 'HIGH', 'label-info': message.priority === 'LOW'}">{{message.priority}}</span>
             <span [ngClass]="{fs: true, bold: !message.read}">{{message.subject}}</span>
             <span *ngIf="message.status!=='NONE'" [ngClass]="{label: true, 'label-info': message.status === 'PENDING', 'label-success': message.status === 'SOLVED', 'label-warning': message.status === 'OPEN'}">{{message.status}}</span>
-            <span class="sn">{{message.created | date:'medium'}}</span>
+            <span class="sn">{{formatDate(message.created)}}</span>
           </div>
         </div>
       </div>

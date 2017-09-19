@@ -11,6 +11,7 @@ import { DialogService } from 'ng2-bootstrap-modal';
 import { ComposeMessageComponent } from './compose-message/compose-message.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import async from 'async-es';
+import * as moment from 'moment';
 
 
 @Component({
@@ -35,10 +36,11 @@ export class MessagesComponent implements OnInit {
   public dataStoreKey: string;
   public disableApproveAll: boolean = false;
   public isCurrentUserInFeedbackGroup: boolean = false;
-  private baseUrl: String;
-  private options: any;
   public statuses = ['OPEN', 'PENDING', 'INVALID', 'SOLVED'];
   public priorities = ['LOW', 'MEDIUM', 'HIGH'];
+
+  private baseUrl: String;
+  private options: any;
 
 
   constructor(private _messageConversationService: MessageConversationService,
@@ -231,6 +233,11 @@ export class MessagesComponent implements OnInit {
 
   private asyncDone(error, results) {
     console.log(results);
+  }
+
+
+  formatDate(date){
+    return moment(date).format('ll')
   }
 
 }
