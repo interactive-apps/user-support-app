@@ -42,14 +42,8 @@ export class SharedDataService {
       .catch( this.handleError );
   }
 
-  sendMultipleAsyncRequests(asyncRequestsArray:any){
-
-    return Observable.forkJoin(asyncRequestsArray);
-  }
-
-
   private handleError (error: Response) {
     return Observable.throw(error || "Server Error");
   }
-  
+
 }

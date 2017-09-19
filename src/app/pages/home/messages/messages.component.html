@@ -36,13 +36,13 @@
                 </div>
                 <section *ngIf="!loadingDataStoreValue">
                   <ul class="dataStore_items__listing">
-                    <li>
+                    <li *ngIf="!disableApproveAll">
                       <span>Approve all Changes</span>
                       <button class="btn btn-success" (click)="approveChangesDataset(dataStoreValues)">Approve All</button>
                     </li>
                     <li *ngFor="let value of dataStoreValues; let i = index">
                       <span>{{value.action}}</span>
-                      <button class="btn btn-success" (click)="approveChangesDataset(value)">Approve</button>
+                      <button class="btn btn-success" (click)="approveChangesDataset(value)" [disabled]="value.status == 'SOLVED'" >{{value.status == 'SOLVED' ? "Approved": "Approve"}}</button>
                     </li>
                   </ul>
                 </section>
@@ -54,12 +54,19 @@
           <div class="image">
             <img src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/avatars/avatar_tile_s_56.png" />
           </div>
-          <form class="replybox" novalidate (ngSubmit)="onReplyMessage(message.id, messageReplyFormGroup)" [formGroup]="messageReplyFormGroup">
+          <form class="replybox" novalidate [formGroup]="messageReplyFormGroup">
             <div class="draft"><span>Draft </span></div>
             <textarea formControlName="message"></textarea>
             <div class="left">
-              <button class="btn btn-success" type="submit">SEND</button>
-              <a href="#"><i class="fa fa-paperclip"></i></a>
+              <button class="btn btn-success" (click)="onReplyMessage(message.id, messageReplyFormGroup)">SEND</button>
+            </div>
+            <div class="pull-right pull__right--Action">
+              <select class="select"  formControlName="priority">
+                <option *ngFor="let priority of priorities" [selected]="priority == message.priority">{{priority}}</option>
+              </select>
+              <select class="select" formControlName="status">
+                <option *ngFor="let status of statuses" [selected]="status == message.status">{{status}}</option>
+              </select>
             </div>
           </form>
         </div>

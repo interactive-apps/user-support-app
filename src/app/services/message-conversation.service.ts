@@ -98,6 +98,34 @@ export class MessageConversationService {
   }
 
 
+  setPriority(messageConversationId: string, payload:any) {
+    this.http.post(`${this.baseUrl}api/messageConversations/${messageConversationId}/priority?messageConversationPriority=${payload.priority}`,this.options)
+      .map(response => response.json()).subscribe(data => {
+        console.log(data);
+        this.dataStore.messageConversation.forEach((t, i) => {
+          if (t.id == messageConversationId) {
+            this.dataStore.messageConversation[i].priority = payload.priority;
+          }
+        });
+
+        this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
+      }, error => this.handleError(error));
+  }
+
+  updateStatus(messageConversationId: string, payload:any) {
+    this.http.post(`${this.baseUrl}api/messageConversations/${messageConversationId}/status?messageConversationStatus=${payload.status}`,this.options)
+      .map(response => response.json()).subscribe(data => {
+        this.dataStore.messageConversation.forEach((t, i) => {
+          if (t.id == messageConversationId) {
+            this.dataStore.messageConversation[i].status = payload.status;
+          }
+        });
+
+        //this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
+      }, error => this.handleError(error));
+  }
+
+
   deleteConversation(MessageConversationId: number) {
     this.http.delete(`${this.baseUrl}api/messageConversations?mc=${MessageConversationId}`).subscribe(response => {
       this.dataStore.messageConversation.forEach((t, i) => {
@@ -110,7 +138,7 @@ export class MessageConversationService {
 
 
   sendFeedBackMessage(payload: any) {
-    return this.http.post(`${this.baseUrl}api/messageConversations`, payload, this.options)
+    return this.http.post(`${this.baseUrl}api/messageConversations?messageConversationStatus=OPEN`, payload, this.options)
         .map((response: Response) => response)
         .catch( this.handleError );
   }

@@ -13,7 +13,7 @@ import {UIRouterModule} from "@uirouter/angular";
 export class ActionComponent implements OnInit {
 
   title = 'action type wizards';
-  private currentUser: any = {};
+  public currentUser: any = {};
   actionTypeForm: FormGroup;
   actionTypeArray: string[];
 
@@ -27,7 +27,7 @@ export class ActionComponent implements OnInit {
       }
 
   ngOnInit() {
-    
+
   }
 
 }

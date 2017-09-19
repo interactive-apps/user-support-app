@@ -221,6 +221,7 @@ export class ListDatasetsComponent implements OnInit {
     }
     this._messageConversationService.sendFeedBackMessage(payload).subscribe(response =>{
       // TODO: Send notification if possible about new message.
+      console.log(response);
 
     })
 

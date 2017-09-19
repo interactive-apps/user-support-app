@@ -48,6 +48,14 @@ export class DataStoreService {
   }
 
 
+  updateValuesDataStore(key: string, payload: any) {
+    
+    return this.http.put(`${this.baseUrl}api/dataStore/${USERSUPPORTAPPPAYLOAD}/${key}`, payload, this.options)
+        .map((response: Response) => response)
+        .catch( this.handleError );
+  }
+
+
 
   private handleError (error: Response) {
     return Observable.throw(error || "Server Error");

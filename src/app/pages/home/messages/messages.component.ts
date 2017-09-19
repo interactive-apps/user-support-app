@@ -9,6 +9,7 @@ import { MessageConversation } from '../../../models/message-conversation.model'
 import { DialogService } from 'ng2-bootstrap-modal';
 import { ComposeMessageComponent } from './compose-message/compose-message.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import async from 'async-es';
 
 
 @Component({
@@ -30,16 +31,21 @@ export class MessagesComponent implements OnInit {
   public dataStoreValues: any = [];
   public messageConversation: Observable<MessageConversation[]>;
   public messageReplyFormGroup: FormGroup;
+  public dataStoreKey: string;
+  public disableApproveAll: boolean = false;
+  public isCurrentUserInFeedbackGroup: boolean = false;
   private baseUrl: String;
   private options: any;
+  public statuses = ['OPEN', 'PENDING', 'INVALID', 'SOLVED'];
+  public priorities = ['LOW', 'MEDIUM', 'HIGH'];
 
 
   constructor(private _messageConversationService: MessageConversationService,
-              private _dialogService: DialogService,
-              private _dataStoreService: DataStoreService,
-              private _sharedDataService: SharedDataService,
-              @Inject('rootDir') _rootDir: string,
-              private http: Http) {
+    private _dialogService: DialogService,
+    private _dataStoreService: DataStoreService,
+    private _sharedDataService: SharedDataService,
+    @Inject('rootDir') _rootDir: string,
+    private http: Http) {
 
     let jsonHeaders = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
     this.options = new RequestOptions({ headers: jsonHeaders }); // Create a request option
@@ -48,11 +54,31 @@ export class MessagesComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.getAllUserMessageConversations();
 
     this.messageReplyFormGroup = new FormGroup({
-      message: new FormControl('')
+      message: new FormControl(''),
+      status: new FormControl(''),
+      priority: new FormControl('')
     });
+    
+    this.messageReplyFormGroup.controls['status'].valueChanges.subscribe(valueChange => {
+      let payload = {
+        status: valueChange
+      }
+      this._messageConversationService.updateStatus(this.openedMessage, payload);
+
+    });
+
+    this.messageReplyFormGroup.controls['priority'].valueChanges.subscribe(valueChange => {
+      let payload = {
+        priority: valueChange
+      }
+      this._messageConversationService.setPriority(this.openedMessage, payload);
+
+    });
+
 
   }
 
@@ -118,59 +144,70 @@ export class MessagesComponent implements OnInit {
 
   checkIfIsUserSupportMessage(message) {
     let formatter = new Intl.DateTimeFormat("fr", { month: "short" }),
-        month_reg = formatter.format(new Date()).slice(0,-1),
-        regex1 = new RegExp('^'+month_reg,'i'),
-        regex2 = message.subject.includes(':'),
-        dataStoreKey = message.subject.split(':')[0];
+      month_reg = formatter.format(new Date()).slice(0, -1),
+      regex1 = new RegExp('^' + month_reg, 'i'),
+      regex2 = message.subject.includes(':'),
+      dataStoreKey = message.subject.split(':')[0];
 
-    if(regex1.test(dataStoreKey) && regex2 && dataStoreKey.includes('_')){
+    if (regex1.test(dataStoreKey) && regex2 && dataStoreKey.includes('_')) {
+      this.dataStoreKey = dataStoreKey;
       this.loadAndFormatDataStoreValue(dataStoreKey);
       this.isUserSupportMsg = true;
     } else {
-       this.isUserSupportMsg = false;
+      this.isUserSupportMsg = false;
     }
 
   }
 
-  loadAndFormatDataStoreValue(dataStoreKey:string){
+  loadAndFormatDataStoreValue(dataStoreKey: string) {
     this._dataStoreService.getValuesOfDataStoreNamespaceKeys(dataStoreKey)
-        .subscribe(response =>{
-          this.loadingDataStoreValue = false;
-          this.dataStoreValues = response;
-        })
+      .subscribe(response => {
+        this.loadingDataStoreValue = false;
+        this.dataStoreValues = response;
+        this.disableApproveAll = (_.findIndex(response, {status: 'SOLVED'}) !== -1);
+      });
   }
 
-  approveChangesDataset(dataSet: any){
+  approveChangesDataset(dataSet: any) {
     let asyncRequestsArray = [];
+    let updatedDatastoreValues = [];
 
     if (_.isArray(dataSet)) {
-      asyncRequestsArray = _.transform(dataSet,(result, obj)=>{
-        let url = `${this.baseUrl}${obj.url}`;
-        let requestObj = this.returnObservable(url, obj);
-        result.push(requestObj);
-      },[])
+      asyncRequestsArray = _.transform(dataSet, (result, obj) => {
+        obj.status = 'SOLVED';
+        result.push(obj);
+      }, []);
+      updatedDatastoreValues = asyncRequestsArray;
+      this.disableApproveAll = true;
+
     } else {
-      
-      let url = `${this.baseUrl}${dataSet.url}`;
-      let requestObj = this.returnObservable(url,dataSet)
-      asyncRequestsArray.push(requestObj);
+      let index = _.findIndex(this.dataStoreValues, { url: dataSet.url });
+      dataSet.status = 'SOLVED';
+      this.dataStoreValues.splice(index, 1, dataSet);
+
+      updatedDatastoreValues = this.dataStoreValues;
+      asyncRequestsArray.push(dataSet);
     }
 
-    this._sharedDataService.sendMultipleAsyncRequests(asyncRequestsArray).subscribe((response)=>{
-      console.log(response);
-      //TODO: make the message solved and update the datastore value as served.
-    });
+    async.map(asyncRequestsArray, this.requestCallBack, this.asyncDone);
+
+    this._dataStoreService.updateValuesDataStore(this.dataStoreKey, updatedDatastoreValues)
+      .subscribe(response => {
+        console.log(response);
+      });
 
   }
 
-  private returnObservable(url,obj){
-    if(obj.method.toLowerCase() == 'put'){
-      return this.http.put(url, obj.payload, this.options).map(res => res.json());
-    }else if (obj.method.toLowerCase() == 'post'){
-      return this.http.post(url, obj.payload, this.options).map(res => res.json());
-    }else if (obj.method.toLowerCase() == 'patch'){
-      return this.http.patch(url, obj.payload, this.options).map(res => res.json());
-    }
+  callback(obj, doneCallBack) {
+    this._dataStoreService.updateValuesDataStore(obj.payload.id, obj.payload).subscribe(response => {
+      return doneCallBack(null, response);
+    })
+  }
+
+  requestCallBack = this.callback.bind(this);
+
+  private asyncDone(error, results) {
+    console.log(results);
   }
 
 }
