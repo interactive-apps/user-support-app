@@ -60,7 +60,7 @@
             <div class="left">
               <button class="btn btn-success" (click)="onReplyMessage(message.id, messageReplyFormGroup)">SEND</button>
             </div>
-            <div class="pull-right pull__right--Action" *ngIf="isCurrentUserInFeedbackGroup">
+            <div class="pull-right pull__right--Action" *ngIf="isCurrentUserInFeedbackGroup && (isUserSupportMsg || message.messageType == 'TICKET')">
               <label for="">Priority</label>
               <select class="select"  formControlName="priority">
                 <option *ngFor="let priority of priorities" [selected]="priority == message.priority">{{priority}}</option>

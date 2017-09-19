@@ -44,6 +44,7 @@ import { ComposeMessageComponent } from './pages/home/messages/compose-message/c
 import { CreateUsersComponent } from './pages/create-users/create-users.component';
 import { AddFormComponent } from './pages/add-form/add-form.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { ComposeFeedbackComponent } from './pages/home/messages/compose-feedback/compose-feedback.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
     CreateUsersComponent,
     AddFormComponent,
     ResetPasswordComponent,
-    ListDatasetsComponent
+    ListDatasetsComponent,
+    ComposeFeedbackComponent
   ],
   imports: [
     BrowserModule,

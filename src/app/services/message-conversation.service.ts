@@ -35,10 +35,12 @@ export class MessageConversationService {
 
   //this loads all messageConversation
 
-  loadAll(pageNumber?: Number | String) {
+  loadAll(pageNumber?: Number | String, filters?:string) {
 
     let pageNo = pageNumber ? pageNumber : 1;
-    this.http.get(`${this.baseUrl}api/messageConversations?fields=*,messages[*]&page=${pageNo}&pageSize=20`).map(response => response.json()).subscribe(result => {
+    let loadFilter = filters ? filters: '';
+    this.http.get(`${this.baseUrl}api/messageConversations?fields=*,messages[*]&page=${pageNo}&pageSize=20&${loadFilter}`)
+      .map(response => response.json()).subscribe(result => {
       this._pager.next(Object.assign({}, result).pager);
       this.dataStore.messageConversation = result.messageConversations;
       this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);

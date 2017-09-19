@@ -22,6 +22,7 @@ import * as moment from 'moment';
 export class MessagesComponent implements OnInit {
 
   public isActive = 'all';
+  public filter: string = '';
   public isDataLoaded = false;
   public isLoadingMessagesPagination = false;
   public isUserSupportMsg = false;
@@ -39,8 +40,9 @@ export class MessagesComponent implements OnInit {
   public statuses = ['OPEN', 'PENDING', 'INVALID', 'SOLVED'];
   public priorities = ['LOW', 'MEDIUM', 'HIGH'];
 
-  private baseUrl: String;
+  private baseUrl: string;
   private options: any;
+  private currentUser: any;
 
 
   constructor(private _messageConversationService: MessageConversationService,
@@ -98,8 +100,8 @@ export class MessagesComponent implements OnInit {
         callback(null, null);
       }
     ], (error, results) => {
-
-      this.isCurrentUserInFeedbackGroup = _.findIndex(results[1].userGroups,{id: results[0].id}) !== -1;
+      this.currentUser = results[1];
+      this.isCurrentUserInFeedbackGroup = _.findIndex(results[1].userGroups, { id: results[0].id }) !== -1;
 
     })
 
@@ -108,7 +110,31 @@ export class MessagesComponent implements OnInit {
   }
 
   messagesFilters(filter) {
-    this.isActive = filter;
+    switch (filter) {
+      case 'followUp':
+        if (this.isActive !== filter) {
+          this.isActive = filter;
+          this.filter = 'filter=followUp:in:[true]';
+          this.getAllUserMessageConversations();
+        }
+        break;
+      case 'assignedToMe':
+
+        if (this.isActive !== filter) {
+          this.isActive = filter;
+          this.filter = `filter=assignee.id:eq:${this.currentUser.id}`;
+          this.getAllUserMessageConversations();
+        }
+        break;
+      default:
+
+        if (this.isActive !== filter) {
+          this.isActive = filter;
+          this.filter = '';
+          this.getAllUserMessageConversations();
+        }
+        break;
+    }
   }
 
   openMessage(message) {
@@ -134,7 +160,7 @@ export class MessagesComponent implements OnInit {
   }
 
   getAllUserMessageConversations(pageNumber?: Number) {
-    this._messageConversationService.loadAll(pageNumber);
+    this._messageConversationService.loadAll(pageNumber, this.filter);
     this.messageConversation = this._messageConversationService.messageConversation;
     this._messageConversationService.pager.subscribe(val => {
       this.pager = val;
@@ -236,7 +262,7 @@ export class MessagesComponent implements OnInit {
   }
 
 
-  formatDate(date){
+  formatDate(date) {
     return moment(date).format('ll')
   }
 
