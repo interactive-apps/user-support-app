@@ -81,7 +81,7 @@
         <div class="image" (click)="openMessage(message)">
           <img src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/avatars/avatar_tile_k_56.png" />
         </div>
-        <div class="name" (click)="openMessage(message)"><span>{{message.userFirstname +" "+message.userSurname}}</span></div>
+        <div class="name" (click)="openMessage(message)"><span>{{message.participants}}</span></div>
         <div class="subject">
           <div class="actions">
             <a href="#" class="pinned-msg"><i class="fa fa-thumb-tack"></i></a>
@@ -94,7 +94,7 @@
             <span *ngIf="message.priority!=='NONE'" [ngClass]="{label: true, 'label-warning': message.priority === 'MEDIUM', 'label-danger': message.priority === 'HIGH', 'label-info': message.priority === 'LOW'}">{{message.priority}}</span>
             <span [ngClass]="{fs: true, bold: !message.read}">{{message.subject}}</span>
             <span *ngIf="message.status!=='NONE'" [ngClass]="{label: true, 'label-info': message.status === 'PENDING', 'label-success': message.status === 'SOLVED', 'label-warning': message.status === 'OPEN'}">{{message.status}}</span>
-            <span class="sn">{{formatDate(message.created)}}</span>
+            <span class="sn">{{formatDate(message.lastMessage)}}</span>
           </div>
         </div>
       </div>

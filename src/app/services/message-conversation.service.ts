@@ -4,6 +4,7 @@ import { Message } from '../models/message.model';
 import { Http, Response, Headers, RequestOptions, RequestOptionsArgs,  } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import * as _ from 'lodash';
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -34,6 +35,7 @@ export class MessageConversationService {
     this.options = new RequestOptions({ headers: jsonHeaders }); // Create a request option
     this.plainTextOption = new RequestOptions({headers: plainTextHeaders});
     this.formDataOptions = new RequestOptions({headers: formDataHeaders});
+
   }
 
   //this loads all messageConversation
@@ -45,7 +47,7 @@ export class MessageConversationService {
     this.http.get(`${this.baseUrl}api/messageConversations?fields=*,messages[*]&page=${pageNo}&pageSize=20&${loadFilter}`)
       .map(response => response.json()).subscribe(result => {
       this._pager.next(Object.assign({}, result).pager);
-      this.dataStore.messageConversation = result.messageConversations;
+      this.dataStore.messageConversation = this.transformMessageConversation(result.messageConversations);
       this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
     }, error => this.handleError(error));
   }
@@ -176,6 +178,21 @@ export class MessageConversationService {
 
   private handleError(error: Response) {
     return Observable.throw(error || "Server Error");
+  }
+
+  transformMessageConversation(messageConvo: any){
+    let convo = [];
+    convo = _.transform(messageConvo,(results,message) => {
+      let messageCount = message.messageCount > 1 ? `(${message.messageCount})`: '';
+      if(message.lastSenderFirstname && (message.userFirstname !== message.lastSenderFirstname)){
+        message.participants = `${message.lastSenderFirstname} ${message.lastSenderSurname},${message.userFirstname} ${message.userSurname} ${messageCount}`;
+      }else{
+        message.participants = `${message.userFirstname} ${message.userSurname} ${messageCount}`;
+      }
+      results.push(message);
+    },[])
+
+    return messageConvo;
   }
 
 }
