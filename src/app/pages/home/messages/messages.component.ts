@@ -4,7 +4,6 @@ import { DataStoreService } from '../../../services/data-store.service';
 import { UserService } from '../../../services/user.service';
 import { ToastService } from '../../../services/toast.service';
 import { SharedDataService } from '../../../shared/shared-data.service';
-import { Http, Response, Headers, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { MessageConversation } from '../../../models/message-conversation.model';
@@ -43,10 +42,7 @@ export class MessagesComponent implements OnInit {
   public isCurrentUserInFeedbackGroup: boolean = false;
   public statuses = ['OPEN', 'PENDING', 'INVALID', 'SOLVED'];
   public priorities = ['LOW', 'MEDIUM', 'HIGH'];
-
-  private baseUrl: string;
-  private options: any;
-  private currentUser: any;
+  public currentUser: any;
 
 
   constructor(private _messageConversationService: MessageConversationService,
@@ -55,13 +51,7 @@ export class MessagesComponent implements OnInit {
               private _sharedDataService: SharedDataService,
               private _userService: UserService,
               @Inject('rootDir') _rootDir: string,
-              private _toastService: ToastService,
-              private http: Http) {
-
-      let jsonHeaders = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-      this.options = new RequestOptions({ headers: jsonHeaders }); // Create a request option
-      this.baseUrl = _rootDir;
-
+              private _toastService: ToastService) {
   }
 
   ngOnInit() {
