@@ -167,7 +167,10 @@ export class MessageConversationService {
 
   sendFeedBackMessage(payload: any) {
     return this.http.post(`${this.baseUrl}api/messageConversations?messageType=TICKET&messageConversationStatus=OPEN`, payload, this.options)
-        .map((response: Response) => response)
+        .map((response: Response) => {
+          this.loadAll();
+          return response;
+        })
         .catch( this.handleError );
   }
 

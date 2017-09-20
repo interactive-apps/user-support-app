@@ -10,6 +10,7 @@ import { Observable } from 'rxjs/Observable';
 import { MessageConversation } from '../../../models/message-conversation.model';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { ComposeMessageComponent } from './compose-message/compose-message.component';
+import { ComposeFeedbackComponent } from './compose-feedback/compose-feedback.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import async from 'async-es';
 import * as moment from 'moment';
@@ -66,10 +67,10 @@ export class MessagesComponent implements OnInit {
   ngOnInit() {
 
     this.messageReplyFormGroup = new FormGroup({
-      message: new FormControl(''),
+      message: new FormControl('',Validators.required),
       status: new FormControl(''),
       priority: new FormControl(''),
-      assign: new FormControl(),
+      assign: new FormControl(this.assignedMember),
     });
 
     this.messageReplyFormGroup.controls['status'].valueChanges.subscribe(valueChange => {
@@ -119,8 +120,9 @@ export class MessagesComponent implements OnInit {
       this.feedbackRecipients = _.transform(results[0].users,(result, user) =>{
         result.push({id: user.id, name: user.displayName});
       },[]);
-      this.feedbackRecipients.push({id:'none', name: 'None'});
 
+      // Add none which will be use to delete assingment
+      this.feedbackRecipients.push({id:'none', name: 'None'});
       this.isCurrentUserInFeedbackGroup = _.findIndex(results[1].userGroups, { id: results[0].id }) !== -1;
 
     })
@@ -157,10 +159,6 @@ export class MessagesComponent implements OnInit {
     }
   }
 
-  getAssignedMember(feedbackRecipientId:string){
-    console.log(feedbackRecipientId == this.assignedMember);
-    return feedbackRecipientId == this.assignedMember;
-  }
   openMessage(message) {
     this.openedMessage = message.id;
     this.checkIfIsUserSupportMessage(message);
@@ -202,6 +200,17 @@ export class MessagesComponent implements OnInit {
       });
   }
 
+  showComposeFeedback(subject?: string, text?: string) {
+    let disposable = this._dialogService.addDialog(ComposeFeedbackComponent, {
+      subject: subject,
+      text: text
+    })
+      .subscribe((isConfirmed) => {
+
+      });
+  }
+
+
   getPage(page) {
     this.currentPage = page;
     this.isDataLoaded = false;
@@ -216,7 +225,11 @@ export class MessagesComponent implements OnInit {
     this.closeMessage();
   }
 
-
+  /**
+   * [checkIfIsUserSupportMessage: this checks if the message is from user support application]
+   * @param  {[object]} message [single object to check if is from user support application]
+   * @return {[void]}         [none]
+   */
   checkIfIsUserSupportMessage(message) {
     if(message.assignee){
       this.messageReplyFormGroup.controls['assign'].patchValue(message.assignee.id);
@@ -237,6 +250,12 @@ export class MessagesComponent implements OnInit {
     }
 
   }
+
+  /**
+   * [loadAndFormatDataStoreValue description]
+   * @param  {string} dataStoreKey [description]
+   * @return {[type]}              [description]
+   */
 
   loadAndFormatDataStoreValue(dataStoreKey: string) {
     this._dataStoreService.getValuesOfDataStoreNamespaceKeys(dataStoreKey)
@@ -268,6 +287,12 @@ export class MessagesComponent implements OnInit {
       asyncRequestsArray.push(dataSet);
     }
 
+    /**
+     * [map map all object]
+     * @param  {[object]} asyncRequestsArray   [dataset array to be posted]
+     * @param  {[function]} this.requestCallBack [callback function]
+     * @param  {[function]} this.asyncDone       [callback function]
+     */
     async.map(asyncRequestsArray, this.requestCallBack, this.asyncDone);
 
     this._dataStoreService.updateValuesDataStore(this.dataStoreKey, updatedDatastoreValues)
@@ -284,6 +309,12 @@ export class MessagesComponent implements OnInit {
 
   }
 
+  /**
+   * [callback: This function will be executed for every object in array async and parallel]
+   * @param  {[object]} obj          [object in a collection]
+   * @param  {[function]} doneCallBack [A call back function]
+   * @return {[function]}              [callback function with error and response results]
+   */
   callback(obj, doneCallBack) {
     if (obj.method.toLowerCase() === 'put') {
 
@@ -298,8 +329,19 @@ export class MessagesComponent implements OnInit {
 
   }
 
+  /**
+   * [this is to bind this in the callback]
+   * @param  {[object]} this [global object that holds the value of this function]
+   * @return {[function]}      [callback function with global this variable]
+   */
   requestCallBack = this.callback.bind(this);
 
+  /**
+   * [asyncDone: This is the final done callback after async execution of all request]
+   * @param  {[object]} error   [Array collection of all errors]
+   * @param  {[object]} results [Array collection of all response results]
+   * @return {[void]}         [none]
+   */
   private asyncDone(error, results) {
     console.log(results);
     if(results.length){
@@ -311,7 +353,11 @@ export class MessagesComponent implements OnInit {
     }
   }
 
-
+  /**
+   * [formatDate: format date to well understandable way]
+   * @param  {[date]} date [creted date in ISO]
+   * @return {[date]}      [formated date to human readable]
+   */
   formatDate(date) {
     return moment(date).format('ll')
   }

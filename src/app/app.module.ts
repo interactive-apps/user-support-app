@@ -86,7 +86,7 @@ import { ComposeFeedbackComponent } from './pages/home/messages/compose-feedback
     {provide: 'rootApi', useValue: '../../../api/'},
     {provide: 'rootDir', useValue: '../../../'}, OrgUnitService],
   exports: [OrgUnitFilterComponent],
-  entryComponents: [ComposeMessageComponent],
+  entryComponents: [ComposeMessageComponent,ComposeFeedbackComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

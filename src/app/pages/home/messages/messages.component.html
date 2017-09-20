@@ -58,7 +58,7 @@
             <div class="draft"><span>Draft </span></div>
             <textarea formControlName="message"></textarea>
             <div class="left">
-              <button class="btn btn-success" (click)="onReplyMessage(message.id, messageReplyFormGroup)">SEND</button>
+              <button [disabled]="!messageReplyFormGroup.valid" class="btn btn-success" (click)="onReplyMessage(message.id, messageReplyFormGroup)">SEND</button>
             </div>
             <div class="pull-right pull__right--Action" *ngIf="isCurrentUserInFeedbackGroup && (isUserSupportMsg || message.messageType == 'TICKET')">
               <label for="">Priority:</label>
@@ -101,7 +101,7 @@
     </div>
   </article>
   <nav class="fab__container">
-    <a class="buttons" href="#" (click)="showComposeMessage()" tooltip="Write Feedback"></a>
+    <a class="buttons" href="#" (click)="showComposeFeedback()" tooltip="Write Feedback"></a>
     <a class="buttons" href="#" (click)="showComposeMessage()" tooltip="Write Message"></a>
     <a class="buttons" (click)="showComposeMessage()" tooltip="Compose">
       <span class="fab"><span class="rotate"></span></span>
