@@ -157,6 +157,10 @@ export class MessagesComponent implements OnInit {
     }
   }
 
+  getAssignedMember(feedbackRecipientId:string){
+    console.log(feedbackRecipientId == this.assignedMember);
+    return feedbackRecipientId == this.assignedMember;
+  }
   openMessage(message) {
     this.openedMessage = message.id;
     this.checkIfIsUserSupportMessage(message);
@@ -215,9 +219,7 @@ export class MessagesComponent implements OnInit {
 
   checkIfIsUserSupportMessage(message) {
     if(message.assignee){
-      this.assignedMember = message.assignee.id;
-      console.log(typeof this.assignedMember);
-      console.log(typeof this.feedbackRecipients[0].id);
+      this.messageReplyFormGroup.controls['assign'].patchValue(message.assignee.id);
     }
 
     let formatter = new Intl.DateTimeFormat("fr", { month: "short" }),

@@ -1,0 +1,19 @@
+{
+    "version": "0.0",
+    "name": "User Support App",
+    "description": "User Support Application for DHIS2",
+    "launch_path": "index.html",
+    "icons": {
+      
+    },
+    "developer": {
+        "name": "HISPTZ",
+        "url": ""
+    },
+    "default_locale": "en",
+    "activities": {
+        "dhis": {
+            "href": "../../.."
+        }
+    }
+}

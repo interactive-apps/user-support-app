@@ -71,7 +71,7 @@
               </select>
               <label for="">Assigned to:</label>
               <select class="select" formControlName="assign">
-                <option *ngFor="let feedbackRecipient of feedbackRecipients" [value]="feedbackRecipient.id" [selected]="feedbackRecipient.id === assignedMember">{{feedbackRecipient.name}}</option>
+                <option *ngFor="let feedbackRecipient of feedbackRecipients" [value]="feedbackRecipient.id">{{feedbackRecipient.name}}</option>
               </select>
             </div>
           </form>
