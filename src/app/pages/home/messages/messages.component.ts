@@ -2,6 +2,7 @@ import { Injectable, Inject, Component, OnInit } from '@angular/core';
 import { MessageConversationService } from '../../../services/message-conversation.service';
 import { DataStoreService } from '../../../services/data-store.service';
 import { UserService } from '../../../services/user.service';
+import { ToastService } from '../../../services/toast.service';
 import { SharedDataService } from '../../../shared/shared-data.service';
 import { Http, Response, Headers, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import * as _ from 'lodash';
@@ -32,6 +33,8 @@ export class MessagesComponent implements OnInit {
   public currentPage: Number;
   public pager: any = {};
   public dataStoreValues: any = [];
+  public feedbackRecipients: any = [];
+  public assignedMember: string = 'none';
   public messageConversation: Observable<MessageConversation[]>;
   public messageReplyFormGroup: FormGroup;
   public dataStoreKey: string;
@@ -46,16 +49,17 @@ export class MessagesComponent implements OnInit {
 
 
   constructor(private _messageConversationService: MessageConversationService,
-    private _dialogService: DialogService,
-    private _dataStoreService: DataStoreService,
-    private _sharedDataService: SharedDataService,
-    private _userService: UserService,
-    @Inject('rootDir') _rootDir: string,
-    private http: Http) {
+              private _dialogService: DialogService,
+              private _dataStoreService: DataStoreService,
+              private _sharedDataService: SharedDataService,
+              private _userService: UserService,
+              @Inject('rootDir') _rootDir: string,
+              private _toastService: ToastService,
+              private http: Http) {
 
-    let jsonHeaders = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
-    this.options = new RequestOptions({ headers: jsonHeaders }); // Create a request option
-    this.baseUrl = _rootDir;
+      let jsonHeaders = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
+      this.options = new RequestOptions({ headers: jsonHeaders }); // Create a request option
+      this.baseUrl = _rootDir;
 
   }
 
@@ -64,7 +68,8 @@ export class MessagesComponent implements OnInit {
     this.messageReplyFormGroup = new FormGroup({
       message: new FormControl(''),
       status: new FormControl(''),
-      priority: new FormControl('')
+      priority: new FormControl(''),
+      assign: new FormControl(),
     });
 
     this.messageReplyFormGroup.controls['status'].valueChanges.subscribe(valueChange => {
@@ -80,7 +85,16 @@ export class MessagesComponent implements OnInit {
         priority: valueChange
       }
       this._messageConversationService.setPriority(this.openedMessage, payload);
+    });
 
+    this.messageReplyFormGroup.controls['assign'].valueChanges.subscribe(valueChange => {
+      if(valueChange == 'none'){
+        this._messageConversationService.deleteAssignment(this.openedMessage);
+        this.assignedMember = 'none';
+      }else{
+        this._messageConversationService.assignToMember(this.openedMessage, valueChange);
+        this.assignedMember = valueChange.toString();
+      }
     });
 
     async.parallel([
@@ -100,7 +114,13 @@ export class MessagesComponent implements OnInit {
         callback(null, null);
       }
     ], (error, results) => {
+
       this.currentUser = results[1];
+      this.feedbackRecipients = _.transform(results[0].users,(result, user) =>{
+        result.push({id: user.id, name: user.displayName});
+      },[]);
+      this.feedbackRecipients.push({id:'none', name: 'None'});
+
       this.isCurrentUserInFeedbackGroup = _.findIndex(results[1].userGroups, { id: results[0].id }) !== -1;
 
     })
@@ -194,6 +214,12 @@ export class MessagesComponent implements OnInit {
 
 
   checkIfIsUserSupportMessage(message) {
+    if(message.assignee){
+      this.assignedMember = message.assignee.id;
+      console.log(typeof this.assignedMember);
+      console.log(typeof this.feedbackRecipients[0].id);
+    }
+
     let formatter = new Intl.DateTimeFormat("fr", { month: "short" }),
       month_reg = formatter.format(new Date()).slice(0, -1),
       regex1 = new RegExp('^' + month_reg, 'i'),
@@ -244,21 +270,43 @@ export class MessagesComponent implements OnInit {
 
     this._dataStoreService.updateValuesDataStore(this.dataStoreKey, updatedDatastoreValues)
       .subscribe(response => {
-        console.log(response);
+
+        if(response.ok){
+          this._toastService.success('Datastore status was updated successfully.');
+
+        } else {
+          this._toastService.error('There was an error when updating Datastore Status.');
+
+        }
       });
 
   }
 
   callback(obj, doneCallBack) {
-    this._dataStoreService.updateValuesDataStore(obj.payload.id, obj.payload).subscribe(response => {
-      return doneCallBack(null, response);
-    })
+    if (obj.method.toLowerCase() === 'put') {
+
+      this._sharedDataService.genericPutRequest(obj.url, obj.payload).subscribe(response => {
+        return doneCallBack(null, response);
+      });
+    } else if(obj.method.toLowerCase() === 'post') {
+      this._sharedDataService.genericPostRequest(obj.url, obj.payload).subscribe(response => {
+        return doneCallBack(null, response);
+      });
+    }
+
   }
 
   requestCallBack = this.callback.bind(this);
 
   private asyncDone(error, results) {
     console.log(results);
+    if(results.length){
+      this._toastService.success('Approved changes were updated successfully.');
+
+    } else {
+      this._toastService.error('There was an error when sending approved changes.');
+
+    }
   }
 
 

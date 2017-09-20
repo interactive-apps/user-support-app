@@ -61,13 +61,17 @@
               <button class="btn btn-success" (click)="onReplyMessage(message.id, messageReplyFormGroup)">SEND</button>
             </div>
             <div class="pull-right pull__right--Action" *ngIf="isCurrentUserInFeedbackGroup && (isUserSupportMsg || message.messageType == 'TICKET')">
-              <label for="">Priority</label>
+              <label for="">Priority:</label>
               <select class="select"  formControlName="priority">
                 <option *ngFor="let priority of priorities" [selected]="priority == message.priority">{{priority}}</option>
               </select>
-              <label for="">Status</label>
+              <label for="">Status:</label>
               <select class="select" formControlName="status">
                 <option *ngFor="let status of statuses" [selected]="status == message.status">{{status}}</option>
+              </select>
+              <label for="">Assigned to:</label>
+              <select class="select" formControlName="assign">
+                <option *ngFor="let feedbackRecipient of feedbackRecipients" [value]="feedbackRecipient.id" [selected]="feedbackRecipient.id === assignedMember">{{feedbackRecipient.name}}</option>
               </select>
             </div>
           </form>

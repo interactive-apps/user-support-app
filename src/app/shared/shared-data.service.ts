@@ -42,6 +42,20 @@ export class SharedDataService {
       .catch( this.handleError );
   }
 
+  // Generic put request
+  genericPutRequest (url:string, payload:any) {
+    return this.http.put(this.baseUrl + url,payload, this.options)
+      .map((response: Response) => response.json())
+      .catch( this.handleError );
+  }
+
+  // Generic post request
+  genericPostRequest (url:string, payload:any) {
+    return this.http.post(this.baseUrl + url,payload, this.options)
+      .map((response: Response) => response.json())
+      .catch( this.handleError );
+  }
+
   private handleError (error: Response) {
     return Observable.throw(error || "Server Error");
   }

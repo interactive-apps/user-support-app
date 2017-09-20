@@ -34,8 +34,9 @@ export class UserService {
   }
 
 
-  getAllUsers () {
-    return this.http.get(this._rootDir + 'api/users.json?paging=false')
+  getAllUsers (filters?:string) {
+    let loadFilter = filters ? filters: '';
+    return this.http.get(`${this._rootDir}api/users.json?paging=false&${loadFilter}`)
           .map((response: Response) => response.json())
           .catch(this.handleError);
   }

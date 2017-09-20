@@ -1,5 +1,6 @@
 export interface MessageConversation {
   id: number | string;
+  assignee: any;
   attributeValues: any[];
   created: string;
   displayName: string;

@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { MessageConversation } from '../models/message-conversation.model';
 import { Message } from '../models/message.model';
-import { Http, Response, Headers, RequestOptions, RequestOptionsArgs } from '@angular/http';
+import { Http, Response, Headers, RequestOptions, RequestOptionsArgs,  } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
@@ -12,6 +12,7 @@ export class MessageConversationService {
   pager: Observable<any>;
   options: any;
   plainTextOption: any;
+  formDataOptions: any;
   private _messageConversation: BehaviorSubject<MessageConversation[]>;
   private _pager: BehaviorSubject<any>;
   private baseUrl: string;
@@ -29,8 +30,10 @@ export class MessageConversationService {
     this.pager = this._pager.asObservable();
     let jsonHeaders = new Headers({ 'Content-Type': 'application/json' }); // ... Set content type to JSON
     let plainTextHeaders = new Headers({'Content-Type': 'text/plain'});
+    let formDataHeaders = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
     this.options = new RequestOptions({ headers: jsonHeaders }); // Create a request option
-    this.plainTextOption = new RequestOptions({headers: plainTextHeaders})
+    this.plainTextOption = new RequestOptions({headers: plainTextHeaders});
+    this.formDataOptions = new RequestOptions({headers: formDataHeaders});
   }
 
   //this loads all messageConversation
@@ -101,7 +104,7 @@ export class MessageConversationService {
 
 
   setPriority(messageConversationId: string, payload:any) {
-    this.http.post(`${this.baseUrl}api/messageConversations/${messageConversationId}/priority?messageConversationPriority=${payload.priority}`,this.options)
+    this.http.post(`${this.baseUrl}api/messageConversations/${messageConversationId}/priority?messageConversationPriority=${payload.priority}&messageType=TICKET`,this.options)
       .map(response => response.json()).subscribe(data => {
         console.log(data);
         this.dataStore.messageConversation.forEach((t, i) => {
@@ -127,6 +130,29 @@ export class MessageConversationService {
       }, error => this.handleError(error));
   }
 
+  assignToMember(messageConversationId: string, memberId:string) {
+    let body = 'userId=' + memberId;
+    this.http.post(`${this.baseUrl}api/messageConversations/${messageConversationId}/assign`,body,this.formDataOptions)
+      .map(response => response.json()).subscribe(data => {
+        this.dataStore.messageConversation.forEach((t, i) => {
+          if (t.id == messageConversationId) {
+            this.dataStore.messageConversation[i].assignee = {id: memberId};
+          }
+        });
+      }, error => this.handleError(error));
+  }
+
+  deleteAssignment(messageConversationId: string) {
+    this.http.delete(`${this.baseUrl}api/messageConversations/${messageConversationId}/assign`)
+      .map(response => response.json()).subscribe(data => {
+        this.dataStore.messageConversation.forEach((t, i) => {
+          if (t.id == messageConversationId) {
+            this.dataStore.messageConversation[i].assignee = null;
+          }
+        });
+      }, error => this.handleError(error));
+  }
+
 
   deleteConversation(MessageConversationId: number) {
     this.http.delete(`${this.baseUrl}api/messageConversations?mc=${MessageConversationId}`).subscribe(response => {
@@ -140,7 +166,7 @@ export class MessageConversationService {
 
 
   sendFeedBackMessage(payload: any) {
-    return this.http.post(`${this.baseUrl}api/messageConversations?messageConversationStatus=OPEN`, payload, this.options)
+    return this.http.post(`${this.baseUrl}api/messageConversations?messageType=TICKET&messageConversationStatus=OPEN`, payload, this.options)
         .map((response: Response) => response)
         .catch( this.handleError );
   }
