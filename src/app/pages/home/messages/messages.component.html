@@ -19,11 +19,11 @@
         </div>
         <div class="mail-body" *ngFor="let messagebody of message.messages; let i = index">
           <div class="image">
-            <img src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/avatars/avatar_tile_k_56.png" />
+            <ngx-avatar name="{{message.userFirstname + ' ' + message.userSurname}}" size="35"></ngx-avatar>
           </div>
           <div class="someClass">
             <div class="sender" *ngIf="message.user">
-              <span>{{message.userFirstname}}</span>
+              <span>{{message.userFirstname+" "+ message.userSurname}}</span>
             </div>
             <div class="message">
               <section [innerHTML]="messagebody.text"></section>
@@ -52,7 +52,7 @@
         </div>
         <div class="mail-footer shadow">
           <div class="image">
-            <img src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/avatars/avatar_tile_s_56.png" />
+            <ngx-avatar name="{{currentUser.name}}" size="35"></ngx-avatar>
           </div>
           <form class="replybox" novalidate [formGroup]="messageReplyFormGroup">
             <div class="draft"><span>Draft </span></div>
@@ -79,7 +79,7 @@
       </div>
       <div class="content-wrapper" *ngIf="message.id !== openedMessage">
         <div class="image" (click)="openMessage(message)">
-          <img src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/avatars/avatar_tile_k_56.png" />
+            <ngx-avatar name="{{message.userFirstname + ' ' + message.userSurname}}" size="30"></ngx-avatar>
         </div>
         <div class="name" (click)="openMessage(message)"><span>{{message.participants}}</span></div>
         <div class="subject">

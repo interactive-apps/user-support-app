@@ -105,7 +105,7 @@ export class MessagesComponent implements OnInit {
         callback(null, null);
       }
     ], (error, results) => {
-
+      console.log(results[1]);
       this.currentUser = results[1];
       this.feedbackRecipients = _.transform(results[0].users,(result, user) =>{
         result.push({id: user.id, name: user.displayName});

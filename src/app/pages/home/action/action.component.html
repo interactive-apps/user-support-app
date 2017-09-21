@@ -3,10 +3,10 @@
     <h3 class="wellcome__messaging">Welcome {{currentUser.name}}, How can we help you today? </h3>
     <div class="form-group">
       <section class="action__choices">
-        <button class="custom-btn btn-1" uiSref="create-users"><i class="fa fa-user-o action__icon" aria-hidden="true"></i>Create User(s)</button>
         <button class="custom-btn btn-1" (click)="showComposeFeedback()"><i class="fa fa-pencil-square-o action__icon" aria-hidden="true"></i>Write Feedback</button>
+        <button class="custom-btn btn-1" uiSref="create-users"><i class="fa fa-user-o action__icon" aria-hidden="true"></i>Create User(s)</button>
         <button class="custom-btn btn-1" uiSref="reset-password"><i class="fa fa-wpforms action__icon" aria-hidden="true"></i>Reset Password</button>
-        <button class="custom-btn btn-1" uiSref="add-form"><i class="fa fa-wpforms action__icon" aria-hidden="true"></i>Add/Remove Form(s)</button>
+        <button class="custom-btn btn-1" uiSref="add-form"><i class="fa fa-wpforms action__icon" aria-hidden="true"></i>Request Form(s)</button>
       </section>
     </div>
   </form>

@@ -2,7 +2,7 @@ import { BrowserModule} from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { BrowserXhr, HttpModule } from '@angular/http';
 import { TreeModule } from 'angular-tree-component';
 import { CommonModule, HashLocationStrategy, Location, LocationStrategy } from '@angular/common';
 import { UIRouterModule} from "@uirouter/angular";
@@ -11,6 +11,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
+import { NgProgressModule, NgProgressBrowserXhr } from 'ngx-progressbar';
+import { AvatarModule } from 'ngx-avatar';
 
 
 import { AppComponent } from './app.component';
@@ -64,6 +66,8 @@ import { ComposeFeedbackComponent } from './pages/home/messages/compose-feedback
     BrowserModule,
     BrowserAnimationsModule,
     ToastModule.forRoot(),
+    NgProgressModule,
+    AvatarModule,
     FormsModule,
     HttpModule,
     SharedModule,
@@ -83,6 +87,7 @@ import { ComposeFeedbackComponent } from './pages/home/messages/compose-feedback
     })
   ],
   providers: [
+    { provide: BrowserXhr, useClass: NgProgressBrowserXhr },
     {provide: 'rootApi', useValue: '../../../api/'},
     {provide: 'rootDir', useValue: '../../../'}, OrgUnitService],
   exports: [OrgUnitFilterComponent],
