@@ -158,7 +158,7 @@ export class MessagesComponent implements OnInit {
       });
 
       this.openedConversation.messages = _.transform(response.messages, (results, message)=>{
-        if(response.messageType == 'VALIDATION_RESULT'){
+        if(!message.sender){
           message.senderDisplayName = 'System Notification';
           message.userSentTo = userSentTo;
         } else {
@@ -168,7 +168,7 @@ export class MessagesComponent implements OnInit {
         }
         results.push(message);
       },[]);
-      
+
     })
     this.checkIfIsUserSupportMessage(message);
     this.markAsRead(message);
