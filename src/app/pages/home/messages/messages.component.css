@@ -130,6 +130,7 @@
 }
 .wrapper .content-wrapper .subject .content {
   float: left;
+  width: 100%;
   overflow: hidden;
 }
 .wrapper .content-wrapper .subject .content span {
@@ -157,6 +158,7 @@
 }
 .wrapper .mail-wrapper {
   margin: 2% 8%;
+  width: 84%;
   transition: all .1s ease-in-out;
   background: white;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 6px 12px rgba(0, 0, 0, 0.32);
@@ -771,4 +773,8 @@ span.label {
   padding: 15px;
 	height: 25px;
 	cursor: pointer;
+}
+
+.font_size09 {
+  font-size: 0.9rem;
 }

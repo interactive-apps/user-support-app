@@ -25,8 +25,8 @@
           <div class="someClass">
             <div class="sender" *ngIf="message.user">
               <span>{{messagebody.senderDisplayName}}</span>
-              <span>to</span>
-              <span *ngFor="let user of messagebody.userSentTo; let isLast=last">{{user.displayName}}{{isLast ? '' : ', '}}</span>
+              <span class="font_size09 ">to</span>
+              <span *ngFor="let user of messagebody.userSentTo; let isLast=last" class="text-capitalize" class="font_size09">{{user.displayName}}{{isLast ? '' : ', '}}</span>
             </div>
             <div class="message">
               <section [innerHTML]="messagebody.text"></section>
@@ -85,7 +85,7 @@
             <ngx-avatar name="{{message.userFirstname + ' ' + message.userSurname}}" size="30"></ngx-avatar>
         </div>
         <div class="name" (click)="openMessage(message)">
-          <span>{{message.participants}}</span>
+          <span class="font_size09">{{message.participants}}</span>
         </div>
         <div class="subject">
           <div class="actions">

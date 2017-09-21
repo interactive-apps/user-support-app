@@ -166,7 +166,6 @@ export class OrgUnitFilterComponent implements OnInit {
                         }
                         this.prepareOrganisationUnitTree(this.organisationunits, 'parent');
                         this.orgunit_tree_config.loading = false;
-                        this.updateOrgUnitModel();
                       },
                       error => {
                         this.orgunit_tree_config.loading = false;

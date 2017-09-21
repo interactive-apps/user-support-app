@@ -36,7 +36,9 @@
   display: inline-block;
 }
 
-.action__choices button.btn-1 {border: 2px solid rgb(39, 102, 150);}
+.action__choices button.btn-1 {
+  border: 2px solid rgb(39, 102, 150);
+}
 .action__choices button.btn-1:hover {
   background: rgb(39, 102, 150);
   color: #fff;
