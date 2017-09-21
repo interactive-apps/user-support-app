@@ -11,7 +11,7 @@
         <i class="fa fa-tags"></i><span>Assigned</span><span class="taille"></span>
       </div>
     </div>
-    <div *ngFor="let message of messageConversation | async | paginate: {id:'messageConvo', itemsPerPage: pager.pageSize, currentPage: pager.page, totalItems: pager.total}">
+    <div *ngFor="let message of messageConversation | async | paginate: {id:'messageConvo', itemsPerPage: pager.pageSize, currentPage: pager.page, totalItems: pager.total}" class="MessageContainer">
       <div class="mail-wrapper" *ngIf="message.id === openedMessage">
         <div class="mail-top shadow" (click)="closeMessage()">
           <div class="mail-subject">{{message.subject}}</div>
@@ -84,7 +84,9 @@
         <div class="image" (click)="openMessage(message)">
             <ngx-avatar name="{{message.userFirstname + ' ' + message.userSurname}}" size="30"></ngx-avatar>
         </div>
-        <div class="name" (click)="openMessage(message)"><span>{{message.participants}}</span></div>
+        <div class="name" (click)="openMessage(message)">
+          <span>{{message.participants}}</span>
+        </div>
         <div class="subject">
           <div class="actions">
             <a href="#" class="pinned-msg"><i class="fa fa-thumb-tack"></i></a>
@@ -94,9 +96,9 @@
             </ul>
           </div>
           <div class="content" (click)="openMessage(message)">
-            <span *ngIf="message.priority!=='NONE'" [ngClass]="{label: true, 'label-warning': message.priority === 'MEDIUM', 'label-danger': message.priority === 'HIGH', 'label-info': message.priority === 'LOW'}">{{message.priority}}</span>
-            <span *ngIf="message.status!=='NONE'" [ngClass]="{label: true, 'label-info': message.status === 'PENDING', 'label-success': message.status === 'SOLVED', 'label-warning': message.status === 'OPEN'}">{{message.status}}</span>
-            <span [ngClass]="{fs: true, bold: !message.read}">{{message.subject}}</span>
+            <span *ngIf="message.priority!=='NONE'" [ngClass]="{badge: true, 'badge-warning': message.priority === 'MEDIUM', 'badge-danger': message.priority === 'HIGH', 'badge-info': message.priority === 'LOW'}" class="badge-warning">{{message.priority}}</span>
+            <span *ngIf="message.status!=='NONE'" [ngClass]="{badge: true, 'badge-info': message.status === 'PENDING', 'badge-success': message.status === 'SOLVED', 'badge-default': message.status === 'OPEN'}">{{message.status}}</span>
+            <span [ngClass]="{fs: true, bold: !message.read}">{{message.subject | limitTo:40}}</span>
             <span class="sn">{{formatDate(message.lastMessage)}}</span>
           </div>
         </div>

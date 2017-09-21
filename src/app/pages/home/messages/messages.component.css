@@ -1,8 +1,30 @@
 .wrapper {
   position: relative;
-  margin: 20px auto;
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   transition: .2s;
+}
+.mail__header_tab {
+  width: 80%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  color: #242424;
+  padding-bottom: 5px;
+}
+
+.mail__header_tab div{
+  display: flex;
+  flex: 1;
+  height: 100%;
+  padding: 6px 10px;
+  display: inline-block;
+  border: 0.01rem solid #f3f3f3;
+  cursor: pointer;
+  background: #f3f3f3;
 }
 .wrapper .header {
   padding-bottom: 20px;
@@ -27,9 +49,17 @@
 .wrapper .header button:hover {
   opacity: .75;
 }
+
+.MessageContainer{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
 .wrapper .content-wrapper {
   transition: all .2s ease-in-out;
-  margin: 0 10%;
+  width: 80%;
+  display: flex;
   position: relative;
   overflow: hidden;
   background: #fff;
@@ -48,17 +78,20 @@
 .wrapper .content-wrapper .name {
   float: left;
   width: 184px;
+  display: flex;
+  align-items: center;
   overflow: hidden;
-  text-overflow: elipsis;
-  word-wrap: noword;
+  text-overflow: ellipsis;
 }
 .wrapper .content-wrapper .name span {
   display: inline-block;
-  padding-top: 16px;
 }
 .wrapper .content-wrapper .subject {
   position: relative;
   display: block;
+  display: flex;
+  align-items: center;
+  flex: 1;
   margin: 0 20px 0 8px;
   min-width: 150px;
   text-overflow: elipsis;
@@ -101,7 +134,6 @@
 }
 .wrapper .content-wrapper .subject .content span {
   display: inline-block;
-  padding-top: 16px;
 }
 .wrapper .content-wrapper .subject .content .fs {
   padding-right: 5px;
@@ -594,25 +626,6 @@
   }
 }
 
-
-
-.mail__header_tab {
-  margin: 0 10%;
-  display: flex;
-  color: #242424;
-  padding-bottom: 5px;
-  background: none;
-}
-
-.mail__header_tab div {
-  height: 100%;
-  padding: 6px 10px;
-  display: inline-block;
-  border: 0.01rem solid #f3f3f3;
-  width: 33.33%;
-  cursor: pointer;
-  background: #f3f3f3;
-}
 .mail__header_tab  ul li.active, .mail__header_tab div.active, .mail__header_tab ul li:hover {
   background: #fff;
 }

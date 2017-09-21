@@ -90,10 +90,10 @@
           <app-list-datasets [selected]="selected" *ngIf="!orgunit_tree_config.loading"></app-list-datasets>
         </div>
         <div class="close-area">
-          <button class="btn btn-default pull-right" style="height: 30px"  (click)="displayOrgTree()">
+          <button class="btn btn-secondary btn-sm pull-right"  (click)="displayOrgTree()">
             <span class="glyphicon glyphicon-remove"></span> Close
           </button>
-          <button [disabled]="orgunit_tree_config.loading" *ngIf="orgunit_model.show_update_button" type="button" class="btn btn-default pull-right"  style="height: 30px" (click)="updateOrgUnitModel()">
+          <button [disabled]="orgunit_tree_config.loading" *ngIf="orgunit_model.show_update_button" type="button" class="btn btn-primary btn-sm pull-right" (click)="updateOrgUnitModel()">
             <span class="glyphicon glyphicon-refresh"></span>  Update
           </button>
         </div>

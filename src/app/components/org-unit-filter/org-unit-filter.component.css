@@ -299,6 +299,9 @@ div#tree_view {
   border-top: 1px solid blanchedalmond;
   padding-top: 5px;
 }
+.close-area button {
+  margin-right: 5px;
+}
 
 
 @media print {
