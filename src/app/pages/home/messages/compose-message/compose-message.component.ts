@@ -48,6 +48,30 @@ export class ComposeMessageComponent extends DialogComponent<EmailMessage, boole
     allSelected: 'All selected',
   };
 
+  public orgunit_tree_config: any = {
+    show_search : true,
+    search_text : 'Search',
+    level: null,
+    loading: true,
+    loading_message: 'Loading Organisation units...',
+    multiple: true,
+    multiple_key:"none", //can be control or shift
+    placeholder: "Select Organisation Unit"
+  };
+
+  public orgunit_model: any =  {
+    selection_mode: "orgUnit",
+    selected_level: "",
+    show_update_button:true,
+    selected_group: "",
+    orgunit_levels: [],
+    orgunit_groups: [],
+    selected_orgunits: [],
+    user_orgunits: [],
+    type:"report", // can be 'data_entry'
+    selected_user_orgunit: "USER_ORGUNIT"
+  };
+
 
   constructor(public fb: FormBuilder, dialogService: DialogService,
     public _userService: UserService, public _messageConversationService: MessageConversationService) {

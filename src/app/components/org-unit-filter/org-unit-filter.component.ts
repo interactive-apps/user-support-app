@@ -314,7 +314,7 @@ export class OrgUnitFilterComponent implements OnInit {
       value = this.orgunit_model.selected_orgunits[0].id;
     }
     this.onOrgUnitUpdate.emit({name: 'ou', value: this.orgunit_model.selected_orgunits});
-    //this.displayOrgTree();
+    this.showOrgTree = !this.showOrgTree;
   }
 
   // prepare a proper name for updating the organisation unit display area.

@@ -13,7 +13,7 @@
           <form class="" (ngSubmit)="onSendEmail(emailComposeForm)" [formGroup]="emailComposeForm" novalidate>
             <div class="organisationUnitsSelect">
               <label for="selectOrgUnit">Organisation unit selection</label>
-              <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)" name="selectOrgUnit"></app-org-unit-filter>
+              <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)" name="selectOrgUnit" [orgunit_tree_config]="orgunit_tree_config" [orgunit_model]="orgunit_model"></app-org-unit-filter>
             </div>
             <div class="userToSendSelect">
               <label>To user(s):</label>
