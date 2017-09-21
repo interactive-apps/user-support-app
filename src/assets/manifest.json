@@ -1,6 +1,6 @@
 {
-	"name": "User Support App",
-	"short_name": "User Support App",
+	"name": "User Support Application",
+	"short_name": "UserSupportApp",
 	"icons": [
 		{
 			"src": "assets/img/icon-128x128.png",

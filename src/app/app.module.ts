@@ -36,8 +36,6 @@ import { UIRouterConfigFn }   from "./app.router";
 import { appStates } from "./app.route-states";
 
 
-//components
-import { HomeComponent } from './pages/home/home.component';
 import { OrgUnitFilterComponent } from  './components/org-unit-filter/org-unit-filter.component';
 import { ListDatasetsComponent } from './components/list-datasets/list-datasets.component';
 import { ActionComponent } from './pages/home/action/action.component';
@@ -51,7 +49,6 @@ import { ComposeFeedbackComponent } from './pages/home/messages/compose-feedback
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     OrgUnitFilterComponent,
     ActionComponent,
     MessagesComponent,
