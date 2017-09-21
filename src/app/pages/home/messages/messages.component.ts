@@ -35,6 +35,7 @@ export class MessagesComponent implements OnInit {
   public dataStoreValues: any = [];
   public feedbackRecipients: any = [];
   public assignedMember: string = 'none';
+  public openedConversation: any;
   public messageConversation: Observable<MessageConversation[]>;
   public messageReplyFormGroup: FormGroup;
   public dataStoreKey: string;
@@ -109,7 +110,6 @@ export class MessagesComponent implements OnInit {
       this.feedbackRecipients = _.transform(results[0].users,(result, user) =>{
         result.push({id: user.id, name: user.displayName});
       },[]);
-
       // Add none which will be use to delete assingment
       this.feedbackRecipients.push({id:'none', name: 'None'});
       this.isCurrentUserInFeedbackGroup = _.findIndex(results[1].userGroups, { id: results[0].id }) !== -1;
@@ -149,7 +149,27 @@ export class MessagesComponent implements OnInit {
   }
 
   openMessage(message) {
-    this.openedMessage = message.id;
+    this._messageConversationService.loadSingleMessage(message.id).subscribe(response =>{
+      this.openedMessage = message.id;
+      this.openedConversation = response;
+
+      let userSentTo = _.map(response.userMessages, (userMessage)=>{
+        return userMessage.user;
+      });
+
+      this.openedConversation.messages = _.transform(response.messages, (results, message)=>{
+        if(response.messageType == 'VALIDATION_RESULT'){
+          message.senderDisplayName = 'System Notification';
+          message.userSentTo = userSentTo;
+        } else {
+          let [sender,sentTo] = _.partition(userSentTo,message.sender);
+          message.senderDisplayName = sender[0].displayName;
+          message.userSentTo = sentTo;
+        }
+        results.push(message);
+      },[]);
+      
+    })
     this.checkIfIsUserSupportMessage(message);
     this.markAsRead(message);
   }

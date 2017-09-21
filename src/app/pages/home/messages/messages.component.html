@@ -17,13 +17,16 @@
           <div class="mail-subject">{{message.subject}}</div>
           <div class="mail-action"></div>
         </div>
-        <div class="mail-body" *ngFor="let messagebody of message.messages; let i = index">
+
+        <div class="mail-body" *ngFor="let messagebody of openedConversation.messages; let i = index">
           <div class="image">
             <ngx-avatar name="{{message.userFirstname + ' ' + message.userSurname}}" size="35"></ngx-avatar>
           </div>
           <div class="someClass">
             <div class="sender" *ngIf="message.user">
-              <span>{{message.userFirstname+" "+ message.userSurname}}</span>
+              <span>{{messagebody.senderDisplayName}}</span>
+              <span>to</span>
+              <span *ngFor="let user of messagebody.userSentTo; let isLast=last">{{user.displayName}}{{isLast ? '' : ', '}}</span>
             </div>
             <div class="message">
               <section [innerHTML]="messagebody.text"></section>

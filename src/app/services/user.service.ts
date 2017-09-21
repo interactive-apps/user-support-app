@@ -16,7 +16,7 @@ export class UserService {
 
   // Get current user information
   getUserInformation () {
-    return this.http.get(this._rootDir + 'api/me.json?fields=id,name,userGroups,userCredentials[userRoles[authorities]]')
+    return this.http.get(this._rootDir + 'api/me.json?fields=id,name,userGroups')
       .map((response: Response) => response.json())
       .catch( this.handleError );
   }

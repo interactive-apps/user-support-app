@@ -44,7 +44,7 @@ export class MessageConversationService {
 
     let pageNo = pageNumber ? pageNumber : 1;
     let loadFilter = filters ? filters: '';
-    this.http.get(`${this.baseUrl}api/messageConversations?fields=*,messages[*]&page=${pageNo}&pageSize=20&${loadFilter}`)
+    this.http.get(`${this.baseUrl}api/messageConversations?fields=*&page=${pageNo}&pageSize=20&${loadFilter}`)
       .map(response => response.json()).subscribe(result => {
       this._pager.next(Object.assign({}, result).pager);
       this.dataStore.messageConversation = this.transformMessageConversation(result.messageConversations);
@@ -54,7 +54,7 @@ export class MessageConversationService {
 
 
   load(id: number | string) {
-    this.http.get(`${this.baseUrl}api/messageConversations/${id}`).map(response => response.json()).subscribe(data => {
+    this.http.get(`${this.baseUrl}api/messageConversations/${id}.json?fields=*,userMessages[*,user[id,displayName]],messages[*]`).map(response => response.json()).subscribe(data => {
       let notFound = true;
 
       this.dataStore.messageConversation.forEach((item, index) => {
@@ -175,6 +175,13 @@ export class MessageConversationService {
         })
         .catch( this.handleError );
   }
+
+  loadSingleMessage(id:string) {
+    return this.http.get(`${this.baseUrl}api/messageConversations/${id}?fields=*,userMessages[*,user[id,displayName]],messages[*]`)
+        .map((response: Response) => response.json())
+        .catch( this.handleError );
+  }
+
 
   private handleError(error: Response) {
     return Observable.throw(error || "Server Error");
