@@ -97,7 +97,7 @@
           </div>
           <div class="content" (click)="openMessage(message)">
             <span *ngIf="message.priority!=='NONE'" [ngClass]="{badge: true, 'badge-warning': message.priority === 'MEDIUM', 'badge-danger': message.priority === 'HIGH', 'badge-info': message.priority === 'LOW'}" class="badge-warning">{{message.priority}}</span>
-            <span *ngIf="message.status!=='NONE'" [ngClass]="{badge: true, 'badge-info': message.status === 'PENDING', 'badge-success': message.status === 'SOLVED', 'badge-default': message.status === 'OPEN'}">{{message.status}}</span>
+            <span *ngIf="message.status!=='NONE'" [ngClass]="{badge: true, 'badge-info': message.status === 'PENDING', 'badge-success': message.status === 'SOLVED', 'badge-secondary': message.status === 'OPEN'}">{{message.status}}</span>
             <span [ngClass]="{fs: true, bold: !message.read}">{{message.subject | limitTo:40}}</span>
             <span class="sn">{{formatDate(message.lastMessage)}}</span>
           </div>

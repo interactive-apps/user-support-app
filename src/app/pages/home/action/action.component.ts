@@ -1,10 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, NgModule} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
-import { StateService}  from "@uirouter/angular";
 import { DialogService } from 'ng2-bootstrap-modal';
 import { User } from '../../../models/user.model';
-import { UIRouterModule } from "@uirouter/angular";
 import { ComposeFeedbackComponent } from '../messages/compose-feedback/compose-feedback.component';
 
 @Component({
@@ -21,7 +19,6 @@ export class ActionComponent implements OnInit {
 
 
   constructor(private fb: FormBuilder,
-              private _stateService: StateService,
               private _userService: UserService,
               private _dialogService: DialogService) {
 

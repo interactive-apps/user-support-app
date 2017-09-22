@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { BrowserXhr, HttpModule } from '@angular/http';
 import { TreeModule } from 'angular-tree-component';
 import { CommonModule, HashLocationStrategy, Location, LocationStrategy } from '@angular/common';
-import { UIRouterModule} from "@uirouter/angular";
 import { Routes, RouterModule, PreloadAllModules} from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
@@ -31,9 +30,7 @@ import { ComponentsModule } from './components/components.module';
 import { MenuModule } from './components/menu/menu.module';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
-import { UIRouterConfigFn }   from "./app.router";
-
-import { appStates } from "./app.route-states";
+import { ROUTES } from "./app.routes";
 
 
 import { OrgUnitFilterComponent } from  './components/org-unit-filter/org-unit-filter.component';
@@ -77,11 +74,7 @@ import { ComposeFeedbackComponent } from './pages/home/messages/compose-feedback
     MenuModule,
     StoreModule.provideStore({uiState: uiStateReducer,storeData: storeDataReducer},INITIAL_APPLICATION_STATE),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
-    UIRouterModule.forRoot({
-      states: appStates,
-      useHash: true,
-      config: UIRouterConfigFn
-    })
+    RouterModule.forRoot(ROUTES, {useHash: true, preloadingStrategy: PreloadAllModules })
   ],
   providers: [
     { provide: BrowserXhr, useClass: NgProgressBrowserXhr },
