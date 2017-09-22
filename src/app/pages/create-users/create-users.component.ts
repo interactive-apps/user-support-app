@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user.model';
+import { matchOtherValidator } from '../../shared/match-other-validator'
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SharedDataService } from '../../shared/shared-data.service';
+import { ToastService } from '../../services/toast.service';
+import { DataStoreService } from '../../services/data-store.service';
+import { MessageConversationService } from '../../services/message-conversation.service';
 
 import * as _ from 'lodash';
 
@@ -12,9 +17,10 @@ import * as _ from 'lodash';
 export class CreateUsersComponent implements OnInit {
 
   public selectedOrgUnitNames: String[];
-  public selectedOrgUnitIDs: String[];
+  public selectedOrgUnitIDs: any;
   public isOrganizationUnitSelected: boolean = false;
-  userDetails: FormGroup;
+  private feedbackRecipients: any;
+  public userDetails: FormGroup;
 
   public orgunit_tree_config: any = {
     show_search : true,
@@ -41,7 +47,10 @@ export class CreateUsersComponent implements OnInit {
   };
 
 
-  constructor() { }
+  constructor(private _dataStoreService: DataStoreService,
+              private _sharedDataService: SharedDataService,
+              private _toastService: ToastService,
+              private _messageConversationService: MessageConversationService) { }
 
   ngOnInit() {
 
@@ -53,13 +62,21 @@ export class CreateUsersComponent implements OnInit {
       userCredentials: new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(2)]),
         password: new FormControl('', [Validators.required, Validators.minLength(2)]),
-        confirm: new FormControl('', [Validators.required, Validators.minLength(2)])
+        confirm: new FormControl('', [Validators.required, Validators.minLength(2),matchOtherValidator('password')])
       })
     });
+
+    this._sharedDataService.getFeedbackReceipients().subscribe(response =>{
+      this.feedbackRecipients = response;
+    })
+
   }
 
   setSelectedOrgunit(event){
-    this.selectedOrgUnitIDs = _.map(event.value, 'id');
+    this.selectedOrgUnitIDs = _.transform(event.value,(results,value) => {
+      results.push(_.pick(value,'id'));
+    },[]);
+
     this.selectedOrgUnitNames = _.map(event.value, 'name');
 
     if(event.value.length >= 1){
@@ -68,11 +85,63 @@ export class CreateUsersComponent implements OnInit {
 
   }
 
+  createDataStoreObjKey(){
 
+    let formatter = new Intl.DateTimeFormat("fr", { month: "short" }),
+        month = formatter.format(new Date()),
+        text = '',
+        possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    for(let i=0; i < 3; i++){
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+
+    return month.slice(0, -1).toUpperCase().concat('_',text);
+
+  }
 
   onSubmit({ value, valid }: { value: User, valid: boolean }) {
     value.organisationUnits = this.selectedOrgUnitIDs;
-    console.log(value, valid);
+    let dataStoreKey = this.createDataStoreObjKey();
+
+    let datasetUrlTosendTo = `api/users`;
+    let payload = [{
+      url: datasetUrlTosendTo,
+      method: 'POST',
+      status: 'OPEN',
+      action: `Add ${value.firstName} ${value.surname} as a user.`,
+      payload: value
+    }];
+
+    let feedbackSubject = `${dataStoreKey}:REQUEST FOR CREATING USER`;
+    let text = `There is request to create user to ${this.selectedOrgUnitNames} orgnisation unit, with the following information`;
+    this._dataStoreService
+        .createNewKeyAndValue(dataStoreKey,payload)
+        .subscribe(response =>{
+
+          if(response.ok){
+            this._toastService.success('Your changes were sent for approval, Thanks.')
+            this.sendFeedBackMessage(feedbackSubject, text);
+
+          } else {
+            this._toastService.error('There was an error when sending data.')
+
+          }
+        });
+  }
+
+  sendFeedBackMessage(subject,message){
+    let payload = {
+      subject: subject,
+      text: message,
+      userGroups: [{id: this.feedbackRecipients.id}]
+    }
+    this._messageConversationService.sendFeedBackMessage(payload).subscribe(response =>{
+      // TODO: Send notification if possible about new message.
+      //console.log(response);
+
+    })
+
   }
 
 }

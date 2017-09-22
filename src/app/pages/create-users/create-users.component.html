@@ -51,8 +51,14 @@
             <div class="form-group col-md-6" formGroupName="userCredentials" [ngClass]="{'has-error': userDetails.get('userCredentials').get('confirm').hasError('required') && userDetails.get('userCredentials').get('confirm').touched}">
               <label for="inputPasswordRetype" class="col-form-label">Retype Passoword</label>
               <input type="password" class="form-control" id="inputPasswordRetype" placeholder="Retype password" formControlName="confirm" aria-describedby="helpConfirm">
-              <span id="helpConfirm" class="form-text text-danger" *ngIf="userDetails.get('userCredentials').get('confirm').hasError('required') && userDetails.get('userCredentials').get('confirm').touched">
-                Confirm is required
+              <span id="helpConfirm" class="form-text text-danger"
+                    *ngIf="userDetails.get('userCredentials').get('confirm').hasError('required') &&
+                    userDetails.get('userCredentials').get('confirm').touched">Confirm is required</span>
+              <span id="helpConfirm" class="form-text text-danger"
+                *ngIf="!userDetails.get('userCredentials').get('password').hasError('required') &&
+                      userDetails.get('userCredentials').get('confirm').hasError('matchOther') &&
+                      userDetails.get('userCredentials').get('confirm').touched">
+                Password does not match.
               </span>
             </div>
           </div>

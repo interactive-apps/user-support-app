@@ -351,7 +351,7 @@ export class MessagesComponent implements OnInit {
    * @param  {[object]} results [Array collection of all response results]
    * @return {[void]}         [none]
    */
-  private asyncDone(error, results) {
+  private asyncDoneAsnc(error, results) {
     console.log(results);
     if(results.length){
       this._toastService.success('Approved changes were updated successfully.');
@@ -361,6 +361,9 @@ export class MessagesComponent implements OnInit {
 
     }
   }
+
+  asyncDone = this.asyncDoneAsnc.bind(this);
+
 
   /**
    * [formatDate: format date to well understandable way]
