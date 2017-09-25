@@ -89,6 +89,11 @@ export class MessagesComponent implements OnInit {
       }
     });
 
+    /**
+     * [parallel async send multiple requests in parallel the outer bound is the one wh]
+     * @param  {[type]} [(callback [description]
+     * @return {[type]}            [description]
+     */
     async.parallel([
       (callback) => {
         this._sharedDataService.getFeedbackReceipients().subscribe(response => {
@@ -120,7 +125,11 @@ export class MessagesComponent implements OnInit {
 
   }
 
-  messagesFilters(filter) {
+  /**
+   * [messagesFilters apply filters during message load]
+   * @param  {string} filter [filter]
+   */
+  messagesFilters(filter:string) {
     switch (filter) {
       case 'followUp':
         if (this.isActive !== filter) {
@@ -148,7 +157,11 @@ export class MessagesComponent implements OnInit {
     }
   }
 
-  openMessage(message) {
+  /**
+   * [openMessage Open message to read]
+   * @param  {[Object]} message [Message conversation which is opened]
+   */
+  openMessage(message:any) {
     this._messageConversationService.loadSingleMessage(message.id).subscribe(response =>{
       this.openedMessage = message.id;
       this.openedConversation = response;
@@ -174,22 +187,36 @@ export class MessagesComponent implements OnInit {
     this.markAsRead(message);
   }
 
-  markAsRead(message) {
+  /**
+   * [markAsRead mark specific message as read]
+   * @param  {any}    message [messageconversation that is to be marked read]
+   */
+  markAsRead(message:any) {
     if (!message.read) {
       message.read = true;
       this._messageConversationService.markAsRead(message);
     }
   }
 
+  /**
+   * [deleteMessage delete specific message conversation]
+   * @param  {[type]} message [Message conversation to be deleted]
+   */
   deleteMessage(message) {
     this._messageConversationService.deleteConversation(message.id);
   }
 
-
+  /**
+   * [closeMessage Close the opened message]
+   */
   closeMessage() {
     this.openedMessage = null;
   }
 
+  /**
+   * [getAllUserMessageConversations get all user messages]
+   * @param  {Number} pageNumber [pageNumber]
+   */
   getAllUserMessageConversations(pageNumber?: Number) {
     this._messageConversationService.loadAll(pageNumber, this.filter);
     this.messageConversation = this._messageConversationService.messageConversation;
@@ -199,6 +226,11 @@ export class MessagesComponent implements OnInit {
     });
   }
 
+  /**
+   * [showComposeMessage open ComposeMessageComponent modal]
+   * @param  {string} subject [subject]
+   * @param  {string} text    [message content]
+   */
   showComposeMessage(subject?: string, text?: string) {
     let disposable = this._dialogService.addDialog(ComposeMessageComponent, {
       subject: subject,
@@ -209,6 +241,11 @@ export class MessagesComponent implements OnInit {
       });
   }
 
+  /**
+   * [showComposeFeedback Opens the ComposeFeedbackComponent modal]
+   * @param  {string} subject [subject]
+   * @param  {string} text    [message content]
+   */
   showComposeFeedback(subject?: string, text?: string) {
     let disposable = this._dialogService.addDialog(ComposeFeedbackComponent, {
       subject: subject,
@@ -219,15 +256,24 @@ export class MessagesComponent implements OnInit {
       });
   }
 
-
-  getPage(page) {
+  /**
+   * [getPage get page number and its messages]
+   * @param  {number} page [page number]
+   */
+  getPage(page:number) {
     this.currentPage = page;
     this.isDataLoaded = false;
     this.isLoadingMessagesPagination = true;
     this.getAllUserMessageConversations(page);
   }
 
-
+  /**
+   * [onReplyMessage description]
+   * @param  {String}     conversationID [description]
+   * @param  {[Object]}     {value         [contains the content of the form]
+   * @param  {any}        valid}         [description]
+   * @param  {boolean }}            valid         [description]
+   */
   onReplyMessage(conversationID: String, { value, valid }: { value: any, valid: boolean }) {
     this._messageConversationService.replyConversation(conversationID, value.message);
     this.messageReplyFormGroup.reset();
@@ -275,6 +321,10 @@ export class MessagesComponent implements OnInit {
       });
   }
 
+  /**
+   * [approveChangesDataset changes status of the datastore value and update disableApproveAll]
+   * @param  {any}    dataSet [dataStoreValues]
+   */
   approveChangesDataset(dataSet: any) {
     let asyncRequestsArray = [];
     let updatedDatastoreValues = [];
@@ -362,6 +412,10 @@ export class MessagesComponent implements OnInit {
     }
   }
 
+  /**
+   * [bind bind callback function with global this]
+   * @param  {[function]} this [this]
+   */
   asyncDone = this.asyncDoneAsnc.bind(this);
 
 
