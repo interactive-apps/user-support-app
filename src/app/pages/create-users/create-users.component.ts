@@ -8,6 +8,7 @@ import { DataStoreService } from '../../services/data-store.service';
 import { MessageConversationService } from '../../services/message-conversation.service';
 
 import * as _ from 'lodash';
+import * as async from 'async-es';
 
 @Component({
   selector: 'app-create-users',
@@ -19,6 +20,7 @@ export class CreateUsersComponent implements OnInit {
   public selectedOrgUnitNames: String[];
   public selectedOrgUnitIDs: any;
   public isOrganizationUnitSelected: boolean = false;
+  private randomGeneratedID:string;
   private feedbackRecipients: any;
   public userDetails: FormGroup;
 
@@ -61,15 +63,28 @@ export class CreateUsersComponent implements OnInit {
       phoneNumber: new FormControl('', [Validators.minLength(2)]),
       userCredentials: new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(2)]),
-        password: new FormControl('', [Validators.required, Validators.minLength(2)]),
-        confirm: new FormControl('', [Validators.required, Validators.minLength(2),matchOtherValidator('password')])
+        password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+        confirm: new FormControl('', [Validators.required, Validators.minLength(8),matchOtherValidator('password')])
       })
     });
 
-    this._sharedDataService.getFeedbackReceipients().subscribe(response =>{
-      this.feedbackRecipients = response;
-    })
+    async.parallel([
+      (callback) => {
+        this._sharedDataService.getFeedbackReceipients().subscribe(response => {
+          callback(null, response)
+        })
+      },
+      (callback) => {
+        this._sharedDataService.getRandomGeneratedId().subscribe(response => {
+          callback(null, response)
+        })
+      }
+    ], (error, results) => {
+      this.feedbackRecipients = results[0];
+      this.randomGeneratedID = results[1]
+      console.log(results[1])
 
+    })
   }
 
   setSelectedOrgunit(event){
@@ -101,16 +116,22 @@ export class CreateUsersComponent implements OnInit {
   }
 
   onSubmit({ value, valid }: { value: User, valid: boolean }) {
-    value.organisationUnits = this.selectedOrgUnitIDs;
-    let dataStoreKey = this.createDataStoreObjKey();
+    let userPayload = Object.assign({},value);
+    userPayload.organisationUnits = this.selectedOrgUnitIDs;
+    userPayload.id = this.randomGeneratedID;
 
+    userPayload.userCredentials.userInfo = {
+      id: this.randomGeneratedID
+    }
+
+    let dataStoreKey = this.createDataStoreObjKey();
     let datasetUrlTosendTo = `api/users`;
     let payload = [{
       url: datasetUrlTosendTo,
       method: 'POST',
       status: 'OPEN',
       action: `Add ${value.firstName} ${value.surname} as a user.`,
-      payload: value
+      payload: userPayload
     }];
 
     let feedbackSubject = `${dataStoreKey}:REQUEST FOR CREATING USER`;
