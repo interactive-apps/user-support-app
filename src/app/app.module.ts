@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { BrowserXhr, HttpModule } from '@angular/http';
 import { TreeModule } from 'angular-tree-component';
 import { CommonModule, HashLocationStrategy, Location, LocationStrategy } from '@angular/common';
-import { Routes, RouterModule, PreloadAllModules} from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -29,8 +28,7 @@ import { OrgUnitService } from './components/org-unit-filter/org-unit.service'
 import { ComponentsModule } from './components/components.module';
 import { MenuModule } from './components/menu/menu.module';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
-
-import { ROUTES } from "./app.routes";
+import { AppRoutingModule }     from './app-routing.module';
 
 
 import { OrgUnitFilterComponent } from  './components/org-unit-filter/org-unit-filter.component';
@@ -74,7 +72,7 @@ import { ComposeFeedbackComponent } from './pages/home/messages/compose-feedback
     MenuModule,
     StoreModule.provideStore({uiState: uiStateReducer,storeData: storeDataReducer},INITIAL_APPLICATION_STATE),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
-    RouterModule.forRoot(ROUTES, {useHash: true, preloadingStrategy: PreloadAllModules })
+    AppRoutingModule
   ],
   providers: [
     { provide: BrowserXhr, useClass: NgProgressBrowserXhr },

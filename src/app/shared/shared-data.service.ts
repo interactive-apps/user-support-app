@@ -34,6 +34,13 @@ export class SharedDataService {
       .catch( this.handleError );
   }
 
+  // Get current user information
+  getRandomGeneratedId () {
+    return this.http.get(this.baseUrl + '/api/system/id.json')
+      .map((response: Response) => response.json().codes[0])
+      .catch( this.handleError );
+  }
+
 
   // Get current user information
   getFeedbackReceipients () {
