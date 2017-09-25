@@ -47,6 +47,12 @@ export class UserService {
           .catch(this.handleError);
   }
 
+  getAllUserRoles () {
+    return this.http.get(this._rootDir + 'api/userRoles.json?paging=false')
+          .map((response: Response) => response.json())
+          .catch(this.handleError);
+  }
+
   private handleError (error: Response) {
     return Observable.throw(error || "Server Error");
   }

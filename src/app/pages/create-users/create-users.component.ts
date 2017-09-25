@@ -22,6 +22,7 @@ export class CreateUsersComponent implements OnInit {
   public selectedOrgUnitNames: String[];
   public selectedOrgUnitIDs: any;
   public allUserGroups: any;
+  public allUserRoles: any;
   public isOrganizationUnitSelected: boolean = false;
   private randomGeneratedID: string;
   private feedbackRecipients: any;
@@ -89,6 +90,7 @@ export class CreateUsersComponent implements OnInit {
       phoneNumber: new FormControl('', [Validators.minLength(2)]),
       userGroups: new FormControl(''),
       userCredentials: new FormGroup({
+        userRoles: new FormControl(''),
         username: new FormControl('', [Validators.required, Validators.minLength(2)]),
         password: new FormControl('', [Validators.required, Validators.minLength(8)]),
         confirm: new FormControl('', [Validators.required, Validators.minLength(8), matchOtherValidator('password')])
@@ -114,16 +116,30 @@ export class CreateUsersComponent implements OnInit {
         this._userService.getAllUserGroups().subscribe(response => {
           callback(null, response)
         })
+      },
+      (callback) => {
+        this._userService.getAllUserRoles().subscribe(response => {
+          callback(null, response)
+        })
       }
     ], (error, results) => {
       this.feedbackRecipients = results[0];
       this.randomGeneratedID = results[1];
+
       this.allUserGroups = _.transform(results[2].userGroups, (results, userGroup) => {
         results.push({
           id: userGroup.id,
           name: userGroup.displayName
         })
       }, []);
+
+      this.allUserRoles = _.transform(results[3].userRoles, (results, userRole) => {
+        results.push({
+          id: userRole.id,
+          name: userRole.displayName
+        })
+      }, []);
+
     })
   }
 
@@ -174,6 +190,16 @@ export class CreateUsersComponent implements OnInit {
     let userPayload = Object.assign({}, value);
     userPayload.organisationUnits = this.selectedOrgUnitIDs;
     userPayload.id = this.randomGeneratedID;
+    
+    userPayload.userCredentials.userRoles = _.transform(value.userCredentials.userRoles,
+        (result, userRoleID) => {
+          if(userRoleID.length) {
+            result.push({
+              id: userRoleID
+            })
+          }
+    }, []);
+
     userPayload.userGroups = _.transform(value.userGroups, (result, userGroupID) => {
       if (userGroupID.length) {
         result.push({
