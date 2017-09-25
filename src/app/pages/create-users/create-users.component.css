@@ -35,3 +35,16 @@
 .requestUser__form {
   margin: 15px 0;
 }
+
+.userGroupSelect{
+  display: block;
+}
+
+ss-multiselect-dropdown#multiselectDropdown {
+    /* width: 100%; */
+    display: block;
+}
+
+ul.dropdown-menu {
+  width: 100%;
+}
