@@ -291,7 +291,7 @@ export class MessagesComponent implements OnInit {
       let index = _.findIndex(this.dataStoreValues, { url: dataSet.url });
       dataSet.status = 'SOLVED';
       this.dataStoreValues.splice(index, 1, dataSet);
-
+      this.disableApproveAll = (_.findIndex(this.dataStoreValues, { status: 'SOLVED' }) !== -1);
       updatedDatastoreValues = this.dataStoreValues;
       asyncRequestsArray.push(dataSet);
     }
