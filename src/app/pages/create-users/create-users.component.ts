@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user.model';
-import { matchOtherValidator } from '../../shared/match-other-validator'
+import { matchOtherValidator } from '../../shared/match-other-validator';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { SharedDataService } from '../../shared/shared-data.service';
 import { ToastService } from '../../services/toast.service';
@@ -190,7 +190,7 @@ export class CreateUsersComponent implements OnInit {
     let userPayload = Object.assign({}, value);
     userPayload.organisationUnits = this.selectedOrgUnitIDs;
     userPayload.id = this.randomGeneratedID;
-    
+
     userPayload.userCredentials.userRoles = _.transform(value.userCredentials.userRoles,
         (result, userRoleID) => {
           if(userRoleID.length) {
@@ -211,7 +211,7 @@ export class CreateUsersComponent implements OnInit {
     userPayload.userCredentials.userInfo = {
       id: this.randomGeneratedID
     }
-    console.log(userPayload);
+    
     let dataStoreKey = this.createDataStoreObjKey();
     let datasetUrlTosendTo = `api/users`;
     let payload = [{
