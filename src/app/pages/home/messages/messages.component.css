@@ -84,7 +84,10 @@
   text-overflow: ellipsis;
 }
 .wrapper .content-wrapper .name span {
-  display: inline-block;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
 }
 .wrapper .content-wrapper .subject {
   position: relative;
