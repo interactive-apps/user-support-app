@@ -1,5 +1,22 @@
 <dhis-menu></dhis-menu>
 <ng-progress></ng-progress>
 <div class="main">
-  <router-outlet></router-outlet>
+  <div class="container-fluid action__wrapper">
+    <div class="actionForm">
+      <h3 class="wellcome__messaging">Welcome {{currentUser.name}}, How can we help you today? </h3>
+      <div class="form-group">
+        <section class="action__choices">
+          <button class="custom-btn btn-1" (click)="showComposeFeedback()" routerLinkActive="active"><i class="fa fa-pencil-square-o action__icon" aria-hidden="true"></i>Write Feedback</button>
+          <button class="custom-btn btn-1" (click)="showChosenComponent('messages')" routerLinkActive="active"><i class="fa fa-envelope-o action__icon" aria-hidden="true"></i>Messages</button>
+          <button class="custom-btn btn-1" (click)="showChosenComponent('createUser')" routerLinkActive="active"><i class="fa fa-user-o action__icon" aria-hidden="true"></i>Create User(s)</button>
+          <button class="custom-btn btn-1" (click)="showChosenComponent('resetPassword')" routerLinkActive="active"><i class="fa fa-wpforms action__icon" aria-hidden="true"></i>Reset Password</button>
+          <button class="custom-btn btn-1" (click)="showChosenComponent('addForms')" routerLinkActive="active"><i class="fa fa-wpforms action__icon" aria-hidden="true"></i>Request Form(s)</button>
+        </section>
+      </div>
+    </div>
+    <app-messages [ngClass]="{'col-sm-12': true,'opacity-modal': currentShown !=='messages'}"></app-messages>
+    <app-create-users class="create__users" *ngIf="currentShown === 'createUser'"></app-create-users>
+    <app-add-form class="create__users" *ngIf="currentShown === 'addForms'"></app-add-form>
+    <app-reset-password class="create__users" *ngIf="currentShown === 'resetPassword'"></app-reset-password>
+  </div>
 </div>

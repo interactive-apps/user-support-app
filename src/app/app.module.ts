@@ -28,7 +28,6 @@ import { OrgUnitService } from './components/org-unit-filter/org-unit.service'
 import { ComponentsModule } from './components/components.module';
 import { MenuModule } from './components/menu/menu.module';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
-import { AppRoutingModule }     from './app-routing.module';
 
 
 import { OrgUnitFilterComponent } from  './components/org-unit-filter/org-unit-filter.component';
@@ -39,7 +38,6 @@ import { CreateUsersComponent } from './components/create-users/create-users.com
 import { AddFormComponent } from './components/add-form/add-form.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { ComposeFeedbackComponent } from './components/messages/compose-feedback/compose-feedback.component';
-import { HomeComponent } from './pages/home/home.component';
 
 @NgModule({
   declarations: [
@@ -51,8 +49,7 @@ import { HomeComponent } from './pages/home/home.component';
     AddFormComponent,
     ResetPasswordComponent,
     ListDatasetsComponent,
-    ComposeFeedbackComponent,
-    HomeComponent
+    ComposeFeedbackComponent
   ],
   imports: [
     BrowserModule,
@@ -71,8 +68,7 @@ import { HomeComponent } from './pages/home/home.component';
     TreeModule,
     MenuModule,
     StoreModule.provideStore({uiState: uiStateReducer,storeData: storeDataReducer},INITIAL_APPLICATION_STATE),
-    StoreDevtoolsModule.instrumentOnlyWithExtension(),
-    AppRoutingModule
+    StoreDevtoolsModule.instrumentOnlyWithExtension()
   ],
   providers: [
     { provide: BrowserXhr, useClass: NgProgressBrowserXhr },
