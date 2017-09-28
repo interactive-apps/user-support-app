@@ -1,12 +1,12 @@
-import { ActionComponent } from './pages/home/action/action.component';
-import { CreateUsersComponent } from './pages/create-users/create-users.component';
-import { AddFormComponent } from './pages/add-form/add-form.component';
-import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { CreateUsersComponent } from './components/create-users/create-users.component';
+import { HomeComponent } from './pages/home/home.component';
+import { AddFormComponent } from './components/add-form/add-form.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { Routes, RouterModule, PreloadAllModules} from '@angular/router';
 import { NgModule } from '@angular/core';
 
 export const ROUTES: Routes = [
-  { path: '', component: ActionComponent },
+  { path: '', component: HomeComponent },
   { path: 'add-form', component: AddFormComponent },
   { path: 'create-users', component: CreateUsersComponent},
   { path: 'reset-password', component: ResetPasswordComponent}

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
-import { EmailMessage } from '../../../../models/email-message.model';
-import { Message } from '../../../../models/message.model';
-import { UserService } from '../../../../services/user.service';
+import { EmailMessage } from '../../../models/email-message.model';
+import { Message } from '../../../models/message.model';
+import { UserService } from '../../../services/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
-import { MessageConversationService } from '../../../../services/message-conversation.service';
+import { MessageConversationService } from '../../../services/message-conversation.service';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 

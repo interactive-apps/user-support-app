@@ -1,12 +1,12 @@
 import { Injectable, Inject, Component, OnInit } from '@angular/core';
-import { MessageConversationService } from '../../../services/message-conversation.service';
-import { DataStoreService } from '../../../services/data-store.service';
-import { UserService } from '../../../services/user.service';
-import { ToastService } from '../../../services/toast.service';
-import { SharedDataService } from '../../../shared/shared-data.service';
+import { MessageConversationService } from '../../services/message-conversation.service';
+import { DataStoreService } from '../../services/data-store.service';
+import { UserService } from '../../services/user.service';
+import { ToastService } from '../../services/toast.service';
+import { SharedDataService } from '../../shared/shared-data.service';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
-import { MessageConversation } from '../../../models/message-conversation.model';
+import { MessageConversation } from '../../models/message-conversation.model';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { ComposeMessageComponent } from './compose-message/compose-message.component';
 import { ComposeFeedbackComponent } from './compose-feedback/compose-feedback.component';
