@@ -28,24 +28,21 @@ import { OrgUnitService } from './components/org-unit-filter/org-unit.service'
 import { ComponentsModule } from './components/components.module';
 import { MenuModule } from './components/menu/menu.module';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
-import { AppRoutingModule }     from './app-routing.module';
 
 
 import { OrgUnitFilterComponent } from  './components/org-unit-filter/org-unit-filter.component';
 import { ListDatasetsComponent } from './components/list-datasets/list-datasets.component';
-import { ActionComponent } from './pages/home/action/action.component';
-import { MessagesComponent } from './pages/home/messages/messages.component';
-import { ComposeMessageComponent } from './pages/home/messages/compose-message/compose-message.component';
-import { CreateUsersComponent } from './pages/create-users/create-users.component';
-import { AddFormComponent } from './pages/add-form/add-form.component';
-import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
-import { ComposeFeedbackComponent } from './pages/home/messages/compose-feedback/compose-feedback.component';
+import { MessagesComponent } from './components/messages/messages.component';
+import { ComposeMessageComponent } from './components/messages/compose-message/compose-message.component';
+import { CreateUsersComponent } from './components/create-users/create-users.component';
+import { AddFormComponent } from './components/add-form/add-form.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { ComposeFeedbackComponent } from './components/messages/compose-feedback/compose-feedback.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     OrgUnitFilterComponent,
-    ActionComponent,
     MessagesComponent,
     ComposeMessageComponent,
     CreateUsersComponent,
@@ -71,8 +68,7 @@ import { ComposeFeedbackComponent } from './pages/home/messages/compose-feedback
     TreeModule,
     MenuModule,
     StoreModule.provideStore({uiState: uiStateReducer,storeData: storeDataReducer},INITIAL_APPLICATION_STATE),
-    StoreDevtoolsModule.instrumentOnlyWithExtension(),
-    AppRoutingModule
+    StoreDevtoolsModule.instrumentOnlyWithExtension()
   ],
   providers: [
     { provide: BrowserXhr, useClass: NgProgressBrowserXhr },
