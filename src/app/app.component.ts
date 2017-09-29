@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   public actionTypeForm: FormGroup;
   public actionTypeArray: string[];
   public currentShown:string = 'messages';
-
+  
   constructor(toastr: ToastsManager, vRef: ViewContainerRef,
               private fb: FormBuilder,
               private _userService: UserService,

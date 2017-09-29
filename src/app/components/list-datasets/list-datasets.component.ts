@@ -37,7 +37,7 @@ export class ListDatasetsComponent implements OnInit {
   // Settings configuration
   public mySettings: IMultiSelectSettings = {
       enableSearch: true,
-      buttonClasses: 'btn btn-default btn-block select_btn',
+      buttonClasses: 'btn btn-secondary btn-sm btn-block',
       dynamicTitleMaxItems: 3,
       displayAllSelectedText: true
   };
