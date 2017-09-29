@@ -44,6 +44,18 @@ export class MessagesComponent implements OnInit {
   public statuses = ['OPEN', 'PENDING', 'INVALID', 'SOLVED'];
   public priorities = ['LOW', 'MEDIUM', 'HIGH'];
   public currentUser: any;
+  public selectedFilterByStatus:string = 'all';
+  public selectedFilterByPriority:string = '';
+
+  public availableStatus:any = [
+    {value: 'all', name: 'Show all'},
+    {value: 'NONE', name: 'No status'},
+    {value: 'PENDING', name: 'Pending'},
+    {value: 'OPEN', name: 'Open'},
+    {value: 'INVALID', name: 'Invalid'},
+    {value: 'SOLVED', name: 'Solved'}
+  ];
+
 
 
   constructor(private _messageConversationService: MessageConversationService,
@@ -156,6 +168,25 @@ export class MessagesComponent implements OnInit {
         break;
     }
   }
+
+  updateSelectedFilter(event:string){
+    this.filter = ''
+    this.selectedFilterByStatus = event;
+    if (event !== 'all'){
+      this.filter =  `filter=status:eq:${event}`;
+    }
+    this.getAllUserMessageConversations()
+  }
+
+  updateSelectedFilterPriority(event:string){
+    this.filter = ''
+    this.selectedFilterByPriority = event;
+    if (event !== 'all'){
+      this.filter =  `filter=priority:eq:${event}`;
+    }
+    this.getAllUserMessageConversations()
+  }
+
 
   /**
    * [openMessage Open message to read]

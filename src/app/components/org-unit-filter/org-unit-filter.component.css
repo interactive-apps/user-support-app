@@ -398,3 +398,8 @@ table * {
 .disabled-orgunit {
   color: #888;
 }
+
+app-list-datasets.list_datasets {
+    margin: 10px 0;
+    width: 100%;
+}
