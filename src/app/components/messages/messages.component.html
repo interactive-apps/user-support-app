@@ -10,6 +10,7 @@
       <div class="col-auto">
         <label class="mr-sm-2" for="inlineStatusFilter">Filter by priorities:</label>
         <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineStatusFilter" [(ngModel)]="selectedFilterByPriority" (change)="updateSelectedFilterPriority(selectedFilterByPriority)">
+          <option >Show all</option>
           <option *ngFor="let priority of priorities" >{{priority}}</option>
         </select>
       </div>
