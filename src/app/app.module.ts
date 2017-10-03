@@ -1,4 +1,4 @@
-import { BrowserModule} from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -11,14 +11,15 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import { NgProgressModule, NgProgressBrowserXhr } from 'ngx-progressbar';
 import { AvatarModule } from 'ngx-avatar';
-
+import { EffectsModule } from '@ngrx/effects';
+import { DBModule } from '@ngrx/db';
 
 import { AppComponent } from './app.component';
-import {StoreModule} from "@ngrx/store";
-import {INITIAL_APPLICATION_STATE} from './store/application-state';
-import {uiStateReducer} from './store/reducers/ui-store-reducer';
-import {storeDataReducer} from './store/reducers/store-data-reducer';
-import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import { StoreModule } from "@ngrx/store";
+import { reducers, metaReducers } from './store/reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+import { schema } from './db';
 
 
 //custom defined modules
@@ -30,7 +31,7 @@ import { MenuModule } from './components/menu/menu.module';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
 
-import { OrgUnitFilterComponent } from  './components/org-unit-filter/org-unit-filter.component';
+import { OrgUnitFilterComponent } from './components/org-unit-filter/org-unit-filter.component';
 import { ListDatasetsComponent } from './components/list-datasets/list-datasets.component';
 import { MessagesComponent } from './components/messages/messages.component';
 import { ComposeMessageComponent } from './components/messages/compose-message/compose-message.component';
@@ -67,15 +68,24 @@ import { ComposeFeedbackComponent } from './components/messages/compose-feedback
     MultiselectDropdownModule,
     TreeModule,
     MenuModule,
-    StoreModule.provideStore({uiState: uiStateReducer,storeData: storeDataReducer},INITIAL_APPLICATION_STATE),
-    StoreDevtoolsModule.instrumentOnlyWithExtension()
+    /**
+     * StoreModule.forRoot is imported once in the root module, accepting a reducer
+     * function or object map of reducer functions. If passed an object of
+     * reducers, combineReducers will be run creating your application
+     * meta-reducer. This returns all providers for an @ngrx/store
+     * based application.
+     */
+    StoreModule.forRoot(reducers, { metaReducers }),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    EffectsModule.forRoot([]),
+    DBModule.provideDB(schema),
   ],
   providers: [
     { provide: BrowserXhr, useClass: NgProgressBrowserXhr },
-    {provide: 'rootApi', useValue: '../../../api/'},
-    {provide: 'rootDir', useValue: '../../../'}, OrgUnitService],
+    { provide: 'rootApi', useValue: '../../../api/' },
+    { provide: 'rootDir', useValue: '../../../' }, OrgUnitService],
   exports: [OrgUnitFilterComponent],
-  entryComponents: [ComposeMessageComponent,ComposeFeedbackComponent],
+  entryComponents: [ComposeMessageComponent, ComposeFeedbackComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

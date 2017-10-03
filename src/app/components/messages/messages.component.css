@@ -781,3 +781,12 @@ label.select__label {
   margin-right: 3px;
   align-items: center;
 }
+
+.filter__select {
+  display: flex;
+  justify-content: center;
+}
+
+.filter__row {
+  width: 90%;
+}
