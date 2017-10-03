@@ -45,7 +45,7 @@ export class MessagesComponent implements OnInit {
   public priorities = ['LOW', 'MEDIUM', 'HIGH'];
   public currentUser: any;
   public selectedFilterByStatus:string = 'all';
-  public selectedFilterByPriority:string = '';
+  public selectedFilterByPriority:string = 'Show all';
 
   public availableStatus:any = [
     {value: 'all', name: 'Show all'},
@@ -181,7 +181,7 @@ export class MessagesComponent implements OnInit {
   updateSelectedFilterPriority(event:string){
     this.filter = ''
     this.selectedFilterByPriority = event;
-    if (event !== 'all'){
+    if (event !== 'Show all'){
       this.filter =  `filter=priority:eq:${event}`;
     }
     this.getAllUserMessageConversations()
