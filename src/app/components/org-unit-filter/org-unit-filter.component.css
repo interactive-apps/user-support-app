@@ -150,7 +150,7 @@
   overflow: hidden;
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 .tree-area{
   max-height: 210px;

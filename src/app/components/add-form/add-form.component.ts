@@ -17,6 +17,7 @@ export class AddFormComponent implements OnInit {
   public selectedOrgUnitIDs: String;
   public payload:any;
   public isOrganizationUnitSelected: boolean = false;
+  public allowSelection: boolean = false;
   public selectedOrgUnitInfo: any;
   public forms: any;
   public loading: boolean = false;
