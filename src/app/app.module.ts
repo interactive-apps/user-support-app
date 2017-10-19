@@ -28,6 +28,7 @@ import { ServicesModule } from './services/services.module';
 import { OrgUnitService } from './components/org-unit-filter/org-unit.service'
 import { ComponentsModule } from './components/components.module';
 import { MenuModule } from './components/menu/menu.module';
+import { DataFilterModule } from './components/data-filter/data-filter.module';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
 
@@ -68,6 +69,7 @@ import { ComposeFeedbackComponent } from './components/messages/compose-feedback
     MultiselectDropdownModule,
     TreeModule,
     MenuModule,
+    DataFilterModule,
     /**
      * StoreModule.forRoot is imported once in the root module, accepting a reducer
      * function or object map of reducer functions. If passed an object of

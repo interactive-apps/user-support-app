@@ -47,6 +47,7 @@ export class CreateUsersComponent implements OnInit {
     orgunit_levels: [],
     orgunit_groups: [],
     selected_orgunits: [],
+    show_selection_mode: false,
     user_orgunits: [],
     type: "report", // can be 'data_entry'
     selected_user_orgunit: "USER_ORGUNIT"
@@ -211,7 +212,7 @@ export class CreateUsersComponent implements OnInit {
     userPayload.userCredentials.userInfo = {
       id: this.randomGeneratedID
     }
-    
+
     let dataStoreKey = this.createDataStoreObjKey();
     let datasetUrlTosendTo = `api/users`;
     let payload = [{
