@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, Input} from '@angular/core';
+import {Component, EventEmitter, OnInit, ViewChild, Input, Output} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import * as _ from 'lodash';
 import { DataSetsService } from '../../services/data-sets.service';
@@ -15,6 +15,8 @@ import { ToastService } from '../../services/toast.service';
 })
 
 export class AddFormComponent implements OnInit {
+
+  @Output() onDataStoreUpdate: EventEmitter<any> = new EventEmitter<any>();
   public selectedOrgUnitIDs: String;
   public payload:any;
   public isOrganizationUnitSelected: boolean = false;
@@ -25,6 +27,7 @@ export class AddFormComponent implements OnInit {
   public assignedDataSets: string[] = [];
   public initialDataSets: string[];
   public disableRequestToApproval: boolean = true;
+  public showFilter: boolean = false;
   private selected: string;
   private addedOrgDataSets: string [];
   private removedOrgDataSets: string [];
@@ -67,6 +70,7 @@ export class AddFormComponent implements OnInit {
   getSelectedDataSets(orgUnitID:string){
     this.isOrganizationUnitSelected = true;
     this.loading = true;
+    this.showFilter = true;
     this.selected = orgUnitID;
     this._organisationUnitsService.getOrganisationUnit(orgUnitID).subscribe(response =>{
       this.selectedOrgUnitInfo = response;
@@ -78,7 +82,7 @@ export class AddFormComponent implements OnInit {
 
 
   dataUpdated(event){
-    
+
     let selectedDatasets = event.selectedData.value.split(';');
     this.addedOrgDataSets = _.difference(selectedDatasets,this.initialDataSets);
     this.removedOrgDataSets = _.difference(this.initialDataSets,selectedDatasets);
@@ -107,10 +111,16 @@ export class AddFormComponent implements OnInit {
             this.disableRequestToApproval = true;
             this._toastService.success('Your changes were sent for approval, Thanks.')
             this.sendFeedBackMessage(feedbackSubject, text);
+            this.onDataStoreUpdate.emit({
+              updated: true
+            });
 
           } else {
             this._toastService.error('There was an error when sending data.')
             this.disableRequestToApproval = false;
+            this.onDataStoreUpdate.emit({
+              updated: false
+            });
 
           }
         });
@@ -118,7 +128,9 @@ export class AddFormComponent implements OnInit {
 
 
   filterIsClosed(event) {
-    console.log(event);
+    if(event){
+      this.showFilter = false;
+    }
   }
 
 

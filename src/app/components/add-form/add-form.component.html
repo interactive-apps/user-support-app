@@ -11,8 +11,8 @@
       </div>
     </div>
     <app-data-filter [selectedItems]='assignedDataSets'
-      *ngIf="isOrganizationUnitSelected && !loading" [allowSelection]='allowSelection'
-      (onDataUpdate)="dataUpdated($event)" (onFilterClose)="filterIsClosed($event)"></app-data-filter>
+      *ngIf="isOrganizationUnitSelected && !loading && showFilter" [allowSelection]='allowSelection'
+      (onDataUpdate)="dataUpdated($event)" (onDataFilterClose)="filterIsClosed($event)"></app-data-filter>
   </div>
 </div>
 </div>

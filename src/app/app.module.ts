@@ -33,7 +33,6 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
 
 import { OrgUnitFilterComponent } from './components/org-unit-filter/org-unit-filter.component';
-import { ListDatasetsComponent } from './components/list-datasets/list-datasets.component';
 import { MessagesComponent } from './components/messages/messages.component';
 import { ComposeMessageComponent } from './components/messages/compose-message/compose-message.component';
 import { CreateUsersComponent } from './components/create-users/create-users.component';
@@ -50,7 +49,6 @@ import { ComposeFeedbackComponent } from './components/messages/compose-feedback
     CreateUsersComponent,
     AddFormComponent,
     ResetPasswordComponent,
-    ListDatasetsComponent,
     ComposeFeedbackComponent
   ],
   imports: [
