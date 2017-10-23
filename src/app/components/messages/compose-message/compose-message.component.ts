@@ -30,7 +30,7 @@ export class ComposeMessageComponent extends DialogComponent<EmailMessage, boole
   // Settings configuration
   public mySettings: IMultiSelectSettings = {
     enableSearch: true,
-    buttonClasses: 'btn btn-default btn-block',
+    buttonClasses: 'btn btn-secondary btn-block',
     dynamicTitleMaxItems: 4,
     displayAllSelectedText: true
   };

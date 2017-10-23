@@ -12,7 +12,7 @@
           </div>
           <form class="" (ngSubmit)="onSendFeedback(feedbackComposeForm)" [formGroup]="feedbackComposeForm" novalidate>
             <div class="msg-subject">
-              <input type="text" placeholder="Subject" formControlName="subject"/>
+              <input type="text" placeholder="Subject" formControlName="subject" autofocus/>
             </div>
             <div class="msg-body">
               <textarea placeholder="Say something" formControlName="message"></textarea>

@@ -104,6 +104,17 @@ export class MessageConversationService {
       }, error => this.handleError(error));
   }
 
+  markUnRead(messageConversation: MessageConversation) {
+    this.http.post(`${this.baseUrl}api/messageConversations/unread`, JSON.stringify([messageConversation.id]), this.options)
+      .map(response => response.json()).subscribe(data => {
+        this.dataStore.messageConversation.forEach((t, i) => {
+          if (data.markedUnread.indexOf(t.id) > -1) { this.dataStore.messageConversation[i].read = false; }
+        });
+
+        this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
+      }, error => this.handleError(error));
+  }
+
 
   setPriority(messageConversationId: string, payload:any) {
     this.http.post(`${this.baseUrl}api/messageConversations/${messageConversationId}/priority?messageConversationPriority=${payload.priority}&messageType=TICKET`,this.options)
