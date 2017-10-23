@@ -2,17 +2,10 @@
   <section class="filter__select">
     <div class="form-row align-items-center filter__row">
       <div class="col-auto">
-        <label class="mr-sm-2" for="inlineStatusFilter">Filter by status:</label>
-        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineStatusFilter" [(ngModel)]="selectedFilterByStatus" (change)="updateSelectedFilter(selectedFilterByStatus)">
-          <option *ngFor="let status of availableStatus" [value]="status.value">{{status.name}}</option>
-        </select>
+        <app-select-dropdown [selectHeader]="statusHeader" [selectOptions]="availableStatus" (onSelected)="updateSelectedFilterStatus($event)"></app-select-dropdown>
       </div>
       <div class="col-auto">
-        <label class="mr-sm-2" for="inlineStatusFilter">Filter by priorities:</label>
-        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineStatusFilter" [(ngModel)]="selectedFilterByPriority" (change)="updateSelectedFilterPriority(selectedFilterByPriority)">
-          <option >Show all</option>
-          <option *ngFor="let priority of priorities" >{{priority}}</option>
-        </select>
+        <app-select-dropdown [selectHeader]="priorityHeader" [selectOptions]="availablePriorities" (onSelected)="updateSelectedFilterPriority($event)"></app-select-dropdown>
       </div>
     </div>
   </section>
@@ -75,10 +68,12 @@
             <ngx-avatar name="{{currentUser.name}}" size="35"></ngx-avatar>
           </div>
           <form class="replybox" novalidate [formGroup]="messageReplyFormGroup">
-            <div class="draft"><span>Draft </span></div>
-            <textarea formControlName="message"></textarea>
+            <div class="draft" *ngIf="textAreaMessageFocused"><span>Draft </span></div>
+            <div class="draft" *ngIf="!textAreaMessageFocused" (click)="setFocusReplyMessage()"><span>Reply</span></div>
+            <textarea formControlName="message" autofocus *ngIf="textAreaMessageFocused"></textarea>
             <div class="left">
-              <button [disabled]="!messageReplyFormGroup.valid" class="btn btn-success" (click)="onReplyMessage(message.id, messageReplyFormGroup)">SEND</button>
+              <button [disabled]="!messageReplyFormGroup.valid" class="btn btn-success" (click)="onReplyMessage(message.id, messageReplyFormGroup)" *ngIf="textAreaMessageFocused">SEND</button>
+              <button class="btn btn-secondary" (click)="setFocusReplyMessage()" *ngIf="textAreaMessageFocused">CANCEL</button>
             </div>
             <div class="pull-right pull__right--Action" *ngIf="isCurrentUserInFeedbackGroup && (isUserSupportMsg || message.messageType == 'TICKET')">
               <label for="" class="select__label">Priority:</label>

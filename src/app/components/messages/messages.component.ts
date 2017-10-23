@@ -30,6 +30,7 @@ export class MessagesComponent implements OnInit {
   public loadingDataStoreValue = true;
   public messages: any = [];
   public openedMessage: string = null;
+  public textAreaMessageFocused: boolean = false;
   public currentPage: Number;
   public pager: any = {};
   public dataStoreValues: any = [];
@@ -46,14 +47,23 @@ export class MessagesComponent implements OnInit {
   public currentUser: any;
   public selectedFilterByStatus:string = 'all';
   public selectedFilterByPriority:string = 'Show all';
+  public priorityHeader = 'Priorities';
+  public statusHeader = 'Status';
 
   public availableStatus:any = [
-    {value: 'all', name: 'Show all'},
-    {value: 'NONE', name: 'No status'},
-    {value: 'PENDING', name: 'Pending'},
-    {value: 'OPEN', name: 'Open'},
-    {value: 'INVALID', name: 'Invalid'},
-    {value: 'SOLVED', name: 'Solved'}
+    {id: 'ALL', name: 'Show all'},
+    {id: 'NONE', name: 'No status'},
+    {id: 'PENDING', name: 'Pending'},
+    {id: 'OPEN', name: 'Open'},
+    {id: 'INVALID', name: 'Invalid'},
+    {id: 'SOLVED', name: 'Solved'}
+  ];
+
+  public availablePriorities:any = [
+    {id: 'ALL', name: 'Show all'},
+    {id: 'LOW', name: 'LOW'},
+    {id: 'MEDIUM', name: 'MEDIUM'},
+    {id: 'HIGH', name: 'HIGH'}
   ];
 
 
@@ -169,20 +179,19 @@ export class MessagesComponent implements OnInit {
     }
   }
 
-  updateSelectedFilter(event:string){
+  updateSelectedFilterStatus(event:any){
     this.filter = ''
     this.selectedFilterByStatus = event;
-    if (event !== 'all'){
-      this.filter =  `filter=status:eq:${event}`;
+    if (event.selectedItem.id !== 'ALL'){
+      this.filter =  `filter=status:eq:${event.selectedItem.id}`;
     }
     this.getAllUserMessageConversations()
   }
 
-  updateSelectedFilterPriority(event:string){
-    this.filter = ''
-    this.selectedFilterByPriority = event;
-    if (event !== 'Show all'){
-      this.filter =  `filter=priority:eq:${event}`;
+  updateSelectedFilterPriority(event: any){
+    this.filter = '';
+    if (event.selectedItem.id !== 'ALL'){
+      this.filter =  `filter=priority:eq:${event.selectedItem.id}`;
     }
     this.getAllUserMessageConversations()
   }
@@ -457,6 +466,11 @@ export class MessagesComponent implements OnInit {
    */
   formatDate(date) {
     return moment(date).format('ll')
+  }
+
+
+  setFocusReplyMessage(){
+    this.textAreaMessageFocused = !this.textAreaMessageFocused;
   }
 
 }

@@ -1,0 +1,14 @@
+<div>
+  <button class="btn btn-default btn-sm btn-block custom-select" (click)="toggleDropdownList($event)">
+      <span class="pull-left">{{ selectedItem?.name || selectHeader}}</span>
+    </button>
+
+  <!--Selection list-->
+  <div class="drop-down-filter-panel" *ngIf="showSelectOptions">
+    <div class="panel-body drop-down-filter-panel-body">
+      <ul class="drop-down-filter-list">
+        <li *ngFor="let item of selectOptions"><a (click)="setSelected(item, $event)">{{ item.name }}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
