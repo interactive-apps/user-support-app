@@ -67,6 +67,7 @@ export class ComposeMessageComponent extends DialogComponent<EmailMessage, boole
     orgunit_levels: [],
     orgunit_groups: [],
     selected_orgunits: [],
+    show_selection_mode: true,
     user_orgunits: [],
     type:"report", // can be 'data_entry'
     selected_user_orgunit: "USER_ORGUNIT"

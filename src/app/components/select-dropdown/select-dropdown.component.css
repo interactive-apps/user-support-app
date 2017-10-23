@@ -1,0 +1,64 @@
+.drop-down-filter-selection {
+  grid-column: span 2;
+  position: relative;
+}
+
+.drop-down-filter-panel {
+  -webkit-box-shadow: 0px 2px 10px -2px rgba(0, 0, 0, .7);
+  -moz-box-shadow: 0px 2px 10px -2px rgba(0, 0, 0, .7);
+  box-shadow: 0px 2px 10px -2px rgba(0, 0, 0, .7);
+  background-color: #ffffff;
+  margin-top: 4px;
+  position: absolute;
+  z-index: 1000;
+  width: 100%;
+}
+
+.drop-down-filter-panel-body {
+  padding: 4px;
+}
+
+.drop-down-filter-list {
+  margin-top: 5px;
+  padding-top: 5px;
+  list-style: none;
+  max-height: 150px;
+  padding-left: 0;
+  overflow: hidden;
+}
+
+.drop-down-filter-list>li>a {
+  display: block;
+  line-height: 20px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.drop-down-filter-list>li>a:hover {
+  background-color: #dddddd;
+}
+
+.drop-down-filter-list:hover {
+  overflow: auto;
+}
+
+.drop-down-filter-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.drop-down-filter-list::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.drop-down-filter-list::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+}
+
+.drop-down-filter-list>li>a {
+  padding: 1px 10px 1px 10px;
+  font-size: 12px;
+  border-radius: 0px;
+  margin: 0;
+}

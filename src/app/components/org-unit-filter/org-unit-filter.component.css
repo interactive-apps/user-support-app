@@ -150,7 +150,7 @@
   overflow: hidden;
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 .tree-area{
   max-height: 210px;
@@ -202,7 +202,7 @@
 }
 
 tree {
-  min-width: 50%;
+  width: 100%;
 }
 
 .tree-view::-webkit-scrollbar {
@@ -402,4 +402,13 @@ table * {
 app-list-datasets.list_datasets {
     margin: 10px 0;
     width: 100%;
+}
+
+
+.loading-balls {
+  display: inline;
+}
+
+.loading-balls span {
+  display: inline;
 }

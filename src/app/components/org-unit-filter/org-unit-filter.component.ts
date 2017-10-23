@@ -23,6 +23,7 @@ export class OrgUnitFilterComponent implements OnInit {
     orgunit_groups: [],
     selected_orgunits: [],
     user_orgunits: [],
+    show_selection_mode: false,
     type:"report", // can be 'data_entry'
     selected_user_orgunit: "USER_ORGUNIT"
   };
