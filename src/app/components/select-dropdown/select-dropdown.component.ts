@@ -10,8 +10,8 @@ export class SelectDropdownComponent implements OnInit {
   @Output() onSelected: EventEmitter<any> = new EventEmitter<any>();
   @Input() selectOptions:any[] = [];
   @Input() selectHeader: string = 'Select';
+  @Input() selectedItem: any;
   public showSelectOptions: boolean = false;
-  public selectedItem: any;
 
   constructor() { }
 
@@ -26,7 +26,7 @@ export class SelectDropdownComponent implements OnInit {
 
   setSelected(item, event) {
     event.stopPropagation();
-    this.selectedItem = item;
+    this.selectedItem = item.name;
     this.showSelectOptions = false;
     this.onSelected.emit({
       selectedItem: item

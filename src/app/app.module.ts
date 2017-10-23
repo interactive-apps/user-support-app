@@ -39,6 +39,7 @@ import { CreateUsersComponent } from './components/create-users/create-users.com
 import { AddFormComponent } from './components/add-form/add-form.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { ComposeFeedbackComponent } from './components/messages/compose-feedback/compose-feedback.component';
+import { SelectDropdownComponent } from './components/select-dropdown/select-dropdown.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { ComposeFeedbackComponent } from './components/messages/compose-feedback
     CreateUsersComponent,
     AddFormComponent,
     ResetPasswordComponent,
-    ComposeFeedbackComponent
+    ComposeFeedbackComponent,
+    SelectDropdownComponent
   ],
   imports: [
     BrowserModule,

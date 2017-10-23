@@ -71,23 +71,22 @@
             <div class="draft" *ngIf="textAreaMessageFocused"><span>Draft </span></div>
             <div class="draft" *ngIf="!textAreaMessageFocused" (click)="setFocusReplyMessage()"><span>Reply</span></div>
             <textarea formControlName="message" autofocus *ngIf="textAreaMessageFocused"></textarea>
-            <div class="left">
-              <button [disabled]="!messageReplyFormGroup.valid" class="btn btn-success" (click)="onReplyMessage(message.id, messageReplyFormGroup)" *ngIf="textAreaMessageFocused">SEND</button>
-              <button class="btn btn-secondary" (click)="setFocusReplyMessage()" *ngIf="textAreaMessageFocused">CANCEL</button>
-            </div>
-            <div class="pull-right pull__right--Action" *ngIf="isCurrentUserInFeedbackGroup && (isUserSupportMsg || message.messageType == 'TICKET')">
-              <label for="" class="select__label">Priority:</label>
-              <select class="custom-select select"  formControlName="priority">
-                <option *ngFor="let priority of priorities" [selected]="priority == message.priority">{{priority}}</option>
-              </select>
-              <label for="" class="select__label">Status:</label>
-              <select class="custom-select select" formControlName="status">
-                <option *ngFor="let status of statuses" [selected]="status == message.status">{{status}}</option>
-              </select>
-              <label for="" class="select__label">Assigned to:</label>
-              <select class="custom-select select" formControlName="assign">
-                <option *ngFor="let feedbackRecipient of feedbackRecipients" [value]="feedbackRecipient.id">{{feedbackRecipient.name}}</option>
-              </select>
+            <div class="reply__action--container">
+              <div class="left">
+                <button [disabled]="!messageReplyFormGroup.valid" class="btn btn-success" (click)="onReplyMessage(message.id, messageReplyFormGroup)" *ngIf="textAreaMessageFocused">SEND</button>
+                <button class="btn btn-secondary" (click)="setFocusReplyMessage()" *ngIf="textAreaMessageFocused">CANCEL</button>
+              </div>
+              <div class="pull-right pull__right--Action" *ngIf="isCurrentUserInFeedbackGroup && (isUserSupportMsg || message.messageType == 'TICKET')">
+                <div class="col-auto" appClickOutside>
+                  <app-select-dropdown [selectHeader]="priorityHeader" [selectOptions]="priorities" [selectedItem]="message.priority" (onSelected)="setMessagePriority($event)"></app-select-dropdown>
+                </div>
+                <div class="col-auto">
+                  <app-select-dropdown [selectHeader]="statusHeader" [selectOptions]="statuses" [selectedItem]="message.status" (onSelected)="setMessageStatus($event)"></app-select-dropdown>
+                </div>
+                <div class="col-auto">
+                  <app-select-dropdown [selectHeader]="assignToMemberHeader" [selectOptions]="feedbackRecipients" [selectedItem]="assignedMember" (onSelected)="assignToMessage($event)"></app-select-dropdown>
+                </div>
+              </div>
             </div>
           </form>
         </div>

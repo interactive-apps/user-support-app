@@ -191,8 +191,8 @@
 }
 .wrapper .mail-wrapper .mail-footer .replybox {
   margin: 0 20px;
-  width: auto;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .wrapper .mail-wrapper .mail-footer .replybox:after {
   content: "";

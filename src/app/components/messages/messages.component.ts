@@ -35,20 +35,30 @@ export class MessagesComponent implements OnInit {
   public pager: any = {};
   public dataStoreValues: any = [];
   public feedbackRecipients: any = [];
-  public assignedMember: string = 'none';
+  public assignedMember: string;
   public openedConversation: any;
   public messageConversation: Observable<MessageConversation[]>;
   public messageReplyFormGroup: FormGroup;
   public dataStoreKey: string;
   public disableApproveAll: boolean = false;
   public isCurrentUserInFeedbackGroup: boolean = false;
-  public statuses = ['OPEN', 'PENDING', 'INVALID', 'SOLVED'];
-  public priorities = ['LOW', 'MEDIUM', 'HIGH'];
+  public statuses = [
+    {id:'OPEN', name: 'OPEN'},
+    {id:'PENDING', name: 'PENDING'},
+    {id:'INVALID', name: 'INVALID'},
+    {id:'SOLVED', name:'SOLVED'}
+  ];
+  public priorities = [
+    {id:'LOW', name: 'LOW'},
+    {id: 'MEDIUM', name: 'MEDIUM'},
+    {id:'HIGH', name: 'HIGH'}
+  ];
   public currentUser: any;
   public selectedFilterByStatus:string = 'all';
   public selectedFilterByPriority:string = 'Show all';
   public priorityHeader = 'Priorities';
   public statusHeader = 'Status';
+  public assignToMemberHeader= 'Assign to:';
 
   public availableStatus:any = [
     {id: 'ALL', name: 'Show all'},
@@ -81,34 +91,6 @@ export class MessagesComponent implements OnInit {
 
     this.messageReplyFormGroup = new FormGroup({
       message: new FormControl('',Validators.required),
-      status: new FormControl(''),
-      priority: new FormControl(''),
-      assign: new FormControl(this.assignedMember),
-    });
-
-    this.messageReplyFormGroup.controls['status'].valueChanges.subscribe(valueChange => {
-      let payload = {
-        status: valueChange
-      }
-      this._messageConversationService.updateStatus(this.openedMessage, payload);
-
-    });
-
-    this.messageReplyFormGroup.controls['priority'].valueChanges.subscribe(valueChange => {
-      let payload = {
-        priority: valueChange
-      }
-      this._messageConversationService.setPriority(this.openedMessage, payload);
-    });
-
-    this.messageReplyFormGroup.controls['assign'].valueChanges.subscribe(valueChange => {
-      if(valueChange == 'none'){
-        this._messageConversationService.deleteAssignment(this.openedMessage);
-        this.assignedMember = 'none';
-      }else{
-        this._messageConversationService.assignToMember(this.openedMessage, valueChange);
-        this.assignedMember = valueChange.toString();
-      }
     });
 
     /**
@@ -145,6 +127,46 @@ export class MessagesComponent implements OnInit {
 
 
 
+  }
+
+
+  /**
+   * [setMessagePriority changes priority of the message]
+   * @param  {[type]} event [description]
+   * @return {[type]}       [description]
+   */
+  setMessagePriority(event:any){
+    console.log(event);
+    let payload = {
+      priority: event.selectedItem.id
+    }
+    this._messageConversationService.setPriority(this.openedMessage, payload);
+  }
+
+  /**
+   * [setMessageStatus change status of the message]
+   * @param  {any}    event [description]
+   * @return {[type]}       [description]
+   */
+  setMessageStatus(event: any){
+    console.log(event);
+    let payload = {
+      status: event.selectedItem.id
+    }
+    this._messageConversationService.updateStatus(this.openedMessage, payload);
+  }
+
+  /**
+   * [assignToMessage Assignes the message to user]
+   * @param  {any}    event [description]
+   * @return {[type]}       [description]
+   */
+  assignToMessage(event: any){
+      if(event.selectedItem.id == 'none'){
+        this._messageConversationService.deleteAssignment(this.openedMessage);
+      }else{
+        this._messageConversationService.assignToMember(this.openedMessage, event.selectedItem.id);
+      }
   }
 
   /**
@@ -326,8 +348,10 @@ export class MessagesComponent implements OnInit {
    * @return {[void]}         [none]
    */
   checkIfIsUserSupportMessage(message) {
+    this.assignedMember = null;
     if(message.assignee){
-      this.messageReplyFormGroup.controls['assign'].patchValue(message.assignee.id);
+     let assignee = _.filter(this.feedbackRecipients, message.assignee);
+     this.assignedMember = assignee[0].name;
     }
 
     let formatter = new Intl.DateTimeFormat("fr", { month: "short" }),
