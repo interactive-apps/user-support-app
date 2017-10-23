@@ -53,11 +53,11 @@ export class MessagesComponent implements OnInit {
     {id: 'MEDIUM', name: 'MEDIUM'},
     {id:'HIGH', name: 'HIGH'}
   ];
-  
+
   public tabFilter = [
     {id:'all', name: 'All Messages'},
     {id:'followUp', name: 'Follow up'},
-    {id: 'assigned', name: 'Assigned'}
+    {id: 'assignedToMe', name: 'Assigned'}
   ];
   public currentUser: any;
   public selectedFilterByStatus:string = 'all';

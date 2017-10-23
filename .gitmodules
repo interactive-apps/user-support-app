@@ -1,6 +1,3 @@
 [submodule "src/app/components/menu"]
 	path = src/app/components/menu
 	url = git@github.com:hisptz/ng2-dhis-menu-module.git
-[submodule "src/app/components/data-filter"]
-	path = src/app/components/data-filter
-	url = git@github.com:hisptz/data-filter-module.git
