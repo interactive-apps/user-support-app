@@ -1,8 +1,18 @@
 <div class="container-fluid add__form--page">
   <div class="content__wrapper">
   <div class="org-data-filter">
-    <h4 class="text-center">Please select Organisation unit to to add form(s)</h4>
     <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)" [selected]="selectedOrgUnitIDs"></app-org-unit-filter>
+  </div>
+  <div class="element-data-filter">
+    <div *ngIf="isOrganizationUnitSelected && loading">
+      <div class="col-md-12 loading-balls">
+        <img src="assets/img/balls-3.svg" alt="" style="height:40px">
+        <span style="margin-top: 20px;">Loading DataSets</span>
+      </div>
+    </div>
+    <app-data-filter [selectedItems]='assignedDataSets'
+      *ngIf="isOrganizationUnitSelected && !loading && showFilter" [allowSelection]='allowSelection'
+      (onDataUpdate)="dataUpdated($event)" (onDataFilterClose)="filterIsClosed($event)"></app-data-filter>
   </div>
 </div>
 </div>

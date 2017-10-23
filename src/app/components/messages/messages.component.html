@@ -1,33 +1,20 @@
 <section class="container-fluid">
   <section class="filter__select">
-    <div class="form-row align-items-center filter__row">
+    <div class="form-row justify-content-end filter__row">
       <div class="col-auto">
-        <label class="mr-sm-2" for="inlineStatusFilter">Filter by status:</label>
-        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineStatusFilter" [(ngModel)]="selectedFilterByStatus" (change)="updateSelectedFilter(selectedFilterByStatus)">
-          <option *ngFor="let status of availableStatus" [value]="status.value">{{status.name}}</option>
-        </select>
+        <app-select-dropdown [selectHeader]="statusHeader" [selectOptions]="availableStatus" (onSelected)="updateSelectedFilterStatus($event)"></app-select-dropdown>
       </div>
       <div class="col-auto">
-        <label class="mr-sm-2" for="inlineStatusFilter">Filter by priorities:</label>
-        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineStatusFilter" [(ngModel)]="selectedFilterByPriority" (change)="updateSelectedFilterPriority(selectedFilterByPriority)">
-          <option >Show all</option>
-          <option *ngFor="let priority of priorities" >{{priority}}</option>
-        </select>
+        <app-select-dropdown [selectHeader]="priorityHeader" [selectOptions]="availablePriorities" (onSelected)="updateSelectedFilterPriority($event)"></app-select-dropdown>
       </div>
+    <div class="btn-group button__filter--message" data-toggle="buttons">
+      <label class="btn" [ngClass]="{'active btn-primary': isActive === item.id, 'btn-secondary': isActive !== item.id}" *ngFor="let item of tabFilter">
+        <input type="radio" name="options" id="option1" autocomplete="off" (click)="messagesFilters(item.id)">{{item.name}}
+      </label>
     </div>
+  </div>
   </section>
   <article class="wrapper">
-    <div class="mail__header_tab">
-      <div [ngClass]="{middle: true, active: isActive === 'all'}" (click)="messagesFilters('all')">
-        <i class="fa fa-envelope"></i><span>Inbox</span><span class="taille"></span>
-      </div>
-      <div [ngClass]="{middle: true, active: isActive === 'followUp'}" (click)="messagesFilters('followUp')">
-        <i class="fa fa-comments-o"></i><span>Follow up</span><span class="taille"></span>
-      </div>
-      <div [ngClass]="{middle: true, active: isActive === 'assignedToMe'}" (click)="messagesFilters('assignedToMe')">
-        <i class="fa fa-tags"></i><span>Assigned</span><span class="taille"></span>
-      </div>
-    </div>
     <div *ngFor="let message of messageConversation | async | paginate: {id:'messageConvo', itemsPerPage: pager.pageSize, currentPage: pager.page, totalItems: pager.total}" class="MessageContainer">
       <div class="mail-wrapper" *ngIf="message.id === openedMessage">
         <div class="mail-top shadow" (click)="closeMessage()">
@@ -75,24 +62,25 @@
             <ngx-avatar name="{{currentUser.name}}" size="35"></ngx-avatar>
           </div>
           <form class="replybox" novalidate [formGroup]="messageReplyFormGroup">
-            <div class="draft"><span>Draft </span></div>
-            <textarea formControlName="message"></textarea>
-            <div class="left">
-              <button [disabled]="!messageReplyFormGroup.valid" class="btn btn-success" (click)="onReplyMessage(message.id, messageReplyFormGroup)">SEND</button>
-            </div>
-            <div class="pull-right pull__right--Action" *ngIf="isCurrentUserInFeedbackGroup && (isUserSupportMsg || message.messageType == 'TICKET')">
-              <label for="" class="select__label">Priority:</label>
-              <select class="custom-select select"  formControlName="priority">
-                <option *ngFor="let priority of priorities" [selected]="priority == message.priority">{{priority}}</option>
-              </select>
-              <label for="" class="select__label">Status:</label>
-              <select class="custom-select select" formControlName="status">
-                <option *ngFor="let status of statuses" [selected]="status == message.status">{{status}}</option>
-              </select>
-              <label for="" class="select__label">Assigned to:</label>
-              <select class="custom-select select" formControlName="assign">
-                <option *ngFor="let feedbackRecipient of feedbackRecipients" [value]="feedbackRecipient.id">{{feedbackRecipient.name}}</option>
-              </select>
+            <div class="draft" *ngIf="textAreaMessageFocused"><span>Draft </span></div>
+            <div class="draft" *ngIf="!textAreaMessageFocused" (click)="setFocusReplyMessage()"><span>Reply</span></div>
+            <textarea formControlName="message" autofocus *ngIf="textAreaMessageFocused"></textarea>
+            <div class="reply__action--container">
+              <div class="left">
+                <button [disabled]="!messageReplyFormGroup.valid" class="btn btn-success" (click)="onReplyMessage(message.id, messageReplyFormGroup)" *ngIf="textAreaMessageFocused">SEND</button>
+                <button class="btn btn-secondary" (click)="setFocusReplyMessage()" *ngIf="textAreaMessageFocused">CANCEL</button>
+              </div>
+              <div class="pull-right pull__right--Action" *ngIf="isCurrentUserInFeedbackGroup && (isUserSupportMsg || message.messageType == 'TICKET')">
+                <div class="col-auto" appClickOutside>
+                  <app-select-dropdown [selectHeader]="priorityHeader" [selectOptions]="priorities" [selectedItem]="message.priority" (onSelected)="setMessagePriority($event)"></app-select-dropdown>
+                </div>
+                <div class="col-auto">
+                  <app-select-dropdown [selectHeader]="statusHeader" [selectOptions]="statuses" [selectedItem]="message.status" (onSelected)="setMessageStatus($event)"></app-select-dropdown>
+                </div>
+                <div class="col-auto">
+                  <app-select-dropdown [selectHeader]="assignToMemberHeader" [selectOptions]="feedbackRecipients" [selectedItem]="assignedMember" (onSelected)="assignToMessage($event)"></app-select-dropdown>
+                </div>
+              </div>
             </div>
           </form>
         </div>
