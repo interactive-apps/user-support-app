@@ -263,6 +263,9 @@ export class MessagesComponent implements OnInit {
     if (!message.read) {
       message.read = true;
       this._messageConversationService.markAsRead(message);
+    }else {
+      message.read = false;
+      this._messageConversationService.markUnRead(message);
     }
   }
 

@@ -96,8 +96,8 @@
           <div class="actions">
             <a href="#" class="pinned-msg"><i class="fa fa-thumb-tack"></i></a>
             <ul>
-              <li (click)="markAsRead(message)"><i class="fa fa-check"></i></li>
-              <li (click)="deleteMessage(message)" ><i class="fa fa-trash"></i></li>
+              <li (click)="markAsRead(message)" tooltip="Mark as read"><i class="fa fa-check"></i></li>
+              <li (click)="deleteMessage(message)" tooltip="Delete Message"><i class="fa fa-trash"></i></li>
             </ul>
           </div>
           <div class="content" (click)="openMessage(message)">
@@ -111,9 +111,9 @@
     </div>
   </article>
   <nav class="fab__container">
-    <a class="buttons" href="#" (click)="showComposeFeedback()" tooltip="Write Feedback"></a>
-    <a class="buttons" href="#" (click)="showComposeMessage()" tooltip="Write Message"></a>
-    <a class="buttons" (click)="showComposeMessage()" tooltip="Compose">
+    <a class="buttons" href="#" (click)="showComposeMessage()" title="Compose a Message"></a>
+    <a class="buttons" href="#" (click)="showComposeFeedback()" title="Write Feedback"></a>
+    <a class="buttons" (click)="showComposeFeedback()" tooltip="Compose">
       <span class="fab"><span class="rotate"></span></span>
     </a>
   </nav>
