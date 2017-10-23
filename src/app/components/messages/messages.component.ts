@@ -403,13 +403,17 @@ export class MessagesComponent implements OnInit {
    * [approveChangesDataset changes status of the datastore value and update disableApproveAll]
    * @param  {any}    dataSet [dataStoreValues]
    */
-  approveChangesDataset(dataSet: any) {
+  approveChangesDataset(dataSet: any, approved:boolean) {
     let asyncRequestsArray = [];
     let updatedDatastoreValues = [];
+
 
     if (_.isArray(dataSet)) {
       asyncRequestsArray = _.transform(dataSet, (result, obj) => {
         obj.status = 'SOLVED';
+
+        approved ? (obj.approved = true) : (obj.rejected = true);
+
         result.push(obj);
       }, []);
       updatedDatastoreValues = asyncRequestsArray;
@@ -418,6 +422,9 @@ export class MessagesComponent implements OnInit {
     } else {
       let index = _.findIndex(this.dataStoreValues, { url: dataSet.url });
       dataSet.status = 'SOLVED';
+
+      approved ? (dataSet.approved = true) : (dataSet.rejected = true);
+
       this.dataStoreValues.splice(index, 1, dataSet);
       this.disableApproveAll = (_.findIndex(this.dataStoreValues, { status: 'SOLVED' }) !== -1);
       updatedDatastoreValues = this.dataStoreValues;
@@ -453,17 +460,23 @@ export class MessagesComponent implements OnInit {
    * @return {[function]}              [callback function with error and response results]
    */
   callback(obj, doneCallBack) {
-    if (obj.method.toLowerCase() === 'put') {
 
-      this._sharedDataService.genericPutRequest(obj.url, obj.payload).subscribe(response => {
-        return doneCallBack(null, response);
-      });
-    } else if(obj.method.toLowerCase() === 'post') {
-      this._sharedDataService.genericPostRequest(obj.url, obj.payload).subscribe(response => {
-        return doneCallBack(null, response);
-      });
+    if (obj.rejected) {
+      return doneCallBack(null, obj);
+    } else {
+
+      if (obj.method.toLowerCase() === 'put' && obj.approved) {
+
+        this._sharedDataService.genericPutRequest(obj.url, obj.payload).subscribe(response => {
+          return doneCallBack(null, response);
+        });
+      } else if(obj.method.toLowerCase() === 'post' && obj.approved) {
+        this._sharedDataService.genericPostRequest(obj.url, obj.payload).subscribe(response => {
+          return doneCallBack(null, response);
+        });
+      }
+
     }
-
   }
 
   /**

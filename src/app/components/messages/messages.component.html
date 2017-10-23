@@ -44,12 +44,18 @@
                 <section *ngIf="!loadingDataStoreValue">
                   <ul class="dataStore_items__listing">
                     <li *ngIf="!disableApproveAll">
-                      <span>Approve all Changes</span>
-                      <button class="btn btn-success" (click)="approveChangesDataset(dataStoreValues)">Approve All</button>
+                      <span>Approve/Reject all Changes</span>
+                      <div class="btn-group" role="group">
+                        <button class="btn btn-success" (click)="approveChangesDataset(dataStoreValues, true)">Approve All</button>
+                        <button class="btn btn-danger" (click)="approveChangesDataset(dataStoreValues, false)">Reject All</button>
+                      </div>
                     </li>
                     <li *ngFor="let value of dataStoreValues; let i = index">
                       <span>{{value.action}}</span>
-                      <button class="btn btn-success" (click)="approveChangesDataset(value)" [disabled]="value.status == 'SOLVED'" >{{value.status == 'SOLVED' ? "Approved": "Approve"}}</button>
+                      <div class="btn-group" role="group">
+                        <button *ngIf="!value.rejected" class="btn btn-success" (click)="approveChangesDataset(value, true)" [disabled]="value.status == 'SOLVED'" >{{value.approved ? "Approved": "Approve"}}</button>
+                        <button *ngIf="!value.approved" class="btn btn-danger" (click)="approveChangesDataset(value, false)" [disabled]="value.status == 'SOLVED'" >{{value.rejected ? "Rejected": "Reject"}}</button>
+                      </div>
                     </li>
                   </ul>
                 </section>
