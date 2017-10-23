@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 import { SharedDataService } from './shared-data.service';
 import { LimitToPipe } from './limit-to.pipe';
 import { FilterLevelPipe } from './filter-level.pipe';
-import { ClickOutsideDirective } from './click-outside.directive';
 
 @NgModule({
   imports: [
@@ -15,7 +14,7 @@ import { ClickOutsideDirective } from './click-outside.directive';
   providers: [
     SharedDataService
   ],
-  declarations: [LimitToPipe, FilterLevelPipe, ClickOutsideDirective],
+  declarations: [LimitToPipe, FilterLevelPipe],
   exports: [LimitToPipe, FilterLevelPipe]
 })
 export class SharedModule { }
