@@ -260,13 +260,18 @@ export class MessagesComponent implements OnInit {
    * @param  {any}    message [messageconversation that is to be marked read]
    */
   markAsRead(message:any) {
-    if (!message.read) {
       message.read = true;
       this._messageConversationService.markAsRead(message);
-    }else {
-      message.read = false;
-      this._messageConversationService.markUnRead(message);
-    }
+  }
+
+  /**
+   * [markUnRead mark specific message as unread]
+   * @param  {any}    message [description]
+   * @return {[type]}         [description]
+   */
+  markUnRead(message:any) {
+    message.read = false;
+    this._messageConversationService.markUnRead(message);
   }
 
   /**
