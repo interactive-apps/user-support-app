@@ -17,6 +17,8 @@ import { ToastService } from '../../services/toast.service';
 export class AddFormComponent implements OnInit {
 
   @Output() onDataStoreUpdate: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onFiltersClosed: EventEmitter<any> = new EventEmitter<any>();
+  @Input()  activeComponent: string;
   public selectedOrgUnitIDs: String;
   public payload:any;
   public isOrganizationUnitSelected: boolean = false;
@@ -35,6 +37,7 @@ export class AddFormComponent implements OnInit {
   private feedbackRecipients: any;
   private AddedFormsNames: string [] = [];
   private RemovedFormsNames: string [] = [];
+  private firstClick: boolean;
 
   constructor(private _organisationUnitsService: OrganisationUnitsService,
               private _dataSetsService: DataSetsService,
@@ -44,6 +47,7 @@ export class AddFormComponent implements OnInit {
               private _toastService: ToastService) {}
 
   ngOnInit() {
+    this.firstClick = true;
     this._dataSetsService.getAllDataSets().subscribe(response => {
       this.allDataSets = response.dataSets;
     });
@@ -224,6 +228,15 @@ export class AddFormComponent implements OnInit {
 
     })
 
+  }
+  // TODO: (barnabas) find better way to prevent close on clicking add form buttons.
+  clickOutside(event){
+    if(!this.firstClick && event){
+      this.onFiltersClosed.emit({
+        closed: true
+      });
+    }
+    this.firstClick = false;
   }
 
 }

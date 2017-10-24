@@ -431,6 +431,8 @@ export class MessagesComponent implements OnInit {
       asyncRequestsArray.push(dataSet);
     }
 
+
+
     /**
      * [map map all object]
      * @param  {[object]} asyncRequestsArray   [dataset array to be posted]
@@ -523,5 +525,7 @@ export class MessagesComponent implements OnInit {
   setFocusReplyMessage(){
     this.textAreaMessageFocused = !this.textAreaMessageFocused;
   }
+
+  
 
 }

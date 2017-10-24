@@ -33,4 +33,10 @@ export class SelectDropdownComponent implements OnInit {
     });
   }
 
+  clickOutside(event: boolean) {
+    if(event){
+      this.showSelectOptions = false;
+    }
+  }
+
 }

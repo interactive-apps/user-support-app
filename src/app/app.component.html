@@ -16,7 +16,7 @@
     </div>
     <app-messages [ngClass]="{'col-sm-12': true,'opacity-modal': currentShown !=='messages'}"></app-messages>
     <app-create-users class="create__users" *ngIf="currentShown === 'createUser'"></app-create-users>
-    <app-add-form class="create__users" *ngIf="currentShown === 'addForms'" (onDataStoreUpdate)="dataSetUpdated($event)"></app-add-form>
+    <app-add-form class="create__users" *ngIf="currentShown === 'addForms'" (onDataStoreUpdate)="dataSetUpdated($event)" (onFiltersClosed)="filtersClosed($event)" [activeComponent]="currentShown"></app-add-form>
     <app-reset-password class="create__users" *ngIf="currentShown === 'resetPassword'"></app-reset-password>
   </div>
 </div>

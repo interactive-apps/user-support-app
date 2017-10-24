@@ -51,11 +51,20 @@ export class AppComponent implements OnInit {
 
   dataSetUpdated(event) {
     if(event.updated){
-      
+
       this.currentShown = 'messages';
 
     }
   }
+
+  filtersClosed(event) {
+    if(event.closed){
+
+      this.currentShown = 'messages';
+
+    }
+  }
+
 
 
 }

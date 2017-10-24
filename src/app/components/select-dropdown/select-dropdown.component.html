@@ -1,4 +1,4 @@
-<div>
+<div appClickOutside (clickOutside)="clickOutside($event)">
   <button class="btn btn-default btn-sm btn-block custom-select" (click)="toggleDropdownList($event)">
       <span class="pull-left">{{ selectedItem || selectHeader}}</span>
     </button>
