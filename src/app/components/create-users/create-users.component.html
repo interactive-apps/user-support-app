@@ -1,4 +1,4 @@
-<div class="container-fluid create__user--page">
+<div class="create__user--page">
   <div class="content__wrapper">
     <div class="org-data-filter">
       <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)"
@@ -22,8 +22,8 @@
               <label for="inputFirstname" class="col-form-label">First Name</label>
               <input type="text" class="form-control" id="inputFirstname" placeholder="First Name"
                     formControlName="firstName" aria-describedby="helpFirstName" autocomplete="off"
-                    (focus)="showOrHideFirstnamesDropDown(true,$event)" (blur)="showOrHideFirstnamesDropDown(false,$event)">
-              <ul class="drop-down-filter-users" *ngIf="userDetails.get('firstName').value && showFirstNameDropdown">
+                    (focus)="showOrHideFirstnamesDropDown(true,$event)">
+              <ul class="drop-down-filter-users" *ngIf="userDetails.get('firstName').value && showFirstNameDropdown" appClickOutside (clickOutside)="showOrHideFirstnamesDropDown(false,$event)">
                 <li
                   *ngFor="let item of allUsers | filterByKeyValues : 'firstName' : userDetails.get('firstName').value"
                 ><a (click)="setSelectedUser(item, $event)">{{ item.displayName }}</a></li>
@@ -36,8 +36,8 @@
               <label for="inputSurname" class="col-form-label">Surname</label>
               <input type="text" class="form-control" id="inputSurname" placeholder="Surname"
                      formControlName="surname" aria-describedby="helpSurname" autocomplete="off"
-                     (focus)="showOrHideSurnameDropDown(true,$event)" (blur)="showOrHideSurnameDropDown(false,$event)">
-              <ul class="drop-down-filter-users" *ngIf="userDetails.get('surname').value && showSurnameDropdown">
+                     (focus)="showOrHideSurnameDropDown(true,$event)">
+              <ul class="drop-down-filter-users" *ngIf="userDetails.get('surname').value && showSurnameDropdown" appClickOutside (clickOutside)="showOrHideSurnameDropDown(false,$event)">
                 <li
                   *ngFor="let item of allUsers | filterByKeyValues : 'surname' : userDetails.get('surname').value"
                 ><a (click)="setSelectedUser(item, $event)">{{ item.displayName }}</a></li>
@@ -51,8 +51,8 @@
           <div class="form-group">
             <label for="inputAddress" class="col-form-label">Email</label>
             <input type="text" class="form-control" id="inputAddress" placeholder="someone@email.com" formControlName="email"
-                   (focus)="showOrHideEmailDropDown(true,$event)" (blur)="showOrHideEmailDropDown(false,$event)" autocomplete="off">
-            <ul class="drop-down-filter-users" *ngIf="userDetails.get('email').value && showEmailDropdown">
+                   (focus)="showOrHideEmailDropDown(true,$event)" autocomplete="off">
+            <ul class="drop-down-filter-users" *ngIf="userDetails.get('email').value && showEmailDropdown" appClickOutside (clickOutside)="showOrHideEmailDropDown(false,$event)">
               <li
                 *ngFor="let item of allUsers | filterByKeyValues : 'email' : userDetails.get('email').value"
               ><a (click)="setSelectedUser(item, $event)">{{ item.email }}</a></li>
@@ -96,8 +96,8 @@
             <label for="inputPhoneNumber" class="col-form-label">Mobile Phone Number</label>
             <input type="text" class="form-control" id="inputPhoneNumber" placeholder="+25512342342"
                    formControlName="phoneNumber" aria-describedby="helpPhoneNumber"
-                   (focus)="showOrHidePhoneNumberDropDown(true,$event)" (blur)="showOrHidePhoneNumberDropDown(false,$event)" autocomplete="off">
-            <ul class="drop-down-filter-users" *ngIf="userDetails.get('phoneNumber').value && showPhoneNumberDropdown">
+                   (focus)="showOrHidePhoneNumberDropDown(true,$event)" autocomplete="off">
+            <ul class="drop-down-filter-users" *ngIf="userDetails.get('phoneNumber').value && showPhoneNumberDropdown" appClickOutside (clickOutside)="showOrHidePhoneNumberDropDown(false,$event)">
               <li
                 *ngFor="let item of allUsers | filterByKeyValues : 'phoneNumber' : userDetails.get('phoneNumber').value"
               ><a (click)="setSelectedUser(item, $event)">{{ item.phoneNumber }}</a></li>

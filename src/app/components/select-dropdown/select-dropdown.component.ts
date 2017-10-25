@@ -10,6 +10,7 @@ export class SelectDropdownComponent implements OnInit {
   @Output() onSelected: EventEmitter<any> = new EventEmitter<any>();
   @Input() selectOptions:any[] = [];
   @Input() selectHeader: string = 'Select';
+  @Input() showSearchInput: boolean = false;
   @Input() selectedItem: any;
   public showSelectOptions: boolean = false;
 

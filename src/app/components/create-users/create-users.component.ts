@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter,OnInit, Input, Output } from '@angular/core';
 import { User } from '../../models/user.model';
 import { matchOtherValidator } from '../../shared/match-other-validator';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
@@ -19,6 +19,7 @@ import * as async from 'async-es';
 })
 export class CreateUsersComponent implements OnInit {
 
+  @Output() onUserSelected: EventEmitter<any> = new EventEmitter<any>();
   public selectedOrgUnitNames: String[];
   public selectedOrgUnitIDs: any;
   public allUserGroups: any;
@@ -152,7 +153,6 @@ export class CreateUsersComponent implements OnInit {
       }, []);
 
       this.allUsers = results[4].users;
-      console.log(this.allUsers);
 
     })
   }
@@ -275,27 +275,26 @@ export class CreateUsersComponent implements OnInit {
 
 
   setSelectedUser(user,event){
-    console.log(user, event);
+    event.stopPropagation();
+    this.onUserSelected.emit({
+      user: user
+    })
   }
 
 
   showOrHideFirstnamesDropDown(value,event){
-    event.stopPropagation();
     this.showFirstNameDropdown = value;
   }
 
   showOrHideSurnameDropDown(value,event){
-    event.stopPropagation();
     this.showSurnameDropdown = value;
   }
 
   showOrHideEmailDropDown(value,event){
-    event.stopPropagation();
     this.showEmailDropdown = value;
   }
 
   showOrHidePhoneNumberDropDown(value,event){
-    event.stopPropagation();
     this.showPhoneNumberDropdown = value;
   }
 

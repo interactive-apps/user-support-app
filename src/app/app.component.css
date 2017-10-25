@@ -10,7 +10,7 @@
 
 .action__icon {
   margin: 0 10px;
-  display: block;
+  display: inline;
 }
 
 .action__wrapper {
@@ -34,31 +34,11 @@
 }
 
 .action__choices button {
-  margin: 20px;
-}
-
-.action__choices button.custom-btn {
-  padding: 10px 25px;
-  font-weight: 500;
-  background: transparent;
-  outline: none !important;
+  margin: 20px 0 0 0;
+  display: block;
   cursor: pointer;
+  font-weight: 500;
   transition: all 0.3s ease;
-  position: relative;
-  display: inline-block;
-}
-
-.action__choices button.btn-1 {
-  border: 2px solid rgb(39, 102, 150);
-}
-
-.action__choices button.btn-1:hover {
-  background: rgb(39, 102, 150);
-  color: #fff;
-}
-
-.action__choices button.btn-1:active {
-  top: 2px;
 }
 
 .create__users {
@@ -69,7 +49,29 @@
   height: 100%;
 }
 
+.request__forms {
+  z-index: 1000;
+  position: absolute;
+  width: 50%;
+  top: 165px;
+  align-self: flex-end;
+  display: flex;
+}
 
-.opacity-modal {
-  opacity: 0.1;
+.action__component {
+
+}
+
+.selected__component {
+  position: absolute;
+  z-index: 1000;
+  min-width: 100%;
+  background: white;
+  min-height: 200px;
+  max-height: 375px;
+  margin-top: 5px;
+  overflow: auto;
+  padding: 0 5px;
+  border: 1px solid rgba(0,0,0,.15);
+
 }

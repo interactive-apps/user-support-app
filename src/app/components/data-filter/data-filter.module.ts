@@ -30,7 +30,7 @@ import {HttpModule} from '@angular/http';
     OrderPipe,
     AddUnderscorePipe,
   ],
-  exports: [DataFilterComponent],
+  exports: [DataFilterComponent,FilterByNamePipe],
   providers: [
     DataFilterService,
     LocalStorageService,

@@ -6,8 +6,11 @@
   <!--Selection list-->
   <div class="drop-down-filter-panel" *ngIf="showSelectOptions">
     <div class="panel-body drop-down-filter-panel-body">
+      <input type="search" class="form-control input-sm" placeholder="Search" [(ngModel)]="querystring" *ngIf="showSearchInput">
       <ul class="drop-down-filter-list">
-        <li *ngFor="let item of selectOptions"><a (click)="setSelected(item, $event)">{{ item.name }}</a></li>
+        <li *ngFor="let item of selectOptions | filterByName:querystring">
+          <a (click)="setSelected(item, $event)">{{ item.name }}</a>
+        </li>
       </ul>
     </div>
   </div>
