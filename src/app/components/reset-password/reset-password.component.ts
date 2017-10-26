@@ -147,7 +147,7 @@ export class ResetPasswordComponent implements OnInit {
 
 
   userSelected(event){
-    console.log(event);
+    this.onUserSelect(event.selectedItem);
   }
 
 }

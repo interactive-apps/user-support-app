@@ -12,24 +12,23 @@
 
 .add__form--page {
   display: flex;
-  width: 100%;
+  width: 500px;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
 
 }
 
 .add__form--page .content__wrapper {
   display: flex;
-  width: 80%;
+  width: 100%;
   background-color: inherit;
-  justify-content: center;
+  justify-content: flex-end;
   flex-direction: row;
 }
 
 
 .create__user--page .content__wrapper  .content__details {
-  margin-top: 50px;
+  margin-top: 5px;
 }
 
 

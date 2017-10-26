@@ -41,23 +41,6 @@
   transition: all 0.3s ease;
 }
 
-.create__users {
-  z-index: 1000;
-  position: absolute;
-  width: 90%;
-  top: 200px;
-  height: 100%;
-}
-
-.request__forms {
-  z-index: 1000;
-  position: absolute;
-  width: 50%;
-  top: 165px;
-  align-self: flex-end;
-  display: flex;
-}
-
 .action__component {
 
 }

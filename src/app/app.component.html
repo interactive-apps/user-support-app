@@ -15,15 +15,15 @@
           </div>
           <div class="action__component col">
             <button class="btn btn-outline-primary" (click)="showChosenComponent('resetPassword')" [ngClass]="{'active': currentShown =='resetPassword'}"><i class="fa fa-wpforms action__icon" aria-hidden="true"></i>Reset Password</button>
+            <app-reset-password class="selected__component" *ngIf="currentShown === 'resetPassword'" [selectedUser]="selectedUser"></app-reset-password>
           </div>
           <div class="action__component col">
             <button class="btn btn-outline-primary" (click)="showChosenComponent('addForms')" [ngClass]="{'active': currentShown =='addForms'}"><i class="fa fa-wpforms action__icon" aria-hidden="true"></i>Request Form(s)</button>
+            <app-add-form class="selected__component" *ngIf="currentShown === 'addForms'" (onDataStoreUpdate)="dataSetUpdated($event)" (onFiltersClosed)="filtersClosed($event)" [activeComponent]="currentShown"></app-add-form>
           </div>
         </section>
       </div>
     </div>
     <app-messages [ngClass]="{'col-sm-12': true}"></app-messages>
-    <app-add-form class="request__forms" *ngIf="currentShown === 'addForms'" (onDataStoreUpdate)="dataSetUpdated($event)" (onFiltersClosed)="filtersClosed($event)" [activeComponent]="currentShown"></app-add-form>
-    <app-reset-password class="create__users" *ngIf="currentShown === 'resetPassword'" [selectedUser]="selectedUser"></app-reset-password>
   </div>
 </div>
