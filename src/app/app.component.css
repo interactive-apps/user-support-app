@@ -2,8 +2,9 @@
   background: #276696;
   width: 100%;
   height: 56px;
-  box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+  box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
 }
+
 .main {
   margin-top: 50px;
 }
@@ -41,9 +42,7 @@
   transition: all 0.3s ease;
 }
 
-.action__component {
-
-}
+.action__component {}
 
 .selected__component {
   position: absolute;
@@ -55,6 +54,10 @@
   margin-top: 5px;
   overflow: auto;
   padding: 0 5px;
-  border: 1px solid rgba(0,0,0,.15);
+  border: 1px solid rgba(0, 0, 0, .15);
+  border-radius: 4px;
+}
 
+.flow_right {
+  right: 0;
 }

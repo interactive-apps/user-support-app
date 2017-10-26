@@ -13,7 +13,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
 
   listItems: any[] = [];
   dataGroups: any[] = [];
-  selectedGroup: any = { id: '', name: "Dataset Form" };
+  selectedGroup: any = { id: 'dataSet_forms', name: "Dataset Form" };
 
   @Output() onDataUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDataFilterClose: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -36,7 +36,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
     programIndicators: [],
     dataSetGroups: [
       { id: '', name: "" },
-      { id: '', name: "Dataset Form" },
+      { id: 'dataSet_forms', name: "Dataset Form" },
       { id: '.REPORTING_RATE_ON_TIME', name: "Reporting Rate on time" },
       { id: '.ACTUAL_REPORTS', name: "Actual Reports Submitted" },
       { id: '.ACTUAL_REPORTS_ON_TIME', name: "Reports Submitted on time" },
@@ -82,7 +82,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
           programIndicators: items[7],
           dataSetGroups: [
             { id: '', name: "Reporting Rate" },
-            { id: '', name: "Dataset Form" },
+            { id: 'dataSet_forms', name: "Dataset Form" },
             { id: '.REPORTING_RATE_ON_TIME', name: "Reporting Rate on time" },
             { id: '.ACTUAL_REPORTS', name: "Actual Reports Submitted" },
             { id: '.ACTUAL_REPORTS_ON_TIME', name: "Reports Submitted on time" },
@@ -229,7 +229,12 @@ export class DataFilterComponent implements OnInit, OnDestroy {
         });
       } else if (!group.hasOwnProperty('indicators') && !group.hasOwnProperty('dataElements')) {
         currentList.push(...data.ds.map(datacv => {
-          return { id: datacv.id + group.id, name: group.name + ' ' + datacv.name }
+
+          if(group.id === 'dataSet_forms'){
+            return { id: datacv.id, name: datacv.name }
+          }else {
+            return { id: datacv.id + group.id, name: group.name + ' ' + datacv.name }
+          }
         }));
       }
     }
@@ -542,6 +547,13 @@ export class DataFilterComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  toggleShowBody(e) {
+    console.log(e);
+    e.stopPropagation();
+    this.showBody = !this.showBody;
+    console.log(this.showBody);
   }
 
 }

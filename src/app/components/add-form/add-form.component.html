@@ -1,9 +1,9 @@
 <div class="add__form--page">
   <div class="content__wrapper" appClickOutside (clickOutside)="clickOutside($event)">
     <div class="org-data-filter">
-      <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)" [selected]="selectedOrgUnitIDs"></app-org-unit-filter>
+      <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)" [orgunit_model]="orgunit_model"></app-org-unit-filter>
     </div>
-    <div class="element-data-filter">
+    <div class="element-data-filter" *ngIf="isOrganizationUnitSelected && showFilter">
       <div *ngIf="isOrganizationUnitSelected && loading">
         <div class="col-md-12 loading-balls">
           <img src="assets/img/balls-3.svg" alt="" style="height:40px">

@@ -1,39 +1,37 @@
 .org-data-filter {
-  flex: 1;
+  width: 50%;
   height: 100%;
-  margin: 20px 0;
+  margin: 5px 0;
 }
 
 .element-data-filter {
-  flex: 1;
+  width: 50%;
   height: 100%;
-  margin: 20px 0;
+  margin: 5px 0 5px 2px;
+  padding-bottom: 2px;
+  border: 1px solid #c6c6c6;
+  border-radius: 4px;
 }
 
 .add__form--page {
   display: flex;
-  width: 600px;
+  width: 650px;
   flex-direction: column;
-  justify-content: flex-end;
-
 }
 
 .add__form--page .content__wrapper {
   display: flex;
   width: 100%;
   background-color: inherit;
-  justify-content: flex-end;
   flex-direction: row;
 }
 
-
-.create__user--page .content__wrapper  .content__details {
+.create__user--page .content__wrapper .content__details {
   margin-top: 5px;
 }
 
-
-.multiselect__forms > button.dropdown-toggle.btn.btn-default.btn-block.select_btn {
-    min-width: 300px !important;
+.multiselect__forms>button.dropdown-toggle.btn.btn-default.btn-block.select_btn {
+  min-width: 300px !important;
 }
 
 .multiselect__forms {
