@@ -59,7 +59,7 @@ export class AppComponent implements OnInit {
   }
 
   filtersClosed(event) {
-    if(event.closed){
+    if(event){
 
       this.currentShown = 'messages';
 

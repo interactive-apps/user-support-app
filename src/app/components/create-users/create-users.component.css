@@ -13,7 +13,7 @@
 
 .create__user--page .content__wrapper {
   display: flex;
-  width: 600px;
+  width: 550px;
   justify-content: flex-start;
   flex-direction: column;
 }

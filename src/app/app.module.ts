@@ -40,7 +40,6 @@ import { AddFormComponent } from './components/add-form/add-form.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { ComposeFeedbackComponent } from './components/messages/compose-feedback/compose-feedback.component';
 import { SelectDropdownComponent } from './components/select-dropdown/select-dropdown.component';
-import { ClickOutsideDirective } from './shared/click-outside.directive';
 
 @NgModule({
   declarations: [
@@ -52,8 +51,7 @@ import { ClickOutsideDirective } from './shared/click-outside.directive';
     AddFormComponent,
     ResetPasswordComponent,
     ComposeFeedbackComponent,
-    SelectDropdownComponent,
-    ClickOutsideDirective
+    SelectDropdownComponent
   ],
   imports: [
     BrowserModule,
