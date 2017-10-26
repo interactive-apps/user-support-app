@@ -19,7 +19,7 @@
           </div>
           <div class="action__component col">
             <button class="btn btn-outline-primary" (click)="showChosenComponent('resetPassword')" [ngClass]="{'active': currentShown =='resetPassword'}"><i class="fa fa-wpforms action__icon" aria-hidden="true"></i>Reset Password</button>
-            <app-reset-password class="selected__component flow_right" *ngIf="currentShown === 'resetPassword'" [selectedUser]="selectedUser"></app-reset-password>
+            <app-reset-password class="selected__component flow_right" *ngIf="currentShown === 'resetPassword'" [selectedUser]="selectedUser" (resetSelectedUser)="resetSelectedUser($event)"></app-reset-password>
           </div>
         </section>
       </div>

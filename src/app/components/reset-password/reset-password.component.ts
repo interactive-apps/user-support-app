@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { SharedDataService } from '../../shared/shared-data.service';
 import { ToastService } from '../../services/toast.service';
@@ -19,6 +19,7 @@ import * as async from 'async-es';
 export class ResetPasswordComponent implements OnInit {
 
   @Input() selectedUser: any;
+  @Output() resetSelectedUser: EventEmitter<any> = new EventEmitter<any>();
   public allUsers: any;
   public optionsModel: number[];
   public userLoaded: boolean = false;
@@ -28,10 +29,10 @@ export class ResetPasswordComponent implements OnInit {
   public resetPasswordHeader: string = 'Please Select User to Reset password';
 
   constructor(private _userService: UserService,
-              private _dataStoreService: DataStoreService,
-              private _toastService: ToastService,
-              private _messageConversationService: MessageConversationService,
-              private _sharedDataService: SharedDataService) {
+    private _dataStoreService: DataStoreService,
+    private _toastService: ToastService,
+    private _messageConversationService: MessageConversationService,
+    private _sharedDataService: SharedDataService) {
 
   }
 
@@ -64,7 +65,7 @@ export class ResetPasswordComponent implements OnInit {
 
   onUserSelect(event) {
     this.userLoaded = false;
-    this._userService.getUser(event.id,'?fields=id,displayName,email,firstName,surname,phoneNumber,userCredentials,userGroups,organisationUnits').subscribe(response => {
+    this._userService.getUser(event.id, '?fields=id,displayName,email,firstName,surname,phoneNumber,userCredentials,userGroups,organisationUnits').subscribe(response => {
       this.userLoaded = true;
       this.selectedUser = response;
     })
@@ -146,8 +147,14 @@ export class ResetPasswordComponent implements OnInit {
   }
 
 
-  userSelected(event){
+  userSelected(event) {
     this.onUserSelect(event.selectedItem);
+  }
+
+  ngOnDestroy() {
+    this.resetSelectedUser.emit({
+      reset: true
+    })
   }
 
 }
