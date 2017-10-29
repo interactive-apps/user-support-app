@@ -22,7 +22,8 @@ export class ResetPasswordComponent implements OnInit {
   @Output() resetSelectedUser: EventEmitter<any> = new EventEmitter<any>();
   public allUsers: any;
   public optionsModel: number[];
-  public userLoaded: boolean = false;
+  public isLoadingUser: boolean = false;
+  public selectedItem: any;
   public passwordForm: FormGroup;
   private feedbackRecipients: any;
   public showSearchInput: boolean = true;
@@ -64,9 +65,10 @@ export class ResetPasswordComponent implements OnInit {
 
 
   onUserSelect(event) {
-    this.userLoaded = false;
+    this.isLoadingUser = true;
+    this.selectedItem = Object.assign({},event);
     this._userService.getUser(event.id, '?fields=id,displayName,email,firstName,surname,phoneNumber,userCredentials,userGroups,organisationUnits').subscribe(response => {
-      this.userLoaded = true;
+      this.isLoadingUser = false;
       this.selectedUser = response;
     })
   }
