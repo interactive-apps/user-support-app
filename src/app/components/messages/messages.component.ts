@@ -82,6 +82,8 @@ export class MessagesComponent implements OnInit {
     {id: 'HIGH', name: 'HIGH'}
   ];
 
+  private requestsAreResolved: boolean = false;
+
 
 
   constructor(private _messageConversationService: MessageConversationService,
@@ -353,6 +355,7 @@ export class MessagesComponent implements OnInit {
   onReplyMessage(conversationID: String, { value, valid }: { value: any, valid: boolean }) {
     this._messageConversationService.replyConversation(conversationID, value.message);
     this.messageReplyFormGroup.reset();
+    this.setFocusReplyMessage();
     this.closeMessage();
   }
 
@@ -418,6 +421,7 @@ export class MessagesComponent implements OnInit {
       }, []);
       updatedDatastoreValues = asyncRequestsArray;
       this.disableApproveAll = true;
+      this.requestsAreResolved = true;
 
     } else {
       let index = _.findIndex(this.dataStoreValues, { url: dataSet.url });
@@ -427,6 +431,7 @@ export class MessagesComponent implements OnInit {
 
       this.dataStoreValues.splice(index, 1, dataSet);
       this.disableApproveAll = (_.findIndex(this.dataStoreValues, { status: 'SOLVED' }) !== -1);
+      this.requestsAreResolved = (_.findIndex(this.dataStoreValues, { status: 'OPEN' }) == -1);
       updatedDatastoreValues = this.dataStoreValues;
       asyncRequestsArray.push(dataSet);
     }
@@ -501,6 +506,12 @@ export class MessagesComponent implements OnInit {
       this._toastService.error('There was an error when sending approved changes.');
 
     }
+
+    if(this.requestsAreResolved){
+      let message = `Your request has been resolved. \n Thanks`;
+      this._messageConversationService.replyConversation(this.openedConversation.id, message);
+      this.closeMessage();
+    }
   }
 
   /**
@@ -523,5 +534,7 @@ export class MessagesComponent implements OnInit {
   setFocusReplyMessage(){
     this.textAreaMessageFocused = !this.textAreaMessageFocused;
   }
+
+
 
 }

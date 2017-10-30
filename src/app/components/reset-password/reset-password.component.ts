@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { SharedDataService } from '../../shared/shared-data.service';
 import { ToastService } from '../../services/toast.service';
@@ -18,42 +18,22 @@ import * as async from 'async-es';
 })
 export class ResetPasswordComponent implements OnInit {
 
+  @Input() selectedUser: any;
+  @Output() resetSelectedUser: EventEmitter<any> = new EventEmitter<any>();
   public allUsers: any;
   public optionsModel: number[];
-  public selectedUser: any;
-  public userLoaded: boolean = false;
+  public isLoadingUser: boolean = false;
+  public selectedItem: any;
   public passwordForm: FormGroup;
   private feedbackRecipients: any;
-
-  // Settings configuration
-  public mySettings: IMultiSelectSettings = {
-    enableSearch: true,
-    buttonClasses: 'btn btn-secondary btn-sm btn-block',
-    containerClasses: 'dropdown-block',
-    selectionLimit: 1,
-    autoUnselect: true,
-    closeOnSelect: true,
-    displayAllSelectedText: true
-  };
-
-  // Text configuration
-  public myTexts: IMultiSelectTexts = {
-    checkAll: 'Select all',
-    uncheckAll: 'Unselect all',
-    checked: 'user selected',
-    checkedPlural: 'users selected',
-    searchPlaceholder: 'Find',
-    searchEmptyResult: 'Nothing found...',
-    searchNoRenderText: 'Type in search box to see results...',
-    defaultTitle: 'Select user to reset password',
-    allSelected: 'All selected',
-  };
+  public showSearchInput: boolean = true;
+  public resetPasswordHeader: string = 'Please Select User to Reset password';
 
   constructor(private _userService: UserService,
-              private _dataStoreService: DataStoreService,
-              private _toastService: ToastService,
-              private _messageConversationService: MessageConversationService,
-              private _sharedDataService: SharedDataService) {
+    private _dataStoreService: DataStoreService,
+    private _toastService: ToastService,
+    private _messageConversationService: MessageConversationService,
+    private _sharedDataService: SharedDataService) {
 
   }
 
@@ -77,13 +57,18 @@ export class ResetPasswordComponent implements OnInit {
       this.feedbackRecipients = response;
     })
 
+    if (this.selectedUser) {
+      this.onUserSelect(this.selectedUser);
+    }
+
   }
 
 
   onUserSelect(event) {
-    this.userLoaded = false;
-    this._userService.getUser(event[0],'?fields=id,displayName,email,firstName,surname,phoneNumber,userCredentials,userGroups,organisationUnits').subscribe(response => {
-      this.userLoaded = true;
+    this.isLoadingUser = true;
+    this.selectedItem = Object.assign({},event);
+    this._userService.getUser(event.id, '?fields=id,displayName,email,firstName,surname,phoneNumber,userCredentials,userGroups,organisationUnits').subscribe(response => {
+      this.isLoadingUser = false;
       this.selectedUser = response;
     })
   }
@@ -162,5 +147,16 @@ export class ResetPasswordComponent implements OnInit {
 
     })
   }
-  
+
+
+  userSelected(event) {
+    this.onUserSelect(event.selectedItem);
+  }
+
+  ngOnDestroy() {
+    this.resetSelectedUser.emit({
+      reset: true
+    })
+  }
+
 }

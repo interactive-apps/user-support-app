@@ -78,13 +78,13 @@
               </div>
               <div class="pull-right pull__right--Action" *ngIf="isCurrentUserInFeedbackGroup && (isUserSupportMsg || message.messageType == 'TICKET')">
                 <div class="col-auto" appClickOutside>
-                  <app-select-dropdown [selectHeader]="priorityHeader" [selectOptions]="priorities" [selectedItem]="message.priority" (onSelected)="setMessagePriority($event)"></app-select-dropdown>
+                  <app-select-dropdown [selectHeader]="priorityHeader" [selectOptions]="priorities" [selectedItem]="message.priority" (onSelected)="setMessagePriority($event)" id="priority"></app-select-dropdown>
                 </div>
                 <div class="col-auto">
-                  <app-select-dropdown [selectHeader]="statusHeader" [selectOptions]="statuses" [selectedItem]="message.status" (onSelected)="setMessageStatus($event)"></app-select-dropdown>
+                  <app-select-dropdown [selectHeader]="statusHeader" [selectOptions]="statuses" [selectedItem]="message.status" (onSelected)="setMessageStatus($event)" id="status"></app-select-dropdown>
                 </div>
                 <div class="col-auto">
-                  <app-select-dropdown [selectHeader]="assignToMemberHeader" [selectOptions]="feedbackRecipients" [selectedItem]="assignedMember" (onSelected)="assignToMessage($event)"></app-select-dropdown>
+                  <app-select-dropdown [selectHeader]="assignToMemberHeader" [selectOptions]="feedbackRecipients" [selectedItem]="assignedMember" (onSelected)="assignToMessage($event)" id="assigned"></app-select-dropdown>
                 </div>
               </div>
             </div>

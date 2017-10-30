@@ -1,7 +1,6 @@
-<div class="container-fluid create__user--page">
+<div class="create__user--page">
   <div class="content__wrapper">
     <div class="org-data-filter">
-      <h4 class="text-center">Please select Organisation unit to request user</h4>
       <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)"
           [orgunit_tree_config]="orgunit_tree_config" [orgunit_model]="orgunit_model">
       </app-org-unit-filter>
@@ -21,23 +20,58 @@
           <div class="form-row">
             <div class="form-group col-md-6" [ngClass]="{'has-error': userDetails.get('firstName').hasError('required') && userDetails.get('firstName').touched}">
               <label for="inputFirstname" class="col-form-label">First Name</label>
-              <input type="text" class="form-control" id="inputFirstname" placeholder="First Name" formControlName="firstName" aria-describedby="helpFirstName">
+              <input type="text" class="form-control" id="inputFirstname" placeholder="First Name"
+                    formControlName="firstName" aria-describedby="helpFirstName" autocomplete="off"
+                    (focus)="showOrHideFirstnamesDropDown(true,$event)">
+              <ul class="drop-down-filter-users" *ngIf="userDetails.get('firstName').value && showFirstNameDropdown" appClickOutside (clickOutside)="showOrHideFirstnamesDropDown(false,$event)">
+                <li
+                  *ngFor="let item of allUsers | filterByKeyValues : 'firstName' : userDetails.get('firstName').value"
+                ><a (click)="setSelectedUser(item, $event)">{{ item.displayName }}</a></li>
+              </ul>
               <span id="helpFirstName" class="form-text text-danger" *ngIf="userDetails.get('firstName').hasError('required') && userDetails.get('firstName').touched">
                 First name is required
               </span>
             </div>
             <div class="form-group col-md-6" [ngClass]="{'has-error': userDetails.get('surname').hasError('required') && userDetails.get('surname').touched}">
               <label for="inputSurname" class="col-form-label">Surname</label>
-              <input type="text" class="form-control" id="inputSurname" placeholder="Surname" formControlName="surname" aria-describedby="helpSurname">
+              <input type="text" class="form-control" id="inputSurname" placeholder="Surname"
+                     formControlName="surname" aria-describedby="helpSurname" autocomplete="off"
+                     (focus)="showOrHideSurnameDropDown(true,$event)">
+              <ul class="drop-down-filter-users" *ngIf="userDetails.get('surname').value && showSurnameDropdown" appClickOutside (clickOutside)="showOrHideSurnameDropDown(false,$event)">
+                <li
+                  *ngFor="let item of allUsers | filterByKeyValues : 'surname' : userDetails.get('surname').value"
+                ><a (click)="setSelectedUser(item, $event)">{{ item.displayName }}</a></li>
+              </ul>
               <span id="helpSurname" class="form-text text-danger" *ngIf="userDetails.get('surname').hasError('required') && userDetails.get('surname').touched">
                 Surname is required
               </span>
             </div>
           </div>
-
-          <div class="form-group">
-            <label for="inputAddress" class="col-form-label">Email</label>
-            <input type="text" class="form-control" id="inputAddress" placeholder="someone@email.com" formControlName="email">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputAddress" class="col-form-label">Email</label>
+              <input type="text" class="form-control" id="inputAddress" placeholder="someone@email.com" formControlName="email"
+                     (focus)="showOrHideEmailDropDown(true,$event)" autocomplete="off">
+              <ul class="drop-down-filter-users" *ngIf="userDetails.get('email').value && showEmailDropdown" appClickOutside (clickOutside)="showOrHideEmailDropDown(false,$event)">
+                <li
+                  *ngFor="let item of allUsers | filterByKeyValues : 'email' : userDetails.get('email').value"
+                ><a (click)="setSelectedUser(item, $event)">{{ item.email }}</a></li>
+              </ul>
+            </div>
+            <div class="form-group col-md-6" [ngClass]="{'has-error': userDetails.get('phoneNumber').hasError('required') && userDetails.get('phoneNumber').touched}">
+              <label for="inputPhoneNumber" class="col-form-label">Phone Number</label>
+              <input type="text" class="form-control" id="inputPhoneNumber" placeholder="+25512342342"
+                     formControlName="phoneNumber" aria-describedby="helpPhoneNumber"
+                     (focus)="showOrHidePhoneNumberDropDown(true,$event)" autocomplete="off">
+              <ul class="drop-down-filter-users" *ngIf="userDetails.get('phoneNumber').value && showPhoneNumberDropdown" appClickOutside (clickOutside)="showOrHidePhoneNumberDropDown(false,$event)">
+                <li
+                  *ngFor="let item of allUsers | filterByKeyValues : 'phoneNumber' : userDetails.get('phoneNumber').value"
+                ><a (click)="setSelectedUser(item, $event)">{{ item.phoneNumber }}</a></li>
+              </ul>
+              <span id="helpMobileNumber" class="form-text text-danger" *ngIf="userDetails.get('phoneNumber').hasError('required') && userDetails.get('phoneNumber').touched">
+                Mobile phone number is required
+              </span>
+            </div>
           </div>
 
           <div class="form-row">
@@ -63,22 +97,16 @@
             </div>
           </div>
 
-          <div class="form-group" formGroupName="userCredentials">
-            <label class="col-form-label userRolesSelect">Select User Roles</label>
-            <ss-multiselect-dropdown [texts]="myTexts" [options]="allUserRoles" [settings]="mySettings"  formControlName="userRoles"></ss-multiselect-dropdown>
-          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6" formGroupName="userCredentials">
+              <label class="col-form-label userRolesSelect">Select User Roles</label>
+              <ss-multiselect-dropdown [texts]="myTexts" [options]="allUserRoles" [settings]="mySettings"  formControlName="userRoles"></ss-multiselect-dropdown>
+            </div>
 
-          <div class="form-group">
-            <label for="multiselectDropdown" class="col-form-label userGroupSelect">Select UserGroups</label>
-            <ss-multiselect-dropdown [texts]="myTexts" [options]="allUserGroups" [settings]="mySettings"  formControlName="userGroups" id="multiselectDropdown"></ss-multiselect-dropdown>
-          </div>
-
-          <div class="form-group" [ngClass]="{'has-error': userDetails.get('phoneNumber').hasError('required') && userDetails.get('phoneNumber').touched}">
-            <label for="inputPhoneNumber" class="col-form-label">Mobile Phone Number</label>
-            <input type="text" class="form-control" id="inputPhoneNumber" placeholder="+25512342342" formControlName="phoneNumber" aria-describedby="helpPhoneNumber">
-            <span id="helpMobileNumber" class="form-text text-danger" *ngIf="userDetails.get('phoneNumber').hasError('required') && userDetails.get('phoneNumber').touched">
-              Mobile phone number is required
-            </span>
+            <div class="form-group col-md-6">
+              <label for="multiselectDropdown" class="col-form-label userGroupSelect">Select UserGroups</label>
+              <ss-multiselect-dropdown [texts]="myTexts" [options]="allUserGroups" [settings]="mySettings"  formControlName="userGroups" id="multiselectDropdown"></ss-multiselect-dropdown>
+            </div>
           </div>
           <div class="">
             <button type="submit" [disabled]="userDetails.invalid" class="btn btn-primary">Request User</button>

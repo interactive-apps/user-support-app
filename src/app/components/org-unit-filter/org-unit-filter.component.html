@@ -26,7 +26,10 @@
           </span>
         <span class="no-selection"*ngIf="orgunit_model.selected_orgunits.length == 0 && !orgunit_tree_config.loading && orgunit_model.selection_mode != 'Usr_orgUnit'">{{ orgunit_tree_config.placeholder }}</span>
         <span class="glyphicon glyphicon-triangle-bottom pull-right" *ngIf="!orgunit_tree_config.loading"></span>
-        <span *ngIf="orgunit_tree_config.loading">{{ orgunit_tree_config.loading_message }}</span>
+        <div class="col-md-12 loading-balls" *ngIf="orgunit_tree_config.loading">
+          <img src="assets/img/balls-3.svg" alt="" style="height:20px">
+          <span style="margin-top: 20px;">{{ orgunit_tree_config.loading_message }}</span>
+        </div>
       </div>
       <div class="tree-view" [ngClass]="{'hiddenTree':showOrgTree}" id="tree_view">
         <div class="col-sm-6" style="padding-left: 0px; margin-bottom: 5px" *ngIf="orgunit_model.show_selection_mode">

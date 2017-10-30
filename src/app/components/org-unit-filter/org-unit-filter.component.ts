@@ -147,6 +147,9 @@ export class OrgUnitFilterComponent implements OnInit {
                 this.orgunitService.user_orgunits = this.orgunitService.getUserOrgUnits( userOrgunit );
                 if(this.orgunit_model.selection_mode == "Usr_orgUnit"){
                   this.orgunit_model.selected_orgunits = this.orgunit_model.user_orgunits;
+                  if(!this.orgunit_model.show_update_button){
+                    this.onOrgUnitUpdate.emit({name: 'ou', value: this.orgunit_model.selected_orgunits[0].id});
+                  }
                 }
                 let all_levels = data.pager.total;
                 let orgunits = this.orgunitService.getuserOrganisationUnitsWithHighestlevel( level, userOrgunit );

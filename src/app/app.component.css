@@ -2,15 +2,16 @@
   background: #276696;
   width: 100%;
   height: 56px;
-  box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+  box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
 }
+
 .main {
   margin-top: 50px;
 }
 
 .action__icon {
   margin: 0 10px;
-  display: block;
+  display: inline;
 }
 
 .action__wrapper {
@@ -34,42 +35,29 @@
 }
 
 .action__choices button {
-  margin: 20px;
-}
-
-.action__choices button.custom-btn {
-  padding: 10px 25px;
-  font-weight: 500;
-  background: transparent;
-  outline: none !important;
+  margin: 20px 0 0 0;
+  display: block;
   cursor: pointer;
+  font-weight: 500;
   transition: all 0.3s ease;
-  position: relative;
-  display: inline-block;
 }
 
-.action__choices button.btn-1 {
-  border: 2px solid rgb(39, 102, 150);
-}
+.action__component {}
 
-.action__choices button.btn-1:hover {
-  background: rgb(39, 102, 150);
-  color: #fff;
-}
-
-.action__choices button.btn-1:active {
-  top: 2px;
-}
-
-.create__users {
-  z-index: 1000;
+.selected__component {
   position: absolute;
-  width: 90%;
-  top: 200px;
-  height: 100%;
+  z-index: 1000;
+  min-width: 100%;
+  background: white;
+  min-height: 200px;
+  max-height: 375px;
+  margin-top: 5px;
+  overflow: auto;
+  padding: 0 5px;
+  border: 1px solid rgba(0, 0, 0, .15);
+  border-radius: 4px;
 }
 
-
-.opacity-modal {
-  opacity: 0.1;
+.flow_right {
+  right: 0;
 }

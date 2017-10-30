@@ -19,6 +19,8 @@ export class AppComponent implements OnInit {
   public actionTypeForm: FormGroup;
   public actionTypeArray: string[];
   public currentShown:string = 'messages';
+  public selectedUser: any;
+  public isUserSelected: boolean = false;
 
   constructor(toastr: ToastsManager, vRef: ViewContainerRef,
               private fb: FormBuilder,
@@ -51,11 +53,34 @@ export class AppComponent implements OnInit {
 
   dataSetUpdated(event) {
     if(event.updated){
-      
+
       this.currentShown = 'messages';
 
     }
   }
+
+  filtersClosed(event) {
+    if(event){
+
+      this.currentShown = 'messages';
+
+    }
+  }
+
+  onUserSelected(event) {
+    if(event.user){
+      this.selectedUser = Object.assign({}, event.user);
+      this.currentShown = 'resetPassword';
+      this.isUserSelected = true;
+    }
+  }
+
+  resetSelectedUser(event){
+    if(event.reset && this.isUserSelected){
+      this.selectedUser = null;
+    }
+  }
+
 
 
 }
