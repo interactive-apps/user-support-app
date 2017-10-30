@@ -21,11 +21,13 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   @Input() functionMappings: any[] = [];
   @Input() hiddenDataElements: any[] = [];
   @Input() allowSelection: boolean = true;
-  querystring: string = null;
-  listchanges: string = null;
-  showBody: boolean = false;
+  public initialDataSelection: any;
+  public disableUpdate: boolean = true;
+  public querystring: string = null;
+  public listchanges: string = null;
+  public showBody: boolean = false;
   private subscription: Subscription;
-  metaData: any = {
+  public metaData: any = {
     dataElements: [],
     indicators: [],
     dataElementGroups: [],
@@ -43,7 +45,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
       { id: '.EXPECTED_REPORTS', name: "Expected Reports" }
     ]
   };
-  loading: boolean = true;
+  public loading: boolean = true;
   p: number = 1;
   k: number = 1;
   need_groups: boolean = true;
@@ -60,6 +62,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initiateData();
+    this.initialDataSelection = this.selectedItems;
   }
 
   // trigger this to reset pagination pointer when search change
@@ -314,6 +317,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
         item
       ];
     }
+    this.disableRequestIfNoChange();
   }
 
   // Remove selected Item
@@ -332,6 +336,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
         item
       ];
     }
+    this.disableRequestIfNoChange();
   }
 
   getAutogrowingTables(selections) {
@@ -550,10 +555,19 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   }
 
   toggleShowBody(e) {
-    console.log(e);
     e.stopPropagation();
     this.showBody = !this.showBody;
-    console.log(this.showBody);
   }
+
+  disableRequestIfNoChange(){
+    let removed =  _.difference(this.initialDataSelection, this.selectedItems);
+    let added = _.difference(this.selectedItems, this.initialDataSelection);
+
+    if(removed.length || added.length){
+      this.disableUpdate = false;
+    }
+  }
+
+
 
 }

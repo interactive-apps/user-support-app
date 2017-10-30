@@ -10,7 +10,7 @@
           <span style="margin-top: 20px;">Loading DataSets</span>
         </div>
       </div>
-      <app-data-filter [selectedItems]='assignedDataSets' *ngIf="isOrganizationUnitSelected && !loading && showFilter" [allowSelection]='allowSelection' (onDataUpdate)="dataUpdated($event)" (onDataFilterClose)="filterIsClosed($event)"></app-data-filter>
+      <app-data-filter [selectedItems]="assignedDataSets" *ngIf="isOrganizationUnitSelected && !loading && showFilter" [allowSelection]='allowSelection' (onDataUpdate)="dataUpdated($event)" (onDataFilterClose)="filterIsClosed($event)"></app-data-filter>
     </div>
   </div>
 </div>
