@@ -1,5 +1,20 @@
 <div class="create__user--page">
   <div class="content__wrapper">
+    <div class="row bs-wizard" style="border-bottom:0;">
+         <div class="col-6 bs-wizard-step" [ngClass]="isOrganizationUnitSelected ? 'complete':'active'"><!-- complete -->
+           <div class="text-center bs-wizard-stepnum">Step 1</div>
+           <div class="progress"><div class="progress-bar"></div></div>
+           <a href="#" class="bs-wizard-dot"></a>
+           <div class="bs-wizard-info text-center">Select Organization Unit.</div>
+         </div>
+
+         <div class="col-6 bs-wizard-step" [ngClass]="isOrganizationUnitSelected ? 'active':'disabled'"><!-- active -->
+           <div class="text-center bs-wizard-stepnum">Step 2</div>
+           <div class="progress"><div class="progress-bar"></div></div>
+           <a href="#" class="bs-wizard-dot"></a>
+           <div class="bs-wizard-info text-center">Add User Information</div>
+         </div>
+     </div>
     <div class="org-data-filter bordered-section">
       <span class="badge badge-primary">Step 1</span>
       <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)"
