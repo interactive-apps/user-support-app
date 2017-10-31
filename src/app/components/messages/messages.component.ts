@@ -144,7 +144,6 @@ export class MessagesComponent implements OnInit {
    * @return {[type]}       [description]
    */
   setMessagePriority(event:any){
-    console.log(event);
     let payload = {
       priority: event.selectedItem.id
     }
@@ -157,7 +156,6 @@ export class MessagesComponent implements OnInit {
    * @return {[type]}       [description]
    */
   setMessageStatus(event: any){
-    console.log(event);
     let payload = {
       status: event.selectedItem.id
     }
@@ -504,7 +502,6 @@ export class MessagesComponent implements OnInit {
    * @return {[void]}         [none]
    */
   private asyncDoneAsnc(error, results) {
-    console.log(results);
     if(results.length){
       this._toastService.success('Approved changes were updated successfully.');
 

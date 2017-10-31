@@ -201,7 +201,6 @@ export class MessageConversationService {
   transformMessageConversation(messageConvo: any){
     let convo = [];
     convo = _.transform(messageConvo,(results,message) => {
-      console.log(message);
       let messageCount = message.messageCount > 1 ? `(${message.messageCount})`: '';
       if(message.lastSenderFirstname && (message.userFirstname !== message.lastSenderFirstname)){
         message.participants = `${message.lastSenderFirstname} ${message.lastSenderSurname},${message.userFirstname} ${message.userSurname} ${messageCount}`;
