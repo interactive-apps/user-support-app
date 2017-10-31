@@ -565,6 +565,8 @@ export class DataFilterComponent implements OnInit, OnDestroy {
 
     if(removed.length || added.length){
       this.disableUpdate = false;
+    }else {
+      this.disableUpdate = true;
     }
   }
 

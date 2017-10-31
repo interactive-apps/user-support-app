@@ -28,6 +28,7 @@ export class ResetPasswordComponent implements OnInit {
   private feedbackRecipients: any;
   public showSearchInput: boolean = true;
   public resetPasswordHeader: string = 'Please Select User to Reset password';
+  public positionAbsolute: boolean = false;
 
   constructor(private _userService: UserService,
     private _dataStoreService: DataStoreService,

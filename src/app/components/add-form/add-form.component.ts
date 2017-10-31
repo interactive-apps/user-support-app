@@ -1,4 +1,5 @@
 import {Component, EventEmitter, OnInit, ViewChild, Input, Output} from '@angular/core';
+import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import * as _ from 'lodash';
 import { DataSetsService } from '../../services/data-sets.service';
@@ -38,19 +39,22 @@ export class AddFormComponent implements OnInit {
   private AddedFormsNames: string [] = [];
   private RemovedFormsNames: string [] = [];
   private firstClick: boolean;
-  
+
+  // our form model
+  public datasetRequestForm: FormGroup;
+
   public orgunit_model: any =  {
-    selection_mode: "Usr_orgUnit",
-    selected_level: "",
-    show_update_button:false,
-    selected_group: "",
+    selection_mode: 'Usr_orgUnit',
+    selected_level: '',
+    show_update_button: false,
+    selected_group: '',
     orgunit_levels: [],
     orgunit_groups: [],
     selected_orgunits: [],
     user_orgunits: [],
     show_selection_mode: false,
-    type:"report", // can be 'data_entry'
-    selected_user_orgunit: "USER_ORGUNIT"
+    type: 'report', // can be 'data_entry'
+    selected_user_orgunit: 'USER_ORGUNIT'
   };
 
   constructor(private _organisationUnitsService: OrganisationUnitsService,
@@ -58,7 +62,8 @@ export class AddFormComponent implements OnInit {
               private _dataStoreService: DataStoreService,
               private _sharedDataService: SharedDataService,
               private _messageConversationService: MessageConversationService,
-              private _toastService: ToastService) {}
+              private _toastService: ToastService,
+              private _fb: FormBuilder) {}
 
   ngOnInit() {
     this.firstClick = true;
@@ -73,7 +78,7 @@ export class AddFormComponent implements OnInit {
 
   setSelectedOrgunit(event) {
 
-    //this.selectedOrgUnitIDs = _.map(event.value, 'id');
+    // this.selectedOrgUnitIDs = _.map(event.value, 'id');
     this.selectedOrgUnitIDs = event.value;
     this.getSelectedDataSets(event.value);
 
@@ -110,14 +115,14 @@ export class AddFormComponent implements OnInit {
       this.disableRequestToApproval = true;
     }
 
-    let formatedDataStoreData = this.formatDataStorePayload();
-    let dataStoreKey = this.createDataStoreObjKey();
+    const formatedDataStoreData = this.formatDataStorePayload();
+    const dataStoreKey = this.createDataStoreObjKey();
 
-    let addedFormsNames = this.AddedFormsNames.length ? this.AddedFormsNames.join() : 'None';
-    let removedFormsNames = this.RemovedFormsNames.length ? this.RemovedFormsNames.join() : 'None';
+    const addedFormsNames = this.AddedFormsNames.length ? this.AddedFormsNames.join() : 'None';
+    const removedFormsNames = this.RemovedFormsNames.length ? this.RemovedFormsNames.join() : 'None';
 
-    let feedbackSubject = `${dataStoreKey}:REQUEST FOR APROVAL CHANGE IN DATASET`;
-    let text = `There is request to update datasets to ${this.selectedOrgUnitInfo.name} orgnisation unit, ${addedFormsNames} were added and ${removedFormsNames} were removed`;
+    const feedbackSubject = `${dataStoreKey}:REQUEST FOR APROVAL CHANGE IN DATASET`;
+    const text = `There is request to update datasets to ${this.selectedOrgUnitInfo.name} orgnisation unit, ${addedFormsNames} were added and ${removedFormsNames} were removed`;
     this.disableRequestToApproval = true;
 
     this._dataStoreService
@@ -154,8 +159,8 @@ export class AddFormComponent implements OnInit {
 
   formatDataStorePayload(){
 
-    let dataSetOrgUnitAdded = []
-    let dataSetOrgUnitRemoved = []
+    let dataSetOrgUnitAdded = [];
+    let dataSetOrgUnitRemoved = [];
 
     // Create payload array for added forms to the organisations
     if(this.addedOrgDataSets.length){
@@ -166,7 +171,7 @@ export class AddFormComponent implements OnInit {
 
       // Add organisationUnit to all dataset that have been added to the org unit.
       dataSetOrgUnitAdded  = _.transform(dataSetOrgUnitAdded,(result, dataset) =>{
-        let datasetUrlTosendTo = `api/dataSets/${dataset.id}`;
+        const datasetUrlTosendTo = `api/dataSets/${dataset.id}`;
         this.AddedFormsNames.push(dataset.name);
         dataset.organisationUnits.push({id: this.selected})
 
@@ -192,7 +197,7 @@ export class AddFormComponent implements OnInit {
       })
       // Remove organisationUnit to all dataset that have been removed to the org unit.
       dataSetOrgUnitRemoved  = _.transform(dataSetOrgUnitRemoved,(result, dataset) =>{
-        let datasetUrlTosendTo = `api/dataSets/${dataset.id}`;
+        const datasetUrlTosendTo = `api/dataSets/${dataset.id}`;
         this.RemovedFormsNames.push(dataset.name);
         // Remove organisationUnit from dataSets.
         dataset.organisationUnits = _.filter(dataset.organisationUnits,(orgUnit) => {
@@ -217,12 +222,12 @@ export class AddFormComponent implements OnInit {
 
   createDataStoreObjKey(){
 
-    let formatter = new Intl.DateTimeFormat("fr", { month: "short" }),
+    const formatter = new Intl.DateTimeFormat('fr', { month: 'short' }),
         month = formatter.format(new Date()),
-        text = '',
         possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let text = '';
 
-    for(let i=0; i < 3; i++){
+    for (let i = 0; i < 3; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
 
@@ -231,26 +236,32 @@ export class AddFormComponent implements OnInit {
   }
 
   sendFeedBackMessage(subject,message){
-    let payload = {
+    const payload = {
       subject: subject,
       text: message,
       userGroups: [{id: this.feedbackRecipients.id}]
     }
     this._messageConversationService.sendFeedBackMessage(payload).subscribe(response =>{
       // TODO: Send notification if possible about new message.
-      //console.log(response);
+      // console.log(response);
 
     })
 
   }
   // TODO: (barnabas) find better way to prevent close on clicking add form buttons.
-  clickOutside(event){
-    if(!this.firstClick && event){
+  clickOutside(event) {
+    if ( !this.firstClick && event) {
       this.onFiltersClosed.emit({
         closed: true
       });
     }
     this.firstClick = false;
   }
+
+
+  save(model: any) {
+        // call API to save customer
+        console.log(model);
+    }
 
 }

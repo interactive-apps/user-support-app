@@ -33,6 +33,7 @@ export class CreateUsersComponent implements OnInit {
   public showSurnameDropdown:boolean = false;
   public showEmailDropdown: boolean = false;
   public showPhoneNumberDropdown: boolean = false;
+  public updateBtnLabel: string = 'Next';
 
   public orgunit_tree_config: any = {
     show_search: true,

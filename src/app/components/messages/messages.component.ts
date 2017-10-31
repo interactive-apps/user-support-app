@@ -397,8 +397,14 @@ export class MessagesComponent implements OnInit {
     this._dataStoreService.getValuesOfDataStoreNamespaceKeys(dataStoreKey)
       .subscribe(response => {
         this.loadingDataStoreValue = false;
-        this.dataStoreValues = response;
-        this.disableApproveAll = (_.findIndex(response, { status: 'SOLVED' }) !== -1);
+        // This check if user just imitated the subject and/or data in datastore
+        // has been deleted.
+        if(response.length){
+          this.dataStoreValues = response;
+          this.disableApproveAll = (_.findIndex(response, { status: 'SOLVED' }) !== -1);
+        }else {
+          this.isUserSupportMsg = false;
+        }
       });
   }
 
