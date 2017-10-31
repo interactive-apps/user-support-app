@@ -20,6 +20,7 @@ import * as async from 'async-es';
 export class CreateUsersComponent implements OnInit {
 
   @Output() onUserSelected: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onCreateUserClosed: EventEmitter<any> = new EventEmitter<any>();
   public selectedOrgUnitNames: String[];
   public selectedOrgUnitIDs: any;
   public allUserGroups: any;
@@ -34,6 +35,7 @@ export class CreateUsersComponent implements OnInit {
   public showEmailDropdown: boolean = false;
   public showPhoneNumberDropdown: boolean = false;
   public updateBtnLabel: string = 'Next';
+  private firstClick: boolean;
 
   public orgunit_tree_config: any = {
     show_search: true,
@@ -90,7 +92,7 @@ export class CreateUsersComponent implements OnInit {
     private _userService: UserService) { }
 
   ngOnInit() {
-
+    this.firstClick = true;
     this.userDetails = new FormGroup({
       firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
       surname: new FormControl('', [Validators.required, Validators.minLength(2)]),
@@ -298,5 +300,16 @@ export class CreateUsersComponent implements OnInit {
   showOrHidePhoneNumberDropDown(value,event){
     this.showPhoneNumberDropdown = value;
   }
+
+  // TODO: (barnabas) find better way to prevent close on clicking add form buttons.
+  clickOutside(event) {
+    if ( !this.firstClick && event) {
+      this.onCreateUserClosed.emit({
+        closed: true
+      });
+    }
+    this.firstClick = false;
+  }
+
 
 }

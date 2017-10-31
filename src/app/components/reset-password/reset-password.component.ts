@@ -20,6 +20,7 @@ export class ResetPasswordComponent implements OnInit {
 
   @Input() selectedUser: any;
   @Output() resetSelectedUser: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onResetPasswordClosed: EventEmitter<any> = new EventEmitter<any>();
   public allUsers: any;
   public optionsModel: number[];
   public isLoadingUser: boolean = false;
@@ -29,6 +30,7 @@ export class ResetPasswordComponent implements OnInit {
   public showSearchInput: boolean = true;
   public resetPasswordHeader: string = 'Please Select User to Reset password';
   public positionAbsolute: boolean = false;
+  public firstClick: boolean;
 
   constructor(private _userService: UserService,
     private _dataStoreService: DataStoreService,
@@ -39,6 +41,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.firstClick = true;
 
     this._userService.getAllUsers().subscribe(response => {
       this.allUsers = _.transform(response.users, (results, user) => {
@@ -158,6 +161,17 @@ export class ResetPasswordComponent implements OnInit {
     this.resetSelectedUser.emit({
       reset: true
     })
+  }
+
+
+  // TODO: (barnabas) find better way to prevent close on clicking add form buttons.
+  clickOutside(event) {
+    if ( !this.firstClick && event) {
+      this.onResetPasswordClosed.emit({
+        closed: true
+      });
+    }
+    this.firstClick = false;
   }
 
 }

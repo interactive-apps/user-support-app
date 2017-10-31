@@ -1,4 +1,4 @@
-<div class="create__user--page">
+<div class="create__user--page" appClickOutside (clickOutside)="clickOutside($event)">
   <div class="content__wrapper">
     <div class="row bs-wizard" style="border-bottom:0;">
          <div class="col-6 bs-wizard-step" [ngClass]="isOrganizationUnitSelected ? 'complete':'active'"><!-- complete -->
