@@ -5,6 +5,7 @@ import { ToastService } from '../../services/toast.service';
 import { UserService } from '../../services/user.service';
 import { DataStoreService } from '../../services/data-store.service';
 import { matchOtherValidator } from '../../shared/match-other-validator';
+import { passwordValueValidator } from '../../shared/password-value-validator';
 import { MessageConversationService } from '../../services/message-conversation.service';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
 
@@ -53,7 +54,7 @@ export class ResetPasswordComponent implements OnInit {
     })
 
     this.passwordForm = new FormGroup({
-      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8), passwordValueValidator]),
       confirm: new FormControl('', [Validators.required, Validators.minLength(8), matchOtherValidator('password')])
     });
 
