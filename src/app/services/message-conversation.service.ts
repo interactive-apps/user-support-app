@@ -201,11 +201,17 @@ export class MessageConversationService {
   transformMessageConversation(messageConvo: any){
     let convo = [];
     convo = _.transform(messageConvo,(results,message) => {
+      console.log(message);
       let messageCount = message.messageCount > 1 ? `(${message.messageCount})`: '';
       if(message.lastSenderFirstname && (message.userFirstname !== message.lastSenderFirstname)){
         message.participants = `${message.lastSenderFirstname} ${message.lastSenderSurname},${message.userFirstname} ${message.userSurname} ${messageCount}`;
-      }else{
+        message.avatarName = `${message.userFirstname} ${message.userSurname}`;
+      }else if(message.userFirstname && message.userSurname && message.messageType !== 'SYSTEM'){
         message.participants = `${message.userFirstname} ${message.userSurname} ${messageCount}`;
+        message.avatarName = `${message.userFirstname} ${message.userSurname}`;
+      }else if(message.messageType == 'SYSTEM') {
+        message.participants = `System Notification ${messageCount}`;
+        message.avatarName = `System Notification`;
       }
       results.push(message);
     },[])

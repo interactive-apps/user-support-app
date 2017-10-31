@@ -241,13 +241,13 @@ export class MessagesComponent implements OnInit {
       });
 
       this.openedConversation.messages = _.transform(response.messages, (results, message)=>{
-        if(!message.sender){
-          message.senderDisplayName = 'System Notification';
-          message.userSentTo = userSentTo;
-        } else {
+        if(message.sender){
           let [sender,sentTo] = _.partition(userSentTo,message.sender);
           message.senderDisplayName = sender[0].displayName;
           message.userSentTo = sentTo;
+        } else {
+          message.senderDisplayName = 'System Notification';
+          message.userSentTo = userSentTo;
         }
         results.push(message);
       },[]);

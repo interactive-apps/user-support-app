@@ -24,7 +24,7 @@
 
         <div class="mail-body" *ngFor="let messagebody of openedConversation.messages; let i = index">
           <div class="image">
-            <ngx-avatar name="{{message.userFirstname + ' ' + message.userSurname}}" size="35"></ngx-avatar>
+            <ngx-avatar name="{{message.avatarName}}" size="35"></ngx-avatar>
           </div>
           <div class="someClass">
             <div class="sender" *ngIf="message.user">
@@ -93,7 +93,7 @@
       </div>
       <div class="content-wrapper" *ngIf="message.id !== openedMessage">
         <div class="image" (click)="openMessage(message)">
-            <ngx-avatar name="{{message.userFirstname + ' ' + message.userSurname}}" size="30"></ngx-avatar>
+            <ngx-avatar name="{{message.avatarName}}" size="30"></ngx-avatar>
         </div>
         <div class="name" (click)="openMessage(message)">
           <span class="font_size09">{{message.participants}}</span>
