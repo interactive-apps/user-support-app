@@ -124,9 +124,12 @@
       <span class="fab"><span class="rotate"></span></span>
     </a>
   </nav>
-  <div class="has-text-centered pagination_number_container" *ngIf="isDataLoaded">
+  <div class="has-text-centered pagination_number_container" *ngIf="isDataLoaded && (messageConversation | async)?.length">
       <div class="spinner" [ngClass]="{ 'hidden': !isLoadingMessagesPagination }"></div>
       <pagination-controls (pageChange)="getPage($event)" id="messageConvo"></pagination-controls>
+  </div>
+  <div class="has-text-centered" *ngIf="((messageConversation | async)?.length==0) && isDataLoaded">
+    <h4 class="text-center">No Message Found</h4>
   </div>
 </section>
 <!-- TODO:

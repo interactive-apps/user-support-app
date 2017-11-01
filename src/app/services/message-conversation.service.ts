@@ -46,6 +46,7 @@ export class MessageConversationService {
     let loadFilter = filters ? filters: '';
     this.http.get(`${this.baseUrl}api/messageConversations?fields=*&page=${pageNo}&pageSize=20&${loadFilter}`)
       .map(response => response.json()).subscribe(result => {
+        console.log(result);
       this._pager.next(Object.assign({}, result).pager);
       this.dataStore.messageConversation = this.transformMessageConversation(result.messageConversations);
       this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);
@@ -119,7 +120,6 @@ export class MessageConversationService {
   setPriority(messageConversationId: string, payload:any) {
     this.http.post(`${this.baseUrl}api/messageConversations/${messageConversationId}/priority?messageConversationPriority=${payload.priority}&messageType=TICKET`,this.options)
       .map(response => response.json()).subscribe(data => {
-        console.log(data);
         this.dataStore.messageConversation.forEach((t, i) => {
           if (t.id == messageConversationId) {
             this.dataStore.messageConversation[i].priority = payload.priority;
@@ -201,7 +201,6 @@ export class MessageConversationService {
   transformMessageConversation(messageConvo: any){
     let convo = [];
     convo = _.transform(messageConvo,(results,message) => {
-      console.log(message);
       let messageCount = message.messageCount > 1 ? `(${message.messageCount})`: '';
       if(message.lastSenderFirstname && (message.userFirstname !== message.lastSenderFirstname)){
         message.participants = `${message.lastSenderFirstname} ${message.lastSenderSurname},${message.userFirstname} ${message.userSurname} ${messageCount}`;

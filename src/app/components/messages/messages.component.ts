@@ -57,7 +57,7 @@ export class MessagesComponent implements OnInit {
   public tabFilter = [
     {id:'all', name: 'All Messages'},
     {id:'followUp', name: 'Follow up'},
-    {id: 'assignedToMe', name: 'Assigned'}
+    {id: 'assignedToMe', name: 'Assigned to me'}
   ];
   public currentUser: any;
   public selectedFilterByStatus:string = 'all';
