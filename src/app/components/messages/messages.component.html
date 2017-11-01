@@ -27,7 +27,7 @@
             <ngx-avatar name="{{message.avatarName}}" size="35"></ngx-avatar>
           </div>
           <div class="someClass">
-            <div class="sender" *ngIf="message.user">
+            <div class="sender" *ngIf="messagebody.senderDisplayName">
               <span>{{messagebody.senderDisplayName}}</span>
               <span class="font_size09 ">to</span>
               <span *ngFor="let user of messagebody.userSentTo; let isLast=last" class="text-capitalize" class="font_size09">{{user.displayName}}{{isLast ? '' : ', '}}</span>

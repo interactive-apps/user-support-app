@@ -46,7 +46,6 @@ export class MessageConversationService {
     let loadFilter = filters ? filters: '';
     this.http.get(`${this.baseUrl}api/messageConversations?fields=*&page=${pageNo}&pageSize=20&${loadFilter}`)
       .map(response => response.json()).subscribe(result => {
-        console.log(result);
       this._pager.next(Object.assign({}, result).pager);
       this.dataStore.messageConversation = this.transformMessageConversation(result.messageConversations);
       this._messageConversation.next(Object.assign({}, this.dataStore).messageConversation);

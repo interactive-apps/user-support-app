@@ -239,6 +239,7 @@ export class MessagesComponent implements OnInit {
       });
 
       this.openedConversation.messages = _.transform(response.messages, (results, message)=>{
+        console.log(message);
         if(message.sender){
           let [sender,sentTo] = _.partition(userSentTo,message.sender);
           message.senderDisplayName = sender[0].displayName;
