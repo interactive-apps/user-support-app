@@ -21,11 +21,15 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   @Input() functionMappings: any[] = [];
   @Input() hiddenDataElements: any[] = [];
   @Input() allowSelection: boolean = true;
+  @Input() autoUpdate: boolean = false;
   public initialDataSelection: any;
   public disableUpdate: boolean = true;
   public querystring: string = null;
   public listchanges: string = null;
   public showBody: boolean = false;
+  private addedOrgDataSets: any = [];
+  private removedOrgDataSets: any = [];
+  private changeHappened: boolean = false;
   private subscription: Subscription;
   public metaData: any = {
     dataElements: [],
@@ -63,6 +67,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initiateData();
     this.initialDataSelection = this.selectedItems;
+    this.dataUpdate();
   }
 
   // trigger this to reset pagination pointer when search change
@@ -317,7 +322,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
         item
       ];
     }
-    this.disableRequestIfNoChange();
+    this.disableRequestIfNoChange(event);
   }
 
   // Remove selected Item
@@ -336,7 +341,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
         item
       ];
     }
-    this.disableRequestIfNoChange();
+    this.disableRequestIfNoChange(event);
   }
 
   getAutogrowingTables(selections) {
@@ -418,7 +423,14 @@ export class DataFilterComponent implements OnInit, OnDestroy {
 
   emit(e) {
     e.stopPropagation();
+    this.dataUpdate();
+  }
+
+  dataUpdate(){
     this.onDataUpdate.emit({
+      addedOrgDataSets: this.addedOrgDataSets,
+      removedOrgDataSets: this.removedOrgDataSets,
+      changeHappened: this.changeHappened,
       itemList: this.selectedItems,
       need_functions: this.getFunctions(this.selectedItems),
       auto_growing: this.getAutogrowingTables(this.selectedItems),
@@ -559,15 +571,16 @@ export class DataFilterComponent implements OnInit, OnDestroy {
     this.showBody = !this.showBody;
   }
 
-  disableRequestIfNoChange(){
-    let removed =  _.difference(this.initialDataSelection, this.selectedItems);
-    let added = _.difference(this.selectedItems, this.initialDataSelection);
-
-    if(removed.length || added.length){
+  disableRequestIfNoChange(event){
+    this.removedOrgDataSets =  _.difference(this.initialDataSelection, this.selectedItems);
+    this.addedOrgDataSets = _.difference(this.selectedItems, this.initialDataSelection);
+    if(this.removedOrgDataSets.length || this.addedOrgDataSets.length){
       this.disableUpdate = false;
+      this.changeHappened = true;
     }else {
       this.disableUpdate = true;
     }
+    this.emit(event);
   }
 
 

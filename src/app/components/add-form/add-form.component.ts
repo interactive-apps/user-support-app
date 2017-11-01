@@ -1,6 +1,6 @@
-import {Component, EventEmitter, OnInit, ViewChild, Input, Output} from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild, Input, Output } from '@angular/core';
 import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
 import { DataSetsService } from '../../services/data-sets.service';
 import { OrganisationUnitsService } from './../../services/organisation-units.service';
@@ -11,6 +11,7 @@ import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-add-form',
+  moduleId: module.id,
   templateUrl: './add-form.component.html',
   styleUrls: ['./add-form.component.css']
 })
@@ -19,9 +20,9 @@ export class AddFormComponent implements OnInit {
 
   @Output() onDataStoreUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onFiltersClosed: EventEmitter<any> = new EventEmitter<any>();
-  @Input()  activeComponent: string;
+  @Input() activeComponent: string;
   public selectedOrgUnitIDs: String;
-  public payload:any;
+  public payload: any;
   public isOrganizationUnitSelected: boolean = false;
   public allowSelection: boolean = false;
   public selectedOrgUnitInfo: any;
@@ -31,19 +32,21 @@ export class AddFormComponent implements OnInit {
   public initialDataSets: string[];
   public disableRequestToApproval: boolean = true;
   public showFilter: boolean = false;
+  public autoUpdate: boolean = true;
   private selected: string;
-  private addedOrgDataSets: string [];
-  private removedOrgDataSets: string [];
-  private allDataSets: object [];
+  private addedOrgDataSets: string[];
+  private removedOrgDataSets: string[];
+  private allDataSets: object[];
   private feedbackRecipients: any;
-  private AddedFormsNames: string [] = [];
-  private RemovedFormsNames: string [] = [];
+  private AddedFormsNames: string[] = [];
+  private RemovedFormsNames: string[] = [];
   private firstClick: boolean;
+  public  isFormValid: boolean = false;
 
   // our form model
   public datasetRequestForm: FormGroup;
 
-  public orgunit_model: any =  {
+  public orgunit_model: any = {
     selection_mode: 'Usr_orgUnit',
     selected_level: '',
     show_update_button: false,
@@ -58,12 +61,12 @@ export class AddFormComponent implements OnInit {
   };
 
   constructor(private _organisationUnitsService: OrganisationUnitsService,
-              private _dataSetsService: DataSetsService,
-              private _dataStoreService: DataStoreService,
-              private _sharedDataService: SharedDataService,
-              private _messageConversationService: MessageConversationService,
-              private _toastService: ToastService,
-              private _fb: FormBuilder) {}
+    private _dataSetsService: DataSetsService,
+    private _dataStoreService: DataStoreService,
+    private _sharedDataService: SharedDataService,
+    private _messageConversationService: MessageConversationService,
+    private _toastService: ToastService,
+    private _fb: FormBuilder) { }
 
   ngOnInit() {
     this.firstClick = true;
@@ -71,9 +74,41 @@ export class AddFormComponent implements OnInit {
       this.allDataSets = response.dataSets;
     });
 
-    this._sharedDataService.getFeedbackReceipients().subscribe(response =>{
+    this._sharedDataService.getFeedbackReceipients().subscribe(response => {
       this.feedbackRecipients = response;
     })
+
+    this.datasetRequestForm = this._fb.group({
+      datasets: this._fb.array([
+        this.initDatasetFilterForm(),
+      ])
+    });
+  }
+
+  initDatasetFilterForm() {
+    return this._fb.group({
+      addedOrgDataSets: [''],
+      removedOrgDataSets: ['']
+    });
+  }
+
+
+  addDatasetComponent(event) {
+    event.stopPropagation();
+    const control = <FormArray>this.datasetRequestForm.controls['datasets'];
+    control.push(this.initDatasetFilterForm());
+  }
+
+  removeDatasetComponent(i: number, event) {
+    event.stopPropagation();
+    const control = <FormArray>this.datasetRequestForm.controls['datasets'];
+    const isLastIndex = (control.controls.length - i) == 1;
+    control.removeAt(i);
+    // if the form is invalid and removed item is the last onChange
+    // make the form valid again
+    if (!this.isFormValid && isLastIndex) {
+      this.isFormValid = true;
+    }
   }
 
   setSelectedOrgunit(event) {
@@ -90,12 +125,12 @@ export class AddFormComponent implements OnInit {
   }
 
 
-  getSelectedDataSets(orgUnitID:string){
+  getSelectedDataSets(orgUnitID: string) {
     this.isOrganizationUnitSelected = true;
     this.loading = true;
     this.showFilter = true;
     this.selected = orgUnitID;
-    this._organisationUnitsService.getOrganisationUnit(orgUnitID).subscribe(response =>{
+    this._organisationUnitsService.getOrganisationUnit(orgUnitID).subscribe(response => {
       this.selectedOrgUnitInfo = response;
       this.loading = false;
       this.initialDataSets = _.map(response.dataSets, 'id');
@@ -104,12 +139,24 @@ export class AddFormComponent implements OnInit {
   }
 
 
-  dataUpdated(event){
+componentDataUpdateEvent(componentIndex, event) {
+  const formGroup = <FormArray>this.datasetRequestForm.controls['datasets'];
+
+  formGroup.controls[componentIndex].patchValue({
+    addedOrgDataSets: event.addedOrgDataSets,
+    removedOrgDataSets: event.removedOrgDataSets
+  });
+
+  this.isFormValid = event.changeHappened;
+}
+
+
+  dataUpdated(event) {
 
     let selectedDatasets = event.selectedData.value.split(';');
-    this.addedOrgDataSets = _.difference(selectedDatasets,this.initialDataSets);
-    this.removedOrgDataSets = _.difference(this.initialDataSets,selectedDatasets);
-    if( this.addedOrgDataSets.length || this.removedOrgDataSets.length ){
+    this.addedOrgDataSets = _.difference(selectedDatasets, this.initialDataSets);
+    this.removedOrgDataSets = _.difference(this.initialDataSets, selectedDatasets);
+    if (this.addedOrgDataSets.length || this.removedOrgDataSets.length) {
       this.disableRequestToApproval = false;
     } else {
       this.disableRequestToApproval = true;
@@ -126,54 +173,54 @@ export class AddFormComponent implements OnInit {
     this.disableRequestToApproval = true;
 
     this._dataStoreService
-        .createNewKeyAndValue(dataStoreKey,formatedDataStoreData)
-        .subscribe(response =>{
+      .createNewKeyAndValue(dataStoreKey, formatedDataStoreData)
+      .subscribe(response => {
 
-          if(response.ok){
+        if (response.ok) {
 
-            this.disableRequestToApproval = true;
-            this._toastService.success('Your changes were sent for approval, Thanks.')
-            this.sendFeedBackMessage(feedbackSubject, text);
-            this.onDataStoreUpdate.emit({
-              updated: true
-            });
+          this.disableRequestToApproval = true;
+          this._toastService.success('Your changes were sent for approval, Thanks.')
+          this.sendFeedBackMessage(feedbackSubject, text);
+          this.onDataStoreUpdate.emit({
+            updated: true
+          });
 
-          } else {
-            this._toastService.error('There was an error when sending data.')
-            this.disableRequestToApproval = false;
-            this.onDataStoreUpdate.emit({
-              updated: false
-            });
+        } else {
+          this._toastService.error('There was an error when sending data.')
+          this.disableRequestToApproval = false;
+          this.onDataStoreUpdate.emit({
+            updated: false
+          });
 
-          }
-        });
+        }
+      });
   }
 
 
   filterIsClosed(event) {
-    if(event){
+    if (event) {
       this.showFilter = false;
     }
   }
 
 
-  formatDataStorePayload(){
+  formatDataStorePayload() {
 
     let dataSetOrgUnitAdded = [];
     let dataSetOrgUnitRemoved = [];
 
     // Create payload array for added forms to the organisations
-    if(this.addedOrgDataSets.length){
+    if (this.addedOrgDataSets.length) {
       // Get full objects for all added dataset
       dataSetOrgUnitAdded = _.filter(this.allDataSets, (dataSet) => {
         return _.includes(this.addedOrgDataSets, dataSet.id);
       });
 
       // Add organisationUnit to all dataset that have been added to the org unit.
-      dataSetOrgUnitAdded  = _.transform(dataSetOrgUnitAdded,(result, dataset) =>{
+      dataSetOrgUnitAdded = _.transform(dataSetOrgUnitAdded, (result, dataset) => {
         const datasetUrlTosendTo = `api/dataSets/${dataset.id}`;
         this.AddedFormsNames.push(dataset.name);
-        dataset.organisationUnits.push({id: this.selected})
+        dataset.organisationUnits.push({ id: this.selected })
 
         // name and periodType are requeired for any PUT payload created to the dataset
         result.push({
@@ -181,26 +228,26 @@ export class AddFormComponent implements OnInit {
           method: 'PUT',
           status: 'OPEN',
           action: `Add ${dataset.name} form.`,
-          payload: _.pick(dataset, ['id','name', 'periodType','organisationUnits'])
+          payload: _.pick(dataset, ['id', 'name', 'periodType', 'organisationUnits'])
         });
 
-      },[])
+      }, [])
     }
 
     // Create payload array for removed forms to the organisations
-    if(this.removedOrgDataSets.length){
+    if (this.removedOrgDataSets.length) {
       // Get full objects for all removed dataset
-      dataSetOrgUnitRemoved = _.filter(this.allDataSets, (dataSet) =>{
+      dataSetOrgUnitRemoved = _.filter(this.allDataSets, (dataSet) => {
 
         return _.includes(this.removedOrgDataSets, dataSet.id);
 
       })
       // Remove organisationUnit to all dataset that have been removed to the org unit.
-      dataSetOrgUnitRemoved  = _.transform(dataSetOrgUnitRemoved,(result, dataset) =>{
+      dataSetOrgUnitRemoved = _.transform(dataSetOrgUnitRemoved, (result, dataset) => {
         const datasetUrlTosendTo = `api/dataSets/${dataset.id}`;
         this.RemovedFormsNames.push(dataset.name);
         // Remove organisationUnit from dataSets.
-        dataset.organisationUnits = _.filter(dataset.organisationUnits,(orgUnit) => {
+        dataset.organisationUnits = _.filter(dataset.organisationUnits, (orgUnit) => {
           return orgUnit.id !== this.selected;
         })
         // name and periodType are requeired for any PUT payload created to the dataset
@@ -209,10 +256,10 @@ export class AddFormComponent implements OnInit {
           method: 'PUT',
           status: 'OPEN',
           action: `Remove ${dataset.name} form.`,
-          payload: _.pick(dataset, ['id','name', 'periodType','organisationUnits'])
+          payload: _.pick(dataset, ['id', 'name', 'periodType', 'organisationUnits'])
         });
 
-      },[])
+      }, [])
     }
 
 
@@ -220,28 +267,28 @@ export class AddFormComponent implements OnInit {
 
   }
 
-  createDataStoreObjKey(){
+  createDataStoreObjKey() {
 
     const formatter = new Intl.DateTimeFormat('fr', { month: 'short' }),
-        month = formatter.format(new Date()),
-        possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      month = formatter.format(new Date()),
+      possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let text = '';
 
     for (let i = 0; i < 3; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
 
-    return month.slice(0, -1).toUpperCase().concat('_',text);
+    return month.slice(0, -1).toUpperCase().concat('_', text);
 
   }
 
-  sendFeedBackMessage(subject,message){
+  sendFeedBackMessage(subject, message) {
     const payload = {
       subject: subject,
       text: message,
-      userGroups: [{id: this.feedbackRecipients.id}]
+      userGroups: [{ id: this.feedbackRecipients.id }]
     }
-    this._messageConversationService.sendFeedBackMessage(payload).subscribe(response =>{
+    this._messageConversationService.sendFeedBackMessage(payload).subscribe(response => {
       // TODO: Send notification if possible about new message.
       // console.log(response);
 
@@ -250,7 +297,7 @@ export class AddFormComponent implements OnInit {
   }
   // TODO: (barnabas) find better way to prevent close on clicking add form buttons.
   clickOutside(event) {
-    if ( !this.firstClick && event) {
+    if (!this.firstClick && event) {
       this.onFiltersClosed.emit({
         closed: true
       });
@@ -259,9 +306,9 @@ export class AddFormComponent implements OnInit {
   }
 
 
-  save(model: any) {
-        // call API to save customer
-        console.log(model);
-    }
+  onSubmit({ value, valid }: { value: any, valid: boolean }) {
+    // call API to save customer
+    console.log(value);
+  }
 
 }

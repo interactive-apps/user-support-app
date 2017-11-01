@@ -114,8 +114,8 @@
 <div class="data-filter-btns" *ngIf="showBody">
   <div>
     <div class="pull-right">
-      <button class="btn btn-primary btn-sm" [disabled]="disableUpdate" (click)="emit($event)">Send Request</button>
-      <button class="btn btn-secondary btn-sm" (click)="toggleShowBody($event)">Close</button>
+      <button class="btn btn-primary btn-sm" [disabled]="disableUpdate" (click)="emit($event)" *ngIf="!autoUpdate">Send Request</button>
+      <button class="btn btn-secondary btn-sm" (click)="toggleShowBody($event)">Hide</button>
     </div>
   </div>
 </div>

@@ -47,6 +47,14 @@
   border-radius: 4px;
 }
 
+.full-width {
+  width: 100%;
+}
+
+.m-20 {
+  margin: 20px !important;
+}
+
 .bs-wizard {
   margin-top: 5px;
   width: 100%;

@@ -49,8 +49,8 @@
   z-index: 1000;
   min-width: 100%;
   background: white;
-  min-height: 200px;
-  max-height: 375px;
+  min-height: 250px;
+  max-height: 400px;
   margin-top: 5px;
   overflow: auto;
   padding: 0 5px;

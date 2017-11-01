@@ -32,6 +32,8 @@ export class ResetPasswordComponent implements OnInit {
   public resetPasswordHeader: string = 'Please Select User to Reset password';
   public positionAbsolute: boolean = false;
   public firstClick: boolean;
+  public isCurrentlySendingData: boolean = false;
+  public isSendingMessage: boolean = false;
 
   constructor(private _userService: UserService,
     private _dataStoreService: DataStoreService,
@@ -113,20 +115,21 @@ export class ResetPasswordComponent implements OnInit {
       payload: this.selectedUser
     }];
 
-    console.log(payload);
     let feedbackSubject = `${dataStoreKey}:REQUEST TO RESET PASSWORD`;
-    let text = `There is request to reset password to ${this.selectedUser.displayName} to ${value.password}`;
+    let text = `There is request to reset password to ${this.selectedUser.displayName}`;
+    this.isCurrentlySendingData = true;
     this._dataStoreService
       .createNewKeyAndValue(dataStoreKey, payload)
       .subscribe(response => {
 
         if (response.ok) {
+          this.isCurrentlySendingData = false;
           this._toastService.success('Your changes were sent for approval, Thanks.')
           this.sendFeedBackMessage(feedbackSubject, text);
 
         } else {
           this._toastService.error('There was an error when sending data.')
-
+          this.isCurrentlySendingData = false;
         }
       });
 
@@ -146,9 +149,14 @@ export class ResetPasswordComponent implements OnInit {
       text: message,
       userGroups: [{ id: this.feedbackRecipients.id }]
     }
+    this.isSendingMessage = true;
     this._messageConversationService.sendFeedBackMessage(payload).subscribe(response => {
       // TODO: Send notification if possible about new message.
       //console.log(response);
+      this.isSendingMessage = false;
+      this.onResetPasswordClosed.emit({
+        closed: true
+      });
 
     })
   }
