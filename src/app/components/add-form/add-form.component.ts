@@ -73,6 +73,7 @@ export class AddFormComponent implements OnInit {
 
   initDatasetFilterForm() {
     return this._fb.group({
+      selectedOrgUnitInfo: [''],
       addedOrgDataSets: [''],
       removedOrgDataSets: ['']
     });
@@ -129,6 +130,7 @@ componentDataUpdateEvent(componentIndex, event) {
   const formGroup = <FormArray>this.datasetRequestForm.controls['datasets'];
 
   formGroup.controls[componentIndex].patchValue({
+    selectedOrgUnitInfo: event.selectedOrgUnitInfo,
     addedOrgDataSets: event.addedOrgDataSets,
     removedOrgDataSets: event.removedOrgDataSets
   });
