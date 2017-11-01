@@ -28,22 +28,7 @@
             <span>Request {{i + 1}}</span>
             <span class="pull-right" *ngIf="datasetRequestForm.controls.datasets.controls.length > 1" (click)="removeDatasetComponent(i, $event)"><i class="fa fa-times" aria-hidden="true"></i></span>
           </div>
-          <div class="card-block d-flex" [formGroupName]="i">
-            <div class="org-data-filter bordered-section">
-              <span class="badge badge-primary">Step 1</span>
-              <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)" [orgunit_model]="orgunit_model"></app-org-unit-filter>
-            </div>
-            <div class="element-data-filter" *ngIf="isOrganizationUnitSelected && showFilter">
-              <span class="badge badge-primary">Step 2</span>
-              <div *ngIf="isOrganizationUnitSelected && loading">
-                <div class="col-md-12 loading-balls">
-                  <img src="assets/img/balls-3.svg" alt="" style="height:40px">
-                  <span style="margin-top: 20px;">Loading DataSets</span>
-                </div>
-              </div>
-              <app-data-filter [autoUpdate]="autoUpdate" [selectedItems]="assignedDataSets" *ngIf="isOrganizationUnitSelected && !loading && showFilter" [allowSelection]='allowSelection' (onDataUpdate)="componentDataUpdateEvent(i,$event)" (onDataFilterClose)="filterIsClosed($event)"></app-data-filter>
-            </div>
-          </div>
+          <app-dataset-select [formGroupName]="i" (onChangeRegistered)="componentDataUpdateEvent(i,$event)"></app-dataset-select>
         </div>
       </div>
       <div class="mt-1">

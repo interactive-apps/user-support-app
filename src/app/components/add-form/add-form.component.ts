@@ -46,20 +46,6 @@ export class AddFormComponent implements OnInit {
   // our form model
   public datasetRequestForm: FormGroup;
 
-  public orgunit_model: any = {
-    selection_mode: 'Usr_orgUnit',
-    selected_level: '',
-    show_update_button: false,
-    selected_group: '',
-    orgunit_levels: [],
-    orgunit_groups: [],
-    selected_orgunits: [],
-    user_orgunits: [],
-    show_selection_mode: false,
-    type: 'report', // can be 'data_entry'
-    selected_user_orgunit: 'USER_ORGUNIT'
-  };
-
   constructor(private _organisationUnitsService: OrganisationUnitsService,
     private _dataSetsService: DataSetsService,
     private _dataStoreService: DataStoreService,
@@ -194,13 +180,6 @@ componentDataUpdateEvent(componentIndex, event) {
 
         }
       });
-  }
-
-
-  filterIsClosed(event) {
-    if (event) {
-      this.showFilter = false;
-    }
   }
 
 
