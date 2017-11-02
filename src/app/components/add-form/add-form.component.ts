@@ -20,28 +20,16 @@ export class AddFormComponent implements OnInit {
 
   @Output() onDataStoreUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onFiltersClosed: EventEmitter<any> = new EventEmitter<any>();
-  @Input() activeComponent: string;
-  public selectedOrgUnitIDs: String;
-  public payload: any;
-  public isOrganizationUnitSelected: boolean = false;
-  public allowSelection: boolean = false;
-  public selectedOrgUnitInfo: any;
-  public forms: any;
+  @Input()  activeComponent: string;
+  @Input()  isOrganizationUnitSelected: boolean = false;
+  public isSendingDataToDataStore: boolean = false;
+  public isSendingFeedback: boolean = false;
+  public isUpdatingDataSet: boolean = false;
   public loading: boolean = false;
-  public assignedDataSets: string[] = [];
-  public initialDataSets: string[];
-  public disableRequestToApproval: boolean = true;
-  public showFilter: boolean = false;
-  public autoUpdate: boolean = true;
-  private selected: string;
-  private addedOrgDataSets: string[];
-  private removedOrgDataSets: string[];
   private allDataSets: object[];
   private feedbackRecipients: any;
-  private AddedFormsNames: string[] = [];
-  private RemovedFormsNames: string[] = [];
   private firstClick: boolean;
-  public  isFormValid: boolean = false;
+  public isFormValid: boolean = false;
 
   // our form model
   public datasetRequestForm: FormGroup;
@@ -98,117 +86,50 @@ export class AddFormComponent implements OnInit {
     }
   }
 
-  setSelectedOrgunit(event) {
 
-    // this.selectedOrgUnitIDs = _.map(event.value, 'id');
-    this.selectedOrgUnitIDs = event.value;
-    this.getSelectedDataSets(event.value);
+  componentDataUpdateEvent(componentIndex, event) {
+    const formGroup = <FormArray>this.datasetRequestForm.controls['datasets'];
 
+    formGroup.controls[componentIndex].patchValue({
+      selectedOrgUnitInfo: event.selectedOrgUnitInfo,
+      addedOrgDataSets: event.addedOrgDataSets,
+      removedOrgDataSets: event.removedOrgDataSets
+    });
+
+    this.isFormValid = event.changeHappened;
   }
 
 
-  onChange() {
 
-  }
-
-
-  getSelectedDataSets(orgUnitID: string) {
-    this.isOrganizationUnitSelected = true;
-    this.loading = true;
-    this.showFilter = true;
-    this.selected = orgUnitID;
-    this._organisationUnitsService.getOrganisationUnit(orgUnitID).subscribe(response => {
-      this.selectedOrgUnitInfo = response;
-      this.loading = false;
-      this.initialDataSets = _.map(response.dataSets, 'id');
-      this.assignedDataSets = Object.assign([], response.dataSets);
-    })
-  }
-
-
-componentDataUpdateEvent(componentIndex, event) {
-  const formGroup = <FormArray>this.datasetRequestForm.controls['datasets'];
-
-  formGroup.controls[componentIndex].patchValue({
-    selectedOrgUnitInfo: event.selectedOrgUnitInfo,
-    addedOrgDataSets: event.addedOrgDataSets,
-    removedOrgDataSets: event.removedOrgDataSets
-  });
-
-  this.isFormValid = event.changeHappened;
-}
-
-
-  dataUpdated(event) {
-
-    let selectedDatasets = event.selectedData.value.split(';');
-    this.addedOrgDataSets = _.difference(selectedDatasets, this.initialDataSets);
-    this.removedOrgDataSets = _.difference(this.initialDataSets, selectedDatasets);
-    if (this.addedOrgDataSets.length || this.removedOrgDataSets.length) {
-      this.disableRequestToApproval = false;
-    } else {
-      this.disableRequestToApproval = true;
-    }
-
-    const formatedDataStoreData = this.formatDataStorePayload();
-    const dataStoreKey = this.createDataStoreObjKey();
-
-    const addedFormsNames = this.AddedFormsNames.length ? this.AddedFormsNames.join() : 'None';
-    const removedFormsNames = this.RemovedFormsNames.length ? this.RemovedFormsNames.join() : 'None';
-
-    const feedbackSubject = `${dataStoreKey}:REQUEST FOR APROVAL CHANGE IN DATASET`;
-    const text = `There is request to update datasets to ${this.selectedOrgUnitInfo.name} orgnisation unit, ${addedFormsNames} were added and ${removedFormsNames} were removed`;
-    this.disableRequestToApproval = true;
-
-    this._dataStoreService
-      .createNewKeyAndValue(dataStoreKey, formatedDataStoreData)
-      .subscribe(response => {
-
-        if (response.ok) {
-
-          this.disableRequestToApproval = true;
-          this._toastService.success('Your changes were sent for approval, Thanks.')
-          this.sendFeedBackMessage(feedbackSubject, text);
-          this.onDataStoreUpdate.emit({
-            updated: true
-          });
-
-        } else {
-          this._toastService.error('There was an error when sending data.')
-          this.disableRequestToApproval = false;
-          this.onDataStoreUpdate.emit({
-            updated: false
-          });
-
-        }
-      });
-  }
-
-
-  formatDataStorePayload() {
+  formatDataStorePayload(addedOrgDataSets, removedOrgDataSets, selectedOrgUnit) {
 
     let dataSetOrgUnitAdded = [];
     let dataSetOrgUnitRemoved = [];
+    let formNames = {
+      added: [],
+      removed: []
+    };
 
     // Create payload array for added forms to the organisations
-    if (this.addedOrgDataSets.length) {
+    if (addedOrgDataSets.length) {
       // Get full objects for all added dataset
+      const addedOrgDataSetsIDs = _.map(addedOrgDataSets, 'id');
       dataSetOrgUnitAdded = _.filter(this.allDataSets, (dataSet) => {
-        return _.includes(this.addedOrgDataSets, dataSet.id);
+        return _.includes(addedOrgDataSetsIDs, dataSet.id);
       });
 
       // Add organisationUnit to all dataset that have been added to the org unit.
       dataSetOrgUnitAdded = _.transform(dataSetOrgUnitAdded, (result, dataset) => {
         const datasetUrlTosendTo = `api/dataSets/${dataset.id}`;
-        this.AddedFormsNames.push(dataset.name);
-        dataset.organisationUnits.push({ id: this.selected })
+        formNames.added.push(dataset.name);
+        dataset.organisationUnits.push({ id: selectedOrgUnit.id })
 
         // name and periodType are requeired for any PUT payload created to the dataset
         result.push({
           url: datasetUrlTosendTo,
           method: 'PUT',
           status: 'OPEN',
-          action: `Add ${dataset.name} form.`,
+          action: `Add ${dataset.name} form from ${selectedOrgUnit.name}.`,
           payload: _.pick(dataset, ['id', 'name', 'periodType', 'organisationUnits'])
         });
 
@@ -216,27 +137,29 @@ componentDataUpdateEvent(componentIndex, event) {
     }
 
     // Create payload array for removed forms to the organisations
-    if (this.removedOrgDataSets.length) {
+    if (removedOrgDataSets.length) {
       // Get full objects for all removed dataset
+      const removedOrgDataSetsIDs = _.map(removedOrgDataSets, 'id');
+
       dataSetOrgUnitRemoved = _.filter(this.allDataSets, (dataSet) => {
 
-        return _.includes(this.removedOrgDataSets, dataSet.id);
+        return _.includes(removedOrgDataSetsIDs, dataSet.id);
 
       })
       // Remove organisationUnit to all dataset that have been removed to the org unit.
       dataSetOrgUnitRemoved = _.transform(dataSetOrgUnitRemoved, (result, dataset) => {
         const datasetUrlTosendTo = `api/dataSets/${dataset.id}`;
-        this.RemovedFormsNames.push(dataset.name);
+        formNames.removed.push(dataset.name);
         // Remove organisationUnit from dataSets.
         dataset.organisationUnits = _.filter(dataset.organisationUnits, (orgUnit) => {
-          return orgUnit.id !== this.selected;
+          return orgUnit.id !== selectedOrgUnit.id;
         })
         // name and periodType are requeired for any PUT payload created to the dataset
         result.push({
           url: datasetUrlTosendTo,
           method: 'PUT',
           status: 'OPEN',
-          action: `Remove ${dataset.name} form.`,
+          action: `Remove ${dataset.name} form from ${selectedOrgUnit.name}.`,
           payload: _.pick(dataset, ['id', 'name', 'periodType', 'organisationUnits'])
         });
 
@@ -244,7 +167,11 @@ componentDataUpdateEvent(componentIndex, event) {
     }
 
 
-    return _.concat(dataSetOrgUnitAdded, dataSetOrgUnitRemoved);
+    return {
+      formNames: formNames,
+      selectedOrgUnitName: selectedOrgUnit.name,
+      payload: _.concat(dataSetOrgUnitAdded, dataSetOrgUnitRemoved)
+    };
 
   }
 
@@ -272,6 +199,11 @@ componentDataUpdateEvent(componentIndex, event) {
     this._messageConversationService.sendFeedBackMessage(payload).subscribe(response => {
       // TODO: Send notification if possible about new message.
       // console.log(response);
+      this.onDataStoreUpdate.emit({
+        updated: true
+      });
+      this.isUpdatingDataSet = false;
+      this.isSendingFeedback = false;
 
     })
 
@@ -289,7 +221,51 @@ componentDataUpdateEvent(componentIndex, event) {
 
   onSubmit({ value, valid }: { value: any, valid: boolean }) {
     // call API to save customer
-    console.log(value);
+    //console.log(value.datasets);
+    const data = _.transform(value.datasets, (result, dataset) => {
+      if (dataset.addedOrgDataSets.length || dataset.removedOrgDataSets.length) {
+        const formatedDataStoreData = this.formatDataStorePayload(
+          dataset.addedOrgDataSets, dataset.removedOrgDataSets, dataset.selectedOrgUnitInfo);
+        result.push(formatedDataStoreData);
+      }
+    }, []);
+    this.sendDataToDataStore(data);
+
+  }
+
+  sendDataToDataStore(data) {
+    const dataStoreKey = this.createDataStoreObjKey();
+    const dataStorePayload = [].concat.apply([], _.map(data, 'payload'));
+    const feedbackSubject = `${dataStoreKey}:REQUEST FOR APROVAL CHANGE IN DATASET`;
+    let text = `There is request to update datasets to `;
+    for (let i = 0; i < data.length; i++) {
+      data[i];
+      const addedFormsNames = data[i].formNames.added ? data[i].formNames.added.join() : 'None';
+      const removedFormsNames = data[i].formNames.removed ? data[i].formNames.removed.join() : 'None';
+
+      text += `${data[i].selectedOrgUnitName} orgnisation unit, ${addedFormsNames} were added and ${removedFormsNames} were removed. `;
+
+    }
+    this.isUpdatingDataSet = true;
+    this.isSendingDataToDataStore = true;
+    this._dataStoreService
+      .createNewKeyAndValue(dataStoreKey, dataStorePayload)
+      .subscribe(response => {
+        if (response.ok) {
+          this.isSendingDataToDataStore = false;
+          this.isSendingFeedback = true;
+          this._toastService.success('Your changes were sent for approval, Thanks.')
+          this.sendFeedBackMessage(feedbackSubject, text);
+
+        } else {
+          this._toastService.error('There was an error when sending data.')
+          this.isUpdatingDataSet = false;
+          this.isSendingDataToDataStore = false;
+          this.onDataStoreUpdate.emit({
+            updated: false
+          });
+        }
+      });
   }
 
 }

@@ -19,7 +19,7 @@
     </div>
   </div>
   <div class="content__wrapper">
-    <form [formGroup]="datasetRequestForm" novalidate class="full-width">
+    <form [formGroup]="datasetRequestForm" novalidate class="full-width" *ngIf="!isUpdatingDataSet">
       <div formArrayName="datasets" class="full-width">
         <div *ngFor="let dataset of datasetRequestForm.controls.datasets.controls; let i=index" class="card">
           <div class="card-header request_header">
@@ -34,5 +34,13 @@
       </div>
       <button (click)="onSubmit(datasetRequestForm)" class="btn btn-success pull-right m-20" [disabled]="!isFormValid">Request change in dataset</button>
     </form>
+
+    <div class="loadingUser" *ngIf="isUpdatingDataSet">
+      <span class="col-md-12 loading-balls">
+        <img src="assets/img/balls-3.svg" alt="" style="height:40px">
+        <span style="margin-top: 20px;" *ngIf="isSendingDataToDataStore">Sending Request for approval...</span>
+        <span style="margin-top: 20px;" *ngIf="isSendingFeedback">Sending Message Notification...</span>
+      </span>
+    </div>
   </div>
 </div>

@@ -78,7 +78,6 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   initiateData() {
     this.subscription = this.dataFilterService.initiateData().subscribe(
       (items) => {
-
         this.metaData = Object.assign({}, {
           dataElements: items[0],
           indicators: items[1],
@@ -239,7 +238,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
         currentList.push(...data.ds.map(datacv => {
 
           if(group.id === 'dataSet_forms'){
-            return { id: datacv.id, name: datacv.name }
+            return { id: datacv.id, name: datacv.name, periodType: datacv.periodType }
           }else {
             return { id: datacv.id + group.id, name: group.name + ' ' + datacv.name }
           }
