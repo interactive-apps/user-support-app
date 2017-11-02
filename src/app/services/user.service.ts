@@ -53,7 +53,7 @@ export class UserService {
 
   getAllUsers (filters?:string) {
     let loadFilter = filters ? filters: '';
-    return this.http.get(`${this._rootDir}api/users.json?paging=false&${loadFilter}`)
+    return this.http.get(`${this._rootDir}api/users.json?fields=id,displayName,firstName,surname,email,phoneNumber&paging=false&${loadFilter}`)
           .map((response: Response) => response.json())
           .catch(this.handleError);
   }

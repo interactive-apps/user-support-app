@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter,OnInit, Input, Output } from '@angular/core';
 import { User } from '../../models/user.model';
 import { matchOtherValidator } from '../../shared/match-other-validator';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
@@ -19,14 +19,23 @@ import * as async from 'async-es';
 })
 export class CreateUsersComponent implements OnInit {
 
+  @Output() onUserSelected: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onCreateUserClosed: EventEmitter<any> = new EventEmitter<any>();
   public selectedOrgUnitNames: String[];
   public selectedOrgUnitIDs: any;
   public allUserGroups: any;
   public allUserRoles: any;
+  public allUsers: any;
   public isOrganizationUnitSelected: boolean = false;
   private randomGeneratedID: string;
   private feedbackRecipients: any;
   public userDetails: FormGroup;
+  public showFirstNameDropdown: boolean = false;
+  public showSurnameDropdown:boolean = false;
+  public showEmailDropdown: boolean = false;
+  public showPhoneNumberDropdown: boolean = false;
+  public updateBtnLabel: string = 'Next';
+  private firstClick: boolean;
 
   public orgunit_tree_config: any = {
     show_search: true,
@@ -36,7 +45,7 @@ export class CreateUsersComponent implements OnInit {
     loading_message: 'Loading Organisation units...',
     multiple: true,
     multiple_key: "none", //can be control or shift
-    placeholder: "Select Organisation Unit"
+    placeholder: "Please select Organisation unit to request user"
   };
 
   public orgunit_model: any = {
@@ -83,7 +92,7 @@ export class CreateUsersComponent implements OnInit {
     private _userService: UserService) { }
 
   ngOnInit() {
-
+    this.firstClick = true;
     this.userDetails = new FormGroup({
       firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
       surname: new FormControl('', [Validators.required, Validators.minLength(2)]),
@@ -122,6 +131,11 @@ export class CreateUsersComponent implements OnInit {
         this._userService.getAllUserRoles().subscribe(response => {
           callback(null, response)
         })
+      },
+      (callback) => {
+        this._userService.getAllUsers().subscribe(response => {
+          callback(null, response)
+        })
       }
     ], (error, results) => {
       this.feedbackRecipients = results[0];
@@ -140,6 +154,8 @@ export class CreateUsersComponent implements OnInit {
           name: userRole.displayName
         })
       }, []);
+
+      this.allUsers = results[4].users;
 
     })
   }
@@ -259,5 +275,41 @@ export class CreateUsersComponent implements OnInit {
     })
 
   }
+
+
+  setSelectedUser(user,event){
+    event.stopPropagation();
+    this.onUserSelected.emit({
+      user: user
+    })
+  }
+
+
+  showOrHideFirstnamesDropDown(value,event){
+    this.showFirstNameDropdown = value;
+  }
+
+  showOrHideSurnameDropDown(value,event){
+    this.showSurnameDropdown = value;
+  }
+
+  showOrHideEmailDropDown(value,event){
+    this.showEmailDropdown = value;
+  }
+
+  showOrHidePhoneNumberDropDown(value,event){
+    this.showPhoneNumberDropdown = value;
+  }
+
+  // TODO: (barnabas) find better way to prevent close on clicking add form buttons.
+  clickOutside(event) {
+    if ( !this.firstClick && event) {
+      this.onCreateUserClosed.emit({
+        closed: true
+      });
+    }
+    this.firstClick = false;
+  }
+
 
 }

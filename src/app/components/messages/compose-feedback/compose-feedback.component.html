@@ -5,6 +5,7 @@
         <div class="msg-compose-wrapper">
           <div class="msg-title-bar">
             <div class="icon left"><i class="fa fa-envelope"></i></div>
+            <span>Write Feedback</span>
             <div class="compose-actions right row">
               <button type="button" class="close" (click)="close()"><i class="fa fa-times white"></i></button>
               <button type="button" class="close" (click)="close()"><i class="fa fa-minus white"></i></button>
@@ -12,7 +13,7 @@
           </div>
           <form class="" (ngSubmit)="onSendFeedback(feedbackComposeForm)" [formGroup]="feedbackComposeForm" novalidate>
             <div class="msg-subject">
-              <input type="text" placeholder="Subject" formControlName="subject"/>
+              <input type="text" placeholder="Subject" formControlName="subject" autofocus/>
             </div>
             <div class="msg-body">
               <textarea placeholder="Say something" formControlName="message"></textarea>

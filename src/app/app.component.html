@@ -5,18 +5,25 @@
     <div class="actionForm">
       <h3 class="wellcome__messaging">Welcome {{currentUser.name}}, How can we help you today? </h3>
       <div class="form-group">
-        <section class="action__choices">
-          <button class="custom-btn btn-1" (click)="showComposeFeedback()" routerLinkActive="active"><i class="fa fa-pencil-square-o action__icon" aria-hidden="true"></i>Write Feedback</button>
-          <button class="custom-btn btn-1" (click)="showChosenComponent('messages')" routerLinkActive="active"><i class="fa fa-envelope-o action__icon" aria-hidden="true"></i>Messages</button>
-          <button class="custom-btn btn-1" (click)="showChosenComponent('createUser')" routerLinkActive="active"><i class="fa fa-user-o action__icon" aria-hidden="true"></i>Create User(s)</button>
-          <button class="custom-btn btn-1" (click)="showChosenComponent('resetPassword')" routerLinkActive="active"><i class="fa fa-wpforms action__icon" aria-hidden="true"></i>Reset Password</button>
-          <button class="custom-btn btn-1" (click)="showChosenComponent('addForms')" routerLinkActive="active"><i class="fa fa-wpforms action__icon" aria-hidden="true"></i>Request Form(s)</button>
+        <section class="row action__choices">
+          <div class="action__component col-12 col-sm-3 col-lg-3 col-xl-2 ml-xl-auto mr-xl-auto pt-3 pt-lg-0">
+            <button class="btn btn-outline-primary" (click)="showComposeFeedback()" [ngClass]="{'active': currentShown =='composeFeedback'}"><i class="fa fa-pencil-square-o action__icon" aria-hidden="true"></i>Write Feedback</button>
+          </div>
+          <div class="action__component col-12 col-sm-3 col-lg-3 col-xl-2 ml-xl-auto mr-xl-auto pt-3 pt-lg-0">
+            <button class="btn btn-outline-primary" (click)="showChosenComponent('addForms')" [ngClass]="{'active': currentShown =='addForms'}"><i class="fa fa-wpforms action__icon" aria-hidden="true"></i>Request Form(s)</button>
+            <app-add-form class="selected__component" *ngIf="currentShown === 'addForms'" (onDataStoreUpdate)="dataSetUpdated($event)" (onFiltersClosed)="filtersClosed($event)" [activeComponent]="currentShown"></app-add-form>
+          </div>
+          <div class="action__component col-12 col-sm-3 col-lg-3 col-xl-2 ml-xl-auto mr-xl-auto pt-3 pt-lg-0">
+            <button class="btn btn-outline-primary" (click)="showChosenComponent('createUser')" [ngClass]="{'active': currentShown =='createUser'}"><i class="fa fa-user-o action__icon" aria-hidden="true"></i>Create User(s)</button>
+            <app-create-users class="selected__component" *ngIf="currentShown === 'createUser'" (onUserSelected)="onUserSelected($event)" (onCreateUserClosed)="filtersClosed($event)"></app-create-users>
+          </div>
+          <div class="action__component col-12 col-sm-3 col-lg-3 col-xl-2 ml-xl-auto mr-xl-auto pt-3 pt-lg-0">
+            <button class="btn btn-outline-primary" (click)="showChosenComponent('resetPassword')" [ngClass]="{'active': currentShown =='resetPassword'}"><i class="fa fa-wpforms action__icon" aria-hidden="true"></i>Reset Password</button>
+            <app-reset-password class="selected__component flow_right" *ngIf="currentShown === 'resetPassword'" [selectedUser]="selectedUser" (resetSelectedUser)="resetSelectedUser($event)" (onResetPasswordClosed)="filtersClosed($event)"></app-reset-password>
+          </div>
         </section>
       </div>
     </div>
-    <app-messages [ngClass]="{'col-sm-12': true,'opacity-modal': currentShown !=='messages'}"></app-messages>
-    <app-create-users class="create__users" *ngIf="currentShown === 'createUser'"></app-create-users>
-    <app-add-form class="create__users" *ngIf="currentShown === 'addForms'" (onDataStoreUpdate)="dataSetUpdated($event)"></app-add-form>
-    <app-reset-password class="create__users" *ngIf="currentShown === 'resetPassword'"></app-reset-password>
+    <app-messages [ngClass]="{'col-sm-12': true}"></app-messages>
   </div>
 </div>

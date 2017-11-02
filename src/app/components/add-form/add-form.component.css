@@ -1,40 +1,37 @@
 .org-data-filter {
-  flex: 1;
+  width: 50%;
   height: 100%;
-  margin: 20px 0;
+  margin: 5px 0;
 }
 
 .element-data-filter {
-  flex: 1;
+  width: 50%;
   height: 100%;
-  margin: 20px 0;
+  margin: 5px 0 5px 2px;
+  padding-bottom: 2px;
+  border: 1px solid #c6c6c6;
+  border-radius: 4px;
 }
 
 .add__form--page {
   display: flex;
-  width: 100%;
+  width: 650px;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
 }
 
 .add__form--page .content__wrapper {
   display: flex;
-  width: 80%;
+  width: 100%;
   background-color: inherit;
-  justify-content: center;
-  flex-direction: row;
+  flex-direction: column;
 }
 
-
-.create__user--page .content__wrapper  .content__details {
-  margin-top: 50px;
+.create__user--page .content__wrapper .content__details {
+  margin-top: 5px;
 }
 
-
-.multiselect__forms > button.dropdown-toggle.btn.btn-default.btn-block.select_btn {
-    min-width: 300px !important;
+.multiselect__forms>button.dropdown-toggle.btn.btn-default.btn-block.select_btn {
+  min-width: 300px !important;
 }
 
 .multiselect__forms {
@@ -42,3 +39,126 @@
   align-content: center;
   justify-content: center;
 }
+
+.bordered-section {
+  border: 1px solid #c6c6c6;
+  padding: 2px;
+  min-height: 20px!important;
+  border-radius: 4px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.m-20 {
+  margin: 20px !important;
+}
+
+.card-header.request_header {
+    padding: 0.25rem 1.25rem;
+}
+
+.sendingData {
+  position: relative;
+  top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bs-wizard {
+  margin-top: 5px;
+  width: 100%;
+}
+
+/*Form Wizard*/
+
+.bs-wizard {
+  border-bottom: solid 1px #e0e0e0;
+  padding: 0;
+}
+
+.bs-wizard>.bs-wizard-step {
+  padding: 0;
+  position: relative;
+}
+
+.bs-wizard>.bs-wizard-step+.bs-wizard-step {}
+
+.bs-wizard>.bs-wizard-step .bs-wizard-stepnum {
+  color: #595959;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.bs-wizard>.bs-wizard-step .bs-wizard-info {
+  color: #999;
+  font-size: 12px;
+}
+
+.bs-wizard>.bs-wizard-step>.bs-wizard-dot {
+  position: absolute;
+  width: 21px;
+  height: 21px;
+  display: block;
+  background: #23ce6a;
+  top: 14px;
+  left: 50%;
+  margin-top: -15px;
+  margin-left: -15px;
+  border-radius: 50%;
+}
+
+.bs-wizard>.bs-wizard-step>.progress {
+  position: relative;
+  border-radius: 0px;
+  height: 6px;
+  box-shadow: none;
+  margin: 6px 0;
+}
+
+.bs-wizard>.bs-wizard-step>.progress>.progress-bar {
+  width: 0px;
+  box-shadow: none;
+  background: #1abc6d;
+}
+
+.bs-wizard>.bs-wizard-step.complete>.progress>.progress-bar {
+  width: 100%;
+}
+
+.bs-wizard>.bs-wizard-step.active>.progress>.progress-bar {
+  width: 50%;
+}
+
+.bs-wizard>.bs-wizard-step:first-child.active>.progress>.progress-bar {
+  width: 0%;
+}
+
+.bs-wizard>.bs-wizard-step:last-child.active>.progress>.progress-bar {
+  width: 100%;
+}
+
+.bs-wizard>.bs-wizard-step.disabled>.bs-wizard-dot {
+  background-color: #f5f5f5;
+}
+
+.bs-wizard>.bs-wizard-step.disabled>.bs-wizard-dot:after {
+  opacity: 0;
+}
+
+.bs-wizard>.bs-wizard-step:first-child>.progress {
+  left: 50%;
+  width: 50%;
+}
+
+.bs-wizard>.bs-wizard-step:last-child>.progress {
+  width: 50%;
+}
+
+.bs-wizard>.bs-wizard-step.disabled a.bs-wizard-dot {
+  pointer-events: none;
+}
+
+/*END Step Wizard*/

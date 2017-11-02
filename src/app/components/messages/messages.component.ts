@@ -57,7 +57,7 @@ export class MessagesComponent implements OnInit {
   public tabFilter = [
     {id:'all', name: 'All Messages'},
     {id:'followUp', name: 'Follow up'},
-    {id: 'assignedToMe', name: 'Assigned'}
+    {id: 'assignedToMe', name: 'Assigned to me'}
   ];
   public currentUser: any;
   public selectedFilterByStatus:string = 'all';
@@ -81,6 +81,8 @@ export class MessagesComponent implements OnInit {
     {id: 'MEDIUM', name: 'MEDIUM'},
     {id: 'HIGH', name: 'HIGH'}
   ];
+
+  private requestsAreResolved: boolean = false;
 
 
 
@@ -142,7 +144,6 @@ export class MessagesComponent implements OnInit {
    * @return {[type]}       [description]
    */
   setMessagePriority(event:any){
-    console.log(event);
     let payload = {
       priority: event.selectedItem.id
     }
@@ -155,7 +156,6 @@ export class MessagesComponent implements OnInit {
    * @return {[type]}       [description]
    */
   setMessageStatus(event: any){
-    console.log(event);
     let payload = {
       status: event.selectedItem.id
     }
@@ -239,13 +239,14 @@ export class MessagesComponent implements OnInit {
       });
 
       this.openedConversation.messages = _.transform(response.messages, (results, message)=>{
-        if(!message.sender){
-          message.senderDisplayName = 'System Notification';
-          message.userSentTo = userSentTo;
-        } else {
+        console.log(message);
+        if(message.sender){
           let [sender,sentTo] = _.partition(userSentTo,message.sender);
           message.senderDisplayName = sender[0].displayName;
           message.userSentTo = sentTo;
+        } else {
+          message.senderDisplayName = 'System Notification';
+          message.userSentTo = userSentTo;
         }
         results.push(message);
       },[]);
@@ -260,10 +261,18 @@ export class MessagesComponent implements OnInit {
    * @param  {any}    message [messageconversation that is to be marked read]
    */
   markAsRead(message:any) {
-    if (!message.read) {
       message.read = true;
       this._messageConversationService.markAsRead(message);
-    }
+  }
+
+  /**
+   * [markUnRead mark specific message as unread]
+   * @param  {any}    message [description]
+   * @return {[type]}         [description]
+   */
+  markUnRead(message:any) {
+    message.read = false;
+    this._messageConversationService.markUnRead(message);
   }
 
   /**
@@ -345,6 +354,7 @@ export class MessagesComponent implements OnInit {
   onReplyMessage(conversationID: String, { value, valid }: { value: any, valid: boolean }) {
     this._messageConversationService.replyConversation(conversationID, value.message);
     this.messageReplyFormGroup.reset();
+    this.setFocusReplyMessage();
     this.closeMessage();
   }
 
@@ -386,8 +396,14 @@ export class MessagesComponent implements OnInit {
     this._dataStoreService.getValuesOfDataStoreNamespaceKeys(dataStoreKey)
       .subscribe(response => {
         this.loadingDataStoreValue = false;
-        this.dataStoreValues = response;
-        this.disableApproveAll = (_.findIndex(response, { status: 'SOLVED' }) !== -1);
+        // This check if user just imitated the subject and/or data in datastore
+        // has been deleted.
+        if(response.length){
+          this.dataStoreValues = response;
+          this.disableApproveAll = (_.findIndex(response, { status: 'SOLVED' }) !== -1);
+        }else {
+          this.isUserSupportMsg = false;
+        }
       });
   }
 
@@ -395,23 +411,32 @@ export class MessagesComponent implements OnInit {
    * [approveChangesDataset changes status of the datastore value and update disableApproveAll]
    * @param  {any}    dataSet [dataStoreValues]
    */
-  approveChangesDataset(dataSet: any) {
+  approveChangesDataset(dataSet: any, approved:boolean) {
     let asyncRequestsArray = [];
     let updatedDatastoreValues = [];
+
 
     if (_.isArray(dataSet)) {
       asyncRequestsArray = _.transform(dataSet, (result, obj) => {
         obj.status = 'SOLVED';
+
+        approved ? (obj.approved = true) : (obj.rejected = true);
+
         result.push(obj);
       }, []);
       updatedDatastoreValues = asyncRequestsArray;
       this.disableApproveAll = true;
+      this.requestsAreResolved = true;
 
     } else {
       let index = _.findIndex(this.dataStoreValues, { url: dataSet.url });
       dataSet.status = 'SOLVED';
+
+      approved ? (dataSet.approved = true) : (dataSet.rejected = true);
+
       this.dataStoreValues.splice(index, 1, dataSet);
       this.disableApproveAll = (_.findIndex(this.dataStoreValues, { status: 'SOLVED' }) !== -1);
+      this.requestsAreResolved = (_.findIndex(this.dataStoreValues, { status: 'OPEN' }) == -1);
       updatedDatastoreValues = this.dataStoreValues;
       asyncRequestsArray.push(dataSet);
     }
@@ -445,17 +470,23 @@ export class MessagesComponent implements OnInit {
    * @return {[function]}              [callback function with error and response results]
    */
   callback(obj, doneCallBack) {
-    if (obj.method.toLowerCase() === 'put') {
 
-      this._sharedDataService.genericPutRequest(obj.url, obj.payload).subscribe(response => {
-        return doneCallBack(null, response);
-      });
-    } else if(obj.method.toLowerCase() === 'post') {
-      this._sharedDataService.genericPostRequest(obj.url, obj.payload).subscribe(response => {
-        return doneCallBack(null, response);
-      });
+    if (obj.rejected) {
+      return doneCallBack(null, obj);
+    } else {
+
+      if (obj.method.toLowerCase() === 'put' && obj.approved) {
+
+        this._sharedDataService.genericPutRequest(obj.url, obj.payload).subscribe(response => {
+          return doneCallBack(null, response);
+        });
+      } else if(obj.method.toLowerCase() === 'post' && obj.approved) {
+        this._sharedDataService.genericPostRequest(obj.url, obj.payload).subscribe(response => {
+          return doneCallBack(null, response);
+        });
+      }
+
     }
-
   }
 
   /**
@@ -472,13 +503,18 @@ export class MessagesComponent implements OnInit {
    * @return {[void]}         [none]
    */
   private asyncDoneAsnc(error, results) {
-    console.log(results);
     if(results.length){
       this._toastService.success('Approved changes were updated successfully.');
 
     } else {
       this._toastService.error('There was an error when sending approved changes.');
 
+    }
+
+    if(this.requestsAreResolved){
+      let message = `Your request has been resolved. \n Thanks`;
+      this._messageConversationService.replyConversation(this.openedConversation.id, message);
+      this.closeMessage();
     }
   }
 
@@ -502,5 +538,7 @@ export class MessagesComponent implements OnInit {
   setFocusReplyMessage(){
     this.textAreaMessageFocused = !this.textAreaMessageFocused;
   }
+
+
 
 }

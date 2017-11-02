@@ -1,14 +1,21 @@
-<div>
+<div appClickOutside (clickOutside)="clickOutside($event)">
   <button class="btn btn-default btn-sm btn-block custom-select" (click)="toggleDropdownList($event)">
       <span class="pull-left">{{ selectedItem || selectHeader}}</span>
     </button>
 
   <!--Selection list-->
-  <div class="drop-down-filter-panel" *ngIf="showSelectOptions">
+  <div class="drop-down-filter-panel" *ngIf="showSelectOptions" [ngClass]="positionAbsolute ? 'position__absolute':'position__relative'">
     <div class="panel-body drop-down-filter-panel-body">
-      <ul class="drop-down-filter-list">
-        <li *ngFor="let item of selectOptions"><a (click)="setSelected(item, $event)">{{ item.name }}</a></li>
+      <input type="search" class="form-control input-sm" placeholder="Search" [(ngModel)]="querystring" *ngIf="showSearchInput">
+      <ul class="drop-down-filter-list" *ngIf="selectOptions">
+        <li *ngFor="let item of selectOptions | filterByName:querystring">
+          <a (click)="setSelected(item, $event)">{{ item.name }}</a>
+        </li>
       </ul>
+      <span class="col-md-12 loading-balls" *ngIf="!selectOptions">
+        <img src="assets/img/balls-3.svg" alt="" style="height:40px">
+        <span style="margin-top: 20px;">Loading items</span>
+      </span>
     </div>
   </div>
 </div>

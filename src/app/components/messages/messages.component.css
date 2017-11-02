@@ -58,7 +58,7 @@
 
 .wrapper .content-wrapper {
   transition: all .2s ease-in-out;
-  width: 80%;
+  width: 90%;
   display: flex;
   position: relative;
   overflow: hidden;
@@ -160,8 +160,8 @@
   color: #4285f4;
 }
 .wrapper .mail-wrapper {
-  margin: 2% 8%;
-  width: 84%;
+  margin: 2% 3%;
+  width: 94%;
   transition: all .1s ease-in-out;
   background: white;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 6px 12px rgba(0, 0, 0, 0.32);
@@ -653,7 +653,7 @@
   opacity: 1;
 }
 .fab__container:hover .rotate {
-  background-image: url("https://cbwconline.com/IMG/Codepen/Compose.svg");
+  background-image: url("../../../assets/img/ic_create_white_24px.svg");
   transform: rotate(0deg);
 }
 
@@ -681,12 +681,13 @@
   height: 56px;
   opacity: 1;
 }
+
 .buttons:nth-last-of-type(2) {
-  background: #D2A518 url("https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/ic_invite_wht_24dp_r1.png") center no-repeat;
+  background: #3C80F6 url("../../../assets/img/ic_feedback_white_24px.svg") center no-repeat;
 }
 
 .buttons:nth-last-of-type(3) {
-  background: #3C80F6 url("https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/ic_reminders_speeddial_white_24dp.png") center no-repeat;
+  background: #D2A518 url("../../../assets/img/ic_message_white_24px.svg") center no-repeat;
 }
 
 .buttons:hover {
@@ -700,7 +701,7 @@ span.fab{
   border-radius: 50%;
 }
 span.fab .rotate {
-  background: #DB4437 url("https://cbwconline.com/IMG/Codepen/Add.svg") center no-repeat;
+  background: #DB4437 url("../../../assets/img/ic_add_white_24px.svg") center no-repeat;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -789,4 +790,27 @@ label.select__label {
 
 .filter__row {
   width: 90%;
+}
+
+
+
+/*Small devices (landscape phones, 576px and up)*/
+@media (min-width: 576px) {
+  
+
+}
+
+/*Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {
+
+}
+
+/*Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) {
+
+}
+
+/*Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) {
+
 }

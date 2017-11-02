@@ -24,10 +24,10 @@
 
         <div class="mail-body" *ngFor="let messagebody of openedConversation.messages; let i = index">
           <div class="image">
-            <ngx-avatar name="{{message.userFirstname + ' ' + message.userSurname}}" size="35"></ngx-avatar>
+            <ngx-avatar name="{{message.avatarName}}" size="35"></ngx-avatar>
           </div>
           <div class="someClass">
-            <div class="sender" *ngIf="message.user">
+            <div class="sender" *ngIf="messagebody.senderDisplayName">
               <span>{{messagebody.senderDisplayName}}</span>
               <span class="font_size09 ">to</span>
               <span *ngFor="let user of messagebody.userSentTo; let isLast=last" class="text-capitalize" class="font_size09">{{user.displayName}}{{isLast ? '' : ', '}}</span>
@@ -44,12 +44,18 @@
                 <section *ngIf="!loadingDataStoreValue">
                   <ul class="dataStore_items__listing">
                     <li *ngIf="!disableApproveAll">
-                      <span>Approve all Changes</span>
-                      <button class="btn btn-success" (click)="approveChangesDataset(dataStoreValues)">Approve All</button>
+                      <span>Approve/Reject all Changes</span>
+                      <div class="btn-group" role="group">
+                        <button class="btn btn-success" (click)="approveChangesDataset(dataStoreValues, true)">Approve All</button>
+                        <button class="btn btn-danger" (click)="approveChangesDataset(dataStoreValues, false)">Reject All</button>
+                      </div>
                     </li>
                     <li *ngFor="let value of dataStoreValues; let i = index">
                       <span>{{value.action}}</span>
-                      <button class="btn btn-success" (click)="approveChangesDataset(value)" [disabled]="value.status == 'SOLVED'" >{{value.status == 'SOLVED' ? "Approved": "Approve"}}</button>
+                      <div class="btn-group" role="group">
+                        <button *ngIf="!value.rejected" class="btn btn-success" (click)="approveChangesDataset(value, true)" [disabled]="value.status == 'SOLVED'" >{{value.approved ? "Approved": "Approve"}}</button>
+                        <button *ngIf="!value.approved" class="btn btn-danger" (click)="approveChangesDataset(value, false)" [disabled]="value.status == 'SOLVED'" >{{value.rejected ? "Rejected": "Reject"}}</button>
+                      </div>
                     </li>
                   </ul>
                 </section>
@@ -72,13 +78,13 @@
               </div>
               <div class="pull-right pull__right--Action" *ngIf="isCurrentUserInFeedbackGroup && (isUserSupportMsg || message.messageType == 'TICKET')">
                 <div class="col-auto" appClickOutside>
-                  <app-select-dropdown [selectHeader]="priorityHeader" [selectOptions]="priorities" [selectedItem]="message.priority" (onSelected)="setMessagePriority($event)"></app-select-dropdown>
+                  <app-select-dropdown [selectHeader]="priorityHeader" [selectOptions]="priorities" [selectedItem]="message.priority" (onSelected)="setMessagePriority($event)" id="priority"></app-select-dropdown>
                 </div>
                 <div class="col-auto">
-                  <app-select-dropdown [selectHeader]="statusHeader" [selectOptions]="statuses" [selectedItem]="message.status" (onSelected)="setMessageStatus($event)"></app-select-dropdown>
+                  <app-select-dropdown [selectHeader]="statusHeader" [selectOptions]="statuses" [selectedItem]="message.status" (onSelected)="setMessageStatus($event)" id="status"></app-select-dropdown>
                 </div>
                 <div class="col-auto">
-                  <app-select-dropdown [selectHeader]="assignToMemberHeader" [selectOptions]="feedbackRecipients" [selectedItem]="assignedMember" (onSelected)="assignToMessage($event)"></app-select-dropdown>
+                  <app-select-dropdown [selectHeader]="assignToMemberHeader" [selectOptions]="feedbackRecipients" [selectedItem]="assignedMember" (onSelected)="assignToMessage($event)" id="assigned"></app-select-dropdown>
                 </div>
               </div>
             </div>
@@ -87,7 +93,7 @@
       </div>
       <div class="content-wrapper" *ngIf="message.id !== openedMessage">
         <div class="image" (click)="openMessage(message)">
-            <ngx-avatar name="{{message.userFirstname + ' ' + message.userSurname}}" size="30"></ngx-avatar>
+            <ngx-avatar name="{{message.avatarName}}" size="30"></ngx-avatar>
         </div>
         <div class="name" (click)="openMessage(message)">
           <span class="font_size09">{{message.participants}}</span>
@@ -96,8 +102,9 @@
           <div class="actions">
             <a href="#" class="pinned-msg"><i class="fa fa-thumb-tack"></i></a>
             <ul>
-              <li (click)="markAsRead(message)"><i class="fa fa-check"></i></li>
-              <li (click)="deleteMessage(message)" ><i class="fa fa-trash"></i></li>
+              <li *ngIf="!message.read" (click)="markAsRead(message)"><i class="fa fa-check" aria-hidden="true" title="Mark as Read"></i></li>
+              <li *ngIf="message.read" (click)="markUnRead(message)" tooltip="Mark as unread"><i class="fa fa-envelope" title="Mark as UnRead"></i></li>
+              <li (click)="deleteMessage(message)" tooltip="Delete Message"><i class="fa fa-trash" title="Delete"></i></li>
             </ul>
           </div>
           <div class="content" (click)="openMessage(message)">
@@ -111,15 +118,18 @@
     </div>
   </article>
   <nav class="fab__container">
+    <a class="buttons" href="#" (click)="showComposeMessage()" tooltip="Compose a Message"></a>
     <a class="buttons" href="#" (click)="showComposeFeedback()" tooltip="Write Feedback"></a>
-    <a class="buttons" href="#" (click)="showComposeMessage()" tooltip="Write Message"></a>
-    <a class="buttons" (click)="showComposeMessage()" tooltip="Compose">
+    <a class="buttons" (click)="showComposeFeedback()" tooltip="Compose">
       <span class="fab"><span class="rotate"></span></span>
     </a>
   </nav>
-  <div class="has-text-centered pagination_number_container" *ngIf="isDataLoaded">
+  <div class="has-text-centered pagination_number_container" *ngIf="isDataLoaded && (messageConversation | async)?.length">
       <div class="spinner" [ngClass]="{ 'hidden': !isLoadingMessagesPagination }"></div>
       <pagination-controls (pageChange)="getPage($event)" id="messageConvo"></pagination-controls>
+  </div>
+  <div class="has-text-centered" *ngIf="((messageConversation | async)?.length==0) && isDataLoaded">
+    <h4 class="text-center">No Message Found</h4>
   </div>
 </section>
 <!-- TODO:

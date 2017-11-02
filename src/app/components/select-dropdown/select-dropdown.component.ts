@@ -10,7 +10,9 @@ export class SelectDropdownComponent implements OnInit {
   @Output() onSelected: EventEmitter<any> = new EventEmitter<any>();
   @Input() selectOptions:any[] = [];
   @Input() selectHeader: string = 'Select';
+  @Input() showSearchInput: boolean = false;
   @Input() selectedItem: any;
+  @Input() positionAbsolute: boolean = true;
   public showSelectOptions: boolean = false;
 
   constructor() { }
@@ -31,6 +33,12 @@ export class SelectDropdownComponent implements OnInit {
     this.onSelected.emit({
       selectedItem: item
     });
+  }
+
+  clickOutside(event: boolean) {
+    if(event){
+      this.showSelectOptions = false;
+    }
   }
 
 }

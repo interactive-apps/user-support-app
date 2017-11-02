@@ -1,4 +1,15 @@
-<div class="data-filter-container">
+<div class="show_datasets" *ngIf="!allowSelection" (click)="toggleShowBody($event)">
+  <span>
+       <span *ngFor="let item of selectedItems | limitByLength : 4" class="selected-item ng-binding ng-scope">
+        {{ item.name }}
+         <a (click)="removeSelected(item, $event)" class="remove_dataset" *ngIf="selectedItems.length > 1">x</a>
+      </span>
+      <span *ngIf="selectedItems.length > 4" class="selected-item ng-binding ng-scope">
+        and {{selectedItems.length - 4}} more
+     </span>
+  </span>
+</div>
+<div class="data-filter-container" *ngIf="showBody">
   <div class="data-filter-options" *ngIf="allowSelection">
     <ul class="data-filter-options-icon">
       <li *ngFor="let option of dataFilterOptions">
@@ -100,11 +111,11 @@
   </div>
 </div>
 
-<div class="data-filter-btns">
+<div class="data-filter-btns" *ngIf="showBody">
   <div>
     <div class="pull-right">
-      <button class="btn btn-primary btn-sm" (click)="emit($event)">Update</button>
-      <button class="btn btn-secondary btn-sm" (click)="close($event)">Close</button>
+      <button class="btn btn-primary btn-sm" [disabled]="disableUpdate" (click)="emit($event)" *ngIf="!autoUpdate">Send Request</button>
+      <button class="btn btn-secondary btn-sm" (click)="toggleShowBody($event)">Minimize</button>
     </div>
   </div>
 </div>

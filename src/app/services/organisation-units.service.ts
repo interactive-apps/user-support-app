@@ -19,7 +19,7 @@ export class OrganisationUnitsService {
 
   // Get current user information
   getOrganisationUnit(orgUnitID: Number | String) {
-    return this.http.get(`${this.baseUrl}api/organisationUnits/${orgUnitID}.json?fields=id,name,dataSets=[id,name]`)
+    return this.http.get(`${this.baseUrl}api/organisationUnits/${orgUnitID}.json?fields=id,name,dataSets=[id,name,periodType]`)
       .map((response: Response) => response.json())
       .catch( this.handleError );
   }
