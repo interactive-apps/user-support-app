@@ -119,7 +119,6 @@ export class MessageConversationService {
   setPriority(messageConversationId: string, payload:any) {
     this.http.post(`${this.baseUrl}api/messageConversations/${messageConversationId}/priority?messageConversationPriority=${payload.priority}&messageType=TICKET`,this.options)
       .map(response => response.json()).subscribe(data => {
-        console.log(data);
         this.dataStore.messageConversation.forEach((t, i) => {
           if (t.id == messageConversationId) {
             this.dataStore.messageConversation[i].priority = payload.priority;
@@ -204,8 +203,13 @@ export class MessageConversationService {
       let messageCount = message.messageCount > 1 ? `(${message.messageCount})`: '';
       if(message.lastSenderFirstname && (message.userFirstname !== message.lastSenderFirstname)){
         message.participants = `${message.lastSenderFirstname} ${message.lastSenderSurname},${message.userFirstname} ${message.userSurname} ${messageCount}`;
-      }else{
+        message.avatarName = `${message.userFirstname} ${message.userSurname}`;
+      }else if(message.userFirstname && message.userSurname && message.messageType !== 'SYSTEM'){
         message.participants = `${message.userFirstname} ${message.userSurname} ${messageCount}`;
+        message.avatarName = `${message.userFirstname} ${message.userSurname}`;
+      }else {
+        message.participants = `System Notification ${messageCount}`;
+        message.avatarName = `System Notification`;
       }
       results.push(message);
     },[])

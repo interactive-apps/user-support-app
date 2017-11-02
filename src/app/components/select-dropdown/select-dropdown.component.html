@@ -4,7 +4,7 @@
     </button>
 
   <!--Selection list-->
-  <div class="drop-down-filter-panel" *ngIf="showSelectOptions">
+  <div class="drop-down-filter-panel" *ngIf="showSelectOptions" [ngClass]="positionAbsolute ? 'position__absolute':'position__relative'">
     <div class="panel-body drop-down-filter-panel-body">
       <input type="search" class="form-control input-sm" placeholder="Search" [(ngModel)]="querystring" *ngIf="showSearchInput">
       <ul class="drop-down-filter-list" *ngIf="selectOptions">

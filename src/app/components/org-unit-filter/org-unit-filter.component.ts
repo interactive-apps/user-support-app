@@ -42,6 +42,7 @@ export class OrgUnitFilterComponent implements OnInit {
 
   @Input() disabled: boolean = false;
   @Input() selected: string;
+  @Input() updateBtnLabel: string = 'Update';
 
   @Output() onOrgUnitUpdate : EventEmitter<any> = new EventEmitter<any>();
   @Output() onOrgUnitUpdateNames: EventEmitter<any> = new EventEmitter<any>();

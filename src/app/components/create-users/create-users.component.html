@@ -1,11 +1,26 @@
-<div class="create__user--page">
+<div class="create__user--page" appClickOutside (clickOutside)="clickOutside($event)">
   <div class="content__wrapper">
-    <div class="org-data-filter">
+    <div class="row bs-wizard" style="border-bottom:0;">
+         <div class="col-6 bs-wizard-step" [ngClass]="isOrganizationUnitSelected ? 'complete':'active'"><!-- complete -->
+           <div class="progress"><div class="progress-bar"></div></div>
+           <span class="bs-wizard-dot text-center font-weight-bold text-dark">1</span>
+           <div class="bs-wizard-info text-center">Select Organization Unit.</div>
+         </div>
+
+         <div class="col-6 bs-wizard-step" [ngClass]="isOrganizationUnitSelected ? 'active':'disabled'"><!-- active -->
+           <div class="progress"><div class="progress-bar"></div></div>
+           <span class="bs-wizard-dot text-center font-weight-bold text-dark">2</span>
+           <div class="bs-wizard-info text-center">Add User Information</div>
+         </div>
+     </div>
+    <div class="org-data-filter bordered-section">
+      <span class="badge badge-primary">Step 1</span>
       <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)"
-          [orgunit_tree_config]="orgunit_tree_config" [orgunit_model]="orgunit_model">
+          [orgunit_tree_config]="orgunit_tree_config" [orgunit_model]="orgunit_model" [updateBtnLabel]="updateBtnLabel">
       </app-org-unit-filter>
     </div>
-    <section class="user__details" *ngIf="isOrganizationUnitSelected">
+    <section class="user__details bordered-section" *ngIf="isOrganizationUnitSelected">
+      <span class="badge badge-primary">Step 2</span>
       <div class="user__details--title">
         <p>Enter user details for the following organization units:  {{selectedOrgUnitNames.join(', ')}}</p>
       </div>

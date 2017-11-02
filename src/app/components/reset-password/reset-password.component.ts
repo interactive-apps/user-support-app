@@ -5,6 +5,7 @@ import { ToastService } from '../../services/toast.service';
 import { UserService } from '../../services/user.service';
 import { DataStoreService } from '../../services/data-store.service';
 import { matchOtherValidator } from '../../shared/match-other-validator';
+import { passwordValueValidator } from '../../shared/password-value-validator';
 import { MessageConversationService } from '../../services/message-conversation.service';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
 
@@ -20,6 +21,7 @@ export class ResetPasswordComponent implements OnInit {
 
   @Input() selectedUser: any;
   @Output() resetSelectedUser: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onResetPasswordClosed: EventEmitter<any> = new EventEmitter<any>();
   public allUsers: any;
   public optionsModel: number[];
   public isLoadingUser: boolean = false;
@@ -28,6 +30,10 @@ export class ResetPasswordComponent implements OnInit {
   private feedbackRecipients: any;
   public showSearchInput: boolean = true;
   public resetPasswordHeader: string = 'Please Select User to Reset password';
+  public positionAbsolute: boolean = false;
+  public firstClick: boolean;
+  public isCurrentlySendingData: boolean = false;
+  public isSendingMessage: boolean = false;
 
   constructor(private _userService: UserService,
     private _dataStoreService: DataStoreService,
@@ -38,6 +44,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.firstClick = true;
 
     this._userService.getAllUsers().subscribe(response => {
       this.allUsers = _.transform(response.users, (results, user) => {
@@ -49,7 +56,7 @@ export class ResetPasswordComponent implements OnInit {
     })
 
     this.passwordForm = new FormGroup({
-      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8), passwordValueValidator]),
       confirm: new FormControl('', [Validators.required, Validators.minLength(8), matchOtherValidator('password')])
     });
 
@@ -108,20 +115,21 @@ export class ResetPasswordComponent implements OnInit {
       payload: this.selectedUser
     }];
 
-    console.log(payload);
     let feedbackSubject = `${dataStoreKey}:REQUEST TO RESET PASSWORD`;
-    let text = `There is request to reset password to ${this.selectedUser.displayName} to ${value.password}`;
+    let text = `There is request to reset password to ${this.selectedUser.displayName}`;
+    this.isCurrentlySendingData = true;
     this._dataStoreService
       .createNewKeyAndValue(dataStoreKey, payload)
       .subscribe(response => {
 
         if (response.ok) {
+          this.isCurrentlySendingData = false;
           this._toastService.success('Your changes were sent for approval, Thanks.')
           this.sendFeedBackMessage(feedbackSubject, text);
 
         } else {
           this._toastService.error('There was an error when sending data.')
-
+          this.isCurrentlySendingData = false;
         }
       });
 
@@ -141,9 +149,14 @@ export class ResetPasswordComponent implements OnInit {
       text: message,
       userGroups: [{ id: this.feedbackRecipients.id }]
     }
+    this.isSendingMessage = true;
     this._messageConversationService.sendFeedBackMessage(payload).subscribe(response => {
       // TODO: Send notification if possible about new message.
       //console.log(response);
+      this.isSendingMessage = false;
+      this.onResetPasswordClosed.emit({
+        closed: true
+      });
 
     })
   }
@@ -157,6 +170,17 @@ export class ResetPasswordComponent implements OnInit {
     this.resetSelectedUser.emit({
       reset: true
     })
+  }
+
+
+  // TODO: (barnabas) find better way to prevent close on clicking add form buttons.
+  clickOutside(event) {
+    if ( !this.firstClick && event) {
+      this.onResetPasswordClosed.emit({
+        closed: true
+      });
+    }
+    this.firstClick = false;
   }
 
 }

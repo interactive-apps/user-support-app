@@ -57,7 +57,7 @@ export class MessagesComponent implements OnInit {
   public tabFilter = [
     {id:'all', name: 'All Messages'},
     {id:'followUp', name: 'Follow up'},
-    {id: 'assignedToMe', name: 'Assigned'}
+    {id: 'assignedToMe', name: 'Assigned to me'}
   ];
   public currentUser: any;
   public selectedFilterByStatus:string = 'all';
@@ -144,7 +144,6 @@ export class MessagesComponent implements OnInit {
    * @return {[type]}       [description]
    */
   setMessagePriority(event:any){
-    console.log(event);
     let payload = {
       priority: event.selectedItem.id
     }
@@ -157,7 +156,6 @@ export class MessagesComponent implements OnInit {
    * @return {[type]}       [description]
    */
   setMessageStatus(event: any){
-    console.log(event);
     let payload = {
       status: event.selectedItem.id
     }
@@ -241,13 +239,14 @@ export class MessagesComponent implements OnInit {
       });
 
       this.openedConversation.messages = _.transform(response.messages, (results, message)=>{
-        if(!message.sender){
-          message.senderDisplayName = 'System Notification';
-          message.userSentTo = userSentTo;
-        } else {
+        console.log(message);
+        if(message.sender){
           let [sender,sentTo] = _.partition(userSentTo,message.sender);
           message.senderDisplayName = sender[0].displayName;
           message.userSentTo = sentTo;
+        } else {
+          message.senderDisplayName = 'System Notification';
+          message.userSentTo = userSentTo;
         }
         results.push(message);
       },[]);
@@ -397,8 +396,14 @@ export class MessagesComponent implements OnInit {
     this._dataStoreService.getValuesOfDataStoreNamespaceKeys(dataStoreKey)
       .subscribe(response => {
         this.loadingDataStoreValue = false;
-        this.dataStoreValues = response;
-        this.disableApproveAll = (_.findIndex(response, { status: 'SOLVED' }) !== -1);
+        // This check if user just imitated the subject and/or data in datastore
+        // has been deleted.
+        if(response.length){
+          this.dataStoreValues = response;
+          this.disableApproveAll = (_.findIndex(response, { status: 'SOLVED' }) !== -1);
+        }else {
+          this.isUserSupportMsg = false;
+        }
       });
   }
 
@@ -498,7 +503,6 @@ export class MessagesComponent implements OnInit {
    * @return {[void]}         [none]
    */
   private asyncDoneAsnc(error, results) {
-    console.log(results);
     if(results.length){
       this._toastService.success('Approved changes were updated successfully.');
 

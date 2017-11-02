@@ -96,7 +96,7 @@
             <span class="glyphicon glyphicon-remove"></span> Close
           </button>
           <button [disabled]="orgunit_tree_config.loading" *ngIf="orgunit_model.show_update_button" type="button" class="btn btn-primary btn-sm pull-right" (click)="updateOrgUnitModel()">
-            <span class="glyphicon glyphicon-refresh"></span>  Update
+            <span class="glyphicon glyphicon-refresh"></span>{{updateBtnLabel}}
           </button>
         </div>
       </div>

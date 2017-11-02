@@ -48,7 +48,7 @@ export class DataFilterService {
   }
 
   getDataSets(): Observable<DataSet[]> {
-    return this.http.get('../../../api/dataSets.json?paging=false&fields=id,name')
+    return this.http.get('../../../api/dataSets.json?paging=false&fields=id,name,periodType')
       .map(res => res.json().dataSets || [])
   }
 

@@ -1,0 +1,21 @@
+.org-data-filter {
+  width: 50%;
+  height: 100%;
+  margin: 5px 0;
+}
+
+.element-data-filter {
+  width: 50%;
+  height: 100%;
+  margin: 5px 0 5px 2px;
+  padding-bottom: 2px;
+  border: 1px solid #c6c6c6;
+  border-radius: 4px;
+}
+
+.bordered-section {
+  border: 1px solid #c6c6c6;
+  padding: 2px;
+  min-height: 20px!important;
+  border-radius: 4px;
+}

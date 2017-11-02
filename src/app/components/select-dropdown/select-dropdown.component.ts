@@ -12,6 +12,7 @@ export class SelectDropdownComponent implements OnInit {
   @Input() selectHeader: string = 'Select';
   @Input() showSearchInput: boolean = false;
   @Input() selectedItem: any;
+  @Input() positionAbsolute: boolean = true;
   public showSelectOptions: boolean = false;
 
   constructor() { }

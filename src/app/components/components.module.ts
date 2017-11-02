@@ -8,6 +8,7 @@ import { OrgUnitService } from './org-unit-filter/org-unit.service';
     CommonModule
   ],
   declarations: [],
+  exports: [],
   providers: [
     OrgUnitService
   ]

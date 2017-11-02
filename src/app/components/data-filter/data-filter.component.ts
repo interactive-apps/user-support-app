@@ -21,11 +21,17 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   @Input() functionMappings: any[] = [];
   @Input() hiddenDataElements: any[] = [];
   @Input() allowSelection: boolean = true;
-  querystring: string = null;
-  listchanges: string = null;
-  showBody: boolean = false;
+  @Input() autoUpdate: boolean = false;
+  public initialDataSelection: any;
+  public disableUpdate: boolean = true;
+  public querystring: string = null;
+  public listchanges: string = null;
+  public showBody: boolean = false;
+  private addedOrgDataSets: any = [];
+  private removedOrgDataSets: any = [];
+  private changeHappened: boolean = false;
   private subscription: Subscription;
-  metaData: any = {
+  public metaData: any = {
     dataElements: [],
     indicators: [],
     dataElementGroups: [],
@@ -43,7 +49,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
       { id: '.EXPECTED_REPORTS', name: "Expected Reports" }
     ]
   };
-  loading: boolean = true;
+  public loading: boolean = true;
   p: number = 1;
   k: number = 1;
   need_groups: boolean = true;
@@ -60,6 +66,8 @@ export class DataFilterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initiateData();
+    this.initialDataSelection = this.selectedItems;
+    this.dataUpdate();
   }
 
   // trigger this to reset pagination pointer when search change
@@ -70,7 +78,6 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   initiateData() {
     this.subscription = this.dataFilterService.initiateData().subscribe(
       (items) => {
-
         this.metaData = Object.assign({}, {
           dataElements: items[0],
           indicators: items[1],
@@ -231,7 +238,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
         currentList.push(...data.ds.map(datacv => {
 
           if(group.id === 'dataSet_forms'){
-            return { id: datacv.id, name: datacv.name }
+            return { id: datacv.id, name: datacv.name, periodType: datacv.periodType }
           }else {
             return { id: datacv.id + group.id, name: group.name + ' ' + datacv.name }
           }
@@ -314,6 +321,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
         item
       ];
     }
+    this.disableRequestIfNoChange(event);
   }
 
   // Remove selected Item
@@ -332,6 +340,7 @@ export class DataFilterComponent implements OnInit, OnDestroy {
         item
       ];
     }
+    this.disableRequestIfNoChange(event);
   }
 
   getAutogrowingTables(selections) {
@@ -413,7 +422,14 @@ export class DataFilterComponent implements OnInit, OnDestroy {
 
   emit(e) {
     e.stopPropagation();
+    this.dataUpdate();
+  }
+
+  dataUpdate(){
     this.onDataUpdate.emit({
+      addedOrgDataSets: this.addedOrgDataSets,
+      removedOrgDataSets: this.removedOrgDataSets,
+      changeHappened: this.changeHappened,
       itemList: this.selectedItems,
       need_functions: this.getFunctions(this.selectedItems),
       auto_growing: this.getAutogrowingTables(this.selectedItems),
@@ -550,10 +566,22 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   }
 
   toggleShowBody(e) {
-    console.log(e);
     e.stopPropagation();
     this.showBody = !this.showBody;
-    console.log(this.showBody);
   }
+
+  disableRequestIfNoChange(event){
+    this.removedOrgDataSets =  _.difference(this.initialDataSelection, this.selectedItems);
+    this.addedOrgDataSets = _.difference(this.selectedItems, this.initialDataSelection);
+    if(this.removedOrgDataSets.length || this.addedOrgDataSets.length){
+      this.disableUpdate = false;
+      this.changeHappened = true;
+    }else {
+      this.disableUpdate = true;
+    }
+    this.emit(event);
+  }
+
+
 
 }

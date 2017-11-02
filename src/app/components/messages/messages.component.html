@@ -24,10 +24,10 @@
 
         <div class="mail-body" *ngFor="let messagebody of openedConversation.messages; let i = index">
           <div class="image">
-            <ngx-avatar name="{{message.userFirstname + ' ' + message.userSurname}}" size="35"></ngx-avatar>
+            <ngx-avatar name="{{message.avatarName}}" size="35"></ngx-avatar>
           </div>
           <div class="someClass">
-            <div class="sender" *ngIf="message.user">
+            <div class="sender" *ngIf="messagebody.senderDisplayName">
               <span>{{messagebody.senderDisplayName}}</span>
               <span class="font_size09 ">to</span>
               <span *ngFor="let user of messagebody.userSentTo; let isLast=last" class="text-capitalize" class="font_size09">{{user.displayName}}{{isLast ? '' : ', '}}</span>
@@ -93,7 +93,7 @@
       </div>
       <div class="content-wrapper" *ngIf="message.id !== openedMessage">
         <div class="image" (click)="openMessage(message)">
-            <ngx-avatar name="{{message.userFirstname + ' ' + message.userSurname}}" size="30"></ngx-avatar>
+            <ngx-avatar name="{{message.avatarName}}" size="30"></ngx-avatar>
         </div>
         <div class="name" (click)="openMessage(message)">
           <span class="font_size09">{{message.participants}}</span>
@@ -124,9 +124,12 @@
       <span class="fab"><span class="rotate"></span></span>
     </a>
   </nav>
-  <div class="has-text-centered pagination_number_container" *ngIf="isDataLoaded">
+  <div class="has-text-centered pagination_number_container" *ngIf="isDataLoaded && (messageConversation | async)?.length">
       <div class="spinner" [ngClass]="{ 'hidden': !isLoadingMessagesPagination }"></div>
       <pagination-controls (pageChange)="getPage($event)" id="messageConvo"></pagination-controls>
+  </div>
+  <div class="has-text-centered" *ngIf="((messageConversation | async)?.length==0) && isDataLoaded">
+    <h4 class="text-center">No Message Found</h4>
   </div>
 </section>
 <!-- TODO:
