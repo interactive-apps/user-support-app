@@ -1,4 +1,4 @@
-<div class="add__form--page">
+<div class="add__form--page" appClickOutside (clickOutside)="clickOutside($event)">
   <div class="row bs-wizard" style="border-bottom:0;">
     <div class="col-6 bs-wizard-step" [ngClass]="isOrganizationUnitSelected ? 'complete':'active'">
       <!-- complete -->
