@@ -24,7 +24,6 @@ export class AddFormComponent implements OnInit {
   @Input()  isOrganizationUnitSelected: boolean = false;
   public isSendingDataToDataStore: boolean = false;
   public isSendingFeedback: boolean = false;
-  public isUpdatingDataSet: boolean = false;
   public loading: boolean = false;
   private allDataSets: object[];
   private feedbackRecipients: any;
@@ -202,7 +201,6 @@ export class AddFormComponent implements OnInit {
       this.onDataStoreUpdate.emit({
         updated: true
       });
-      this.isUpdatingDataSet = false;
       this.isSendingFeedback = false;
 
     })
@@ -246,7 +244,6 @@ export class AddFormComponent implements OnInit {
       text += `${data[i].selectedOrgUnitName} orgnisation unit, ${addedFormsNames} were added and ${removedFormsNames} were removed. `;
 
     }
-    this.isUpdatingDataSet = true;
     this.isSendingDataToDataStore = true;
     this._dataStoreService
       .createNewKeyAndValue(dataStoreKey, dataStorePayload)
@@ -259,7 +256,6 @@ export class AddFormComponent implements OnInit {
 
         } else {
           this._toastService.error('There was an error when sending data.')
-          this.isUpdatingDataSet = false;
           this.isSendingDataToDataStore = false;
           this.onDataStoreUpdate.emit({
             updated: false

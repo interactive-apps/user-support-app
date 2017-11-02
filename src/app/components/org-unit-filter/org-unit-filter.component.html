@@ -26,7 +26,7 @@
           </span>
         <span class="no-selection"*ngIf="orgunit_model.selected_orgunits.length == 0 && !orgunit_tree_config.loading && orgunit_model.selection_mode != 'Usr_orgUnit'">{{ orgunit_tree_config.placeholder }}</span>
         <span class="glyphicon glyphicon-triangle-bottom pull-right" *ngIf="!orgunit_tree_config.loading"></span>
-        <div class="col-md-12 loading-balls" *ngIf="orgunit_model.selected_orgunits.length == 0 && orgunit_tree_config.loading">
+        <div class="col-md-12 loading-balls" *ngIf="orgunit_tree_config.loading">
           <img src="assets/img/balls-3.svg" alt="" style="height:20px">
           <span style="margin-top: 20px;">{{ orgunit_tree_config.loading_message }}</span>
         </div>

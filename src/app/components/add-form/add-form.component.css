@@ -23,7 +23,7 @@
   display: flex;
   width: 100%;
   background-color: inherit;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .create__user--page .content__wrapper .content__details {
@@ -57,6 +57,14 @@
 
 .card-header.request_header {
     padding: 0.25rem 1.25rem;
+}
+
+.sendingData {
+  position: relative;
+  top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .bs-wizard {
