@@ -1,22 +1,7 @@
 <div class="add__form--page" appClickOutside (clickOutside)="clickOutside($event)">
-  <div class="row bs-wizard" style="border-bottom:0;">
-    <div class="col-6 bs-wizard-step" [ngClass]="isOrganizationUnitSelected ? 'complete':'active'">
-      <!-- complete -->
-      <div class="progress">
-        <div class="progress-bar"></div>
-      </div>
-      <span class="bs-wizard-dot text-center font-weight-bold text-dark align-baseline">1</span>
-      <div class="bs-wizard-info text-center">Select Organization Unit.</div>
-    </div>
-
-    <div class="col-6 bs-wizard-step" [ngClass]="isOrganizationUnitSelected ? 'active':'disabled'">
-      <!-- active -->
-      <div class="progress">
-        <div class="progress-bar"></div>
-      </div>
-      <span class="bs-wizard-dot text-center font-weight-bold text-dark align-baseline">2</span>
-      <div class="bs-wizard-info text-center">Add/Remove Form of for selected organization unit</div>
-    </div>
+  <div class="arrow-steps clearfix bs-wizard" style="border-bottom:0;">
+     <div class="step" [ngClass]="isOrganizationUnitSelected ? 'done':'current'"><span>1. Select Organization Unit.</span> </div>
+     <div class="step" [ngClass]="isOrganizationUnitSelected ? 'current':''"> <span>2. Add/Remove Form of for selected organization unit</span> </div>
   </div>
   <div class="content__wrapper">
     <form [formGroup]="datasetRequestForm" novalidate class="full-width" *ngIf="!isSendingDataToDataStore && !isSendingFeedback">

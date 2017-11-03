@@ -2,8 +2,12 @@
   width: 50%;
   height: 100%;
   margin: 5px 0;
+  display: flex;
 }
 
+app-org-unit-filter{
+  flex: 1;
+}
 .element-data-filter {
   width: 50%;
   height: 100%;
@@ -11,6 +15,7 @@
   padding-bottom: 2px;
   border: 1px solid #c6c6c6;
   border-radius: 4px;
+  display: flex;
 }
 
 .bordered-section {
@@ -18,4 +23,19 @@
   padding: 2px;
   min-height: 20px!important;
   border-radius: 4px;
+}
+
+
+.badge-round {
+  border-radius: 50% !important;
+  height: 20px;
+  width: 20px;
+}
+
+.badge-top-5 {
+  margin-top: 5px;
+}
+
+.flex-1 {
+  flex: 1;
 }
