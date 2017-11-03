@@ -235,7 +235,7 @@ export class CreateUsersComponent implements OnInit {
       url: datasetUrlTosendTo,
       method: 'POST',
       status: 'OPEN',
-      action: `Add ${value.firstName} ${value.surname} as a user.`,
+      action: `Add ${value.firstName} ${value.surname} as a user`,
       payload: userPayload
     }];
 

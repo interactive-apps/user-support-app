@@ -111,7 +111,7 @@ export class ResetPasswordComponent implements OnInit {
       url: datasetUrlTosendTo,
       method: 'PUT',
       status: 'OPEN',
-      action: `Reset ${this.selectedUser.displayName} password.`,
+      action: `Reset ${this.selectedUser.displayName} password`,
       payload: this.selectedUser
     }];
 

@@ -128,7 +128,7 @@ export class AddFormComponent implements OnInit {
           url: datasetUrlTosendTo,
           method: 'PUT',
           status: 'OPEN',
-          action: `Add ${dataset.name} form from ${selectedOrgUnit.name}.`,
+          action: `Add ${dataset.name} form from ${selectedOrgUnit.name}`,
           payload: _.pick(dataset, ['id', 'name', 'periodType', 'organisationUnits'])
         });
 
@@ -158,7 +158,7 @@ export class AddFormComponent implements OnInit {
           url: datasetUrlTosendTo,
           method: 'PUT',
           status: 'OPEN',
-          action: `Remove ${dataset.name} form from ${selectedOrgUnit.name}.`,
+          action: `Remove ${dataset.name} form from ${selectedOrgUnit.name}`,
           payload: _.pick(dataset, ['id', 'name', 'periodType', 'organisationUnits'])
         });
 
@@ -218,8 +218,6 @@ export class AddFormComponent implements OnInit {
 
 
   onSubmit({ value, valid }: { value: any, valid: boolean }) {
-    // call API to save customer
-    //console.log(value.datasets);
     const data = _.transform(value.datasets, (result, dataset) => {
       if (dataset.addedOrgDataSets.length || dataset.removedOrgDataSets.length) {
         const formatedDataStoreData = this.formatDataStorePayload(

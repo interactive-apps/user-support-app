@@ -239,7 +239,6 @@ export class MessagesComponent implements OnInit {
       });
 
       this.openedConversation.messages = _.transform(response.messages, (results, message)=>{
-        console.log(message);
         if(message.sender){
           let [sender,sentTo] = _.partition(userSentTo,message.sender);
           message.senderDisplayName = sender[0].displayName;
@@ -512,7 +511,11 @@ export class MessagesComponent implements OnInit {
     }
 
     if(this.requestsAreResolved){
-      let message = `Your request has been resolved. \n Thanks`;
+      const [approvedRequest, rejectedRequest] = _.partition(this.dataStoreValues, 'approved');
+      const approvedActions = approvedRequest.length ? _.map(approvedRequest, 'action').join() : 'None';
+      const rejectedActions = rejectedRequest.length ? _.map(rejectedRequest, 'action').join() : 'None';
+      let message = `Your request has been resolved.${approvedActions}
+        was approved and ${rejectedActions} was rejected. \n Thanks`;
       this._messageConversationService.replyConversation(this.openedConversation.id, message);
       this.closeMessage();
     }
