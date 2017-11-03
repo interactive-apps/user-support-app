@@ -55,6 +55,10 @@
   margin: 20px !important;
 }
 
+.font-12 {
+  font-size: 12px;
+}
+
 .card-header.request_header {
     padding: 0.15rem 1rem;
 }

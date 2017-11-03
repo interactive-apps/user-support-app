@@ -6,10 +6,13 @@
   <div class="content__wrapper">
     <form [formGroup]="datasetRequestForm" novalidate class="full-width" *ngIf="!isSendingDataToDataStore && !isSendingFeedback">
       <div formArrayName="datasets" class="full-width">
-        <div *ngFor="let dataset of datasetRequestForm.controls.datasets.controls; let i=index" class="card">
+        <div *ngFor="let dataset of datasetRequestForm.controls.datasets.controls; let i=index" class="card mb-1" [ngClass]="requestErrorArr[i].noChange ? 'border-warning' : 'border-success'">
           <div class="card-header request_header">
             <span>Request {{i + 1}}</span>
-            <span class="pull-right" *ngIf="datasetRequestForm.controls.datasets.controls.length > 1" (click)="removeDatasetComponent(i, $event)"><i class="fa fa-times" aria-hidden="true"></i></span>
+            <div class="pull-right">
+              <span class="text-warning font-12" *ngIf="requestErrorArr[i].noChange"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> No form was added/removed</span>
+              <span *ngIf="datasetRequestForm.controls.datasets.controls.length > 1" (click)="removeDatasetComponent(i, $event)"><i class="fa fa-times" aria-hidden="true"></i></span>
+            </div>
           </div>
           <app-dataset-select [formGroupName]="i" (onChangeRegistered)="componentDataUpdateEvent(i,$event)" (onOrgUnitSelect)="onSelectOrgUnit($event)"></app-dataset-select>
         </div>
