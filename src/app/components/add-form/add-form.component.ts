@@ -21,7 +21,7 @@ export class AddFormComponent implements OnInit {
   @Output() onDataStoreUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onFiltersClosed: EventEmitter<any> = new EventEmitter<any>();
   @Input()  activeComponent: string;
-  @Input()  isOrganizationUnitSelected: boolean = false;
+  public isOrganizationUnitSelected: boolean = false;
   public isSendingDataToDataStore: boolean = false;
   public isSendingFeedback: boolean = false;
   public loading: boolean = false;
@@ -83,6 +83,10 @@ export class AddFormComponent implements OnInit {
     if (!this.isFormValid && isLastIndex) {
       this.isFormValid = true;
     }
+  }
+
+  onSelectOrgUnit(event){
+    this.isOrganizationUnitSelected = event;
   }
 
 

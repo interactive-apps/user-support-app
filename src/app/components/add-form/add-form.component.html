@@ -26,7 +26,7 @@
             <span>Request {{i + 1}}</span>
             <span class="pull-right" *ngIf="datasetRequestForm.controls.datasets.controls.length > 1" (click)="removeDatasetComponent(i, $event)"><i class="fa fa-times" aria-hidden="true"></i></span>
           </div>
-          <app-dataset-select [formGroupName]="i" (onChangeRegistered)="componentDataUpdateEvent(i,$event)"></app-dataset-select>
+          <app-dataset-select [formGroupName]="i" (onChangeRegistered)="componentDataUpdateEvent(i,$event)" (onOrgUnitSelect)="onSelectOrgUnit($event)"></app-dataset-select>
         </div>
       </div>
       <div class="mt-1">
