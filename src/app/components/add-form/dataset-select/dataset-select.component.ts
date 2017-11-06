@@ -23,7 +23,7 @@ export class DatasetSelectComponent implements OnInit {
   public loading: boolean = false;
 
   public orgunit_model: any = {
-    selection_mode: 'Usr_orgUnit',
+    selection_mode: 'orgUnit',
     selected_level: '',
     show_update_button: false,
     selected_group: '',

@@ -51,13 +51,12 @@ export class AddFormComponent implements OnInit {
     this._sharedDataService.getFeedbackReceipients().subscribe(response => {
       this.feedbackRecipients = response;
     })
-
+    this.requestErrorArr.push({noChange: true});
     this.datasetRequestForm = this._fb.group({
       datasets: this._fb.array([
         this.initDatasetFilterForm(),
       ])
     });
-    this.requestErrorArr.push({noChange: true});
   }
 
   initDatasetFilterForm() {
