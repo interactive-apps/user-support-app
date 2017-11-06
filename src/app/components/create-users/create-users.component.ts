@@ -271,6 +271,9 @@ export class CreateUsersComponent implements OnInit {
     this._messageConversationService.sendFeedBackMessage(payload).subscribe(response => {
       // TODO: Send notification if possible about new message.
       //console.log(response);
+      this.onCreateUserClosed.emit({
+        closed: true
+      });
 
     })
 
