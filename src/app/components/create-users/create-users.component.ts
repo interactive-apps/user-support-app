@@ -34,7 +34,7 @@ export class CreateUsersComponent implements OnInit {
   public showSurnameDropdown:boolean = false;
   public showEmailDropdown: boolean = false;
   public showPhoneNumberDropdown: boolean = false;
-  public updateBtnLabel: string = 'Next';
+  public updateBtnLabel: string = 'Next Step';
   private firstClick: boolean;
 
   public orgunit_tree_config: any = {
@@ -235,7 +235,7 @@ export class CreateUsersComponent implements OnInit {
       url: datasetUrlTosendTo,
       method: 'POST',
       status: 'OPEN',
-      action: `Add ${value.firstName} ${value.surname} as a user.`,
+      action: `Add ${value.firstName} ${value.surname} as a user`,
       payload: userPayload
     }];
 
@@ -271,6 +271,9 @@ export class CreateUsersComponent implements OnInit {
     this._messageConversationService.sendFeedBackMessage(payload).subscribe(response => {
       // TODO: Send notification if possible about new message.
       //console.log(response);
+      this.onCreateUserClosed.emit({
+        closed: true
+      });
 
     })
 

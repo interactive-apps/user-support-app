@@ -1,16 +1,16 @@
 <div class="card-block d-flex">
   <div class="org-data-filter bordered-section">
-    <span class="badge badge-primary">Step 1</span>
+    <span class="badge badge-primary badge-round">1</span>
     <app-org-unit-filter (onOrgUnitUpdate)="setSelectedOrgunit($event)" [orgunit_model]="orgunit_model"></app-org-unit-filter>
   </div>
   <div class="element-data-filter" *ngIf="isOrganizationUnitSelected && showFilter">
-    <span class="badge badge-primary">Step 2</span>
-    <div *ngIf="isOrganizationUnitSelected && loading">
+    <span class="badge badge-primary badge-round">2</span>
+    <div *ngIf="isOrganizationUnitSelected && loading" class="flex-1">
       <div class="col-md-12 loading-balls">
         <img src="assets/img/balls-3.svg" alt="" style="height:40px">
         <span style="margin-top: 20px;">Loading DataSets</span>
       </div>
     </div>
-    <app-data-filter [autoUpdate]="autoUpdate" [selectedItems]="assignedDataSets" *ngIf="isOrganizationUnitSelected && !loading && showFilter" [allowSelection]='allowSelection' (onDataUpdate)="onDataSetUpdate($event)" (onDataFilterClose)="filterIsClosed($event)"></app-data-filter>
+    <app-data-filter class="flex-1" [autoUpdate]="autoUpdate" [selectedItems]="assignedDataSets" *ngIf="isOrganizationUnitSelected && !loading && showFilter" [allowSelection]='allowSelection' (onDataUpdate)="onDataSetUpdate($event)" (onDataFilterClose)="filterIsClosed($event)"></app-data-filter>
   </div>
 </div>

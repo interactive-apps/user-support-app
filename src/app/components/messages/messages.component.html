@@ -1,4 +1,4 @@
-<section class="container-fluid">
+<section class="full-width">
   <section class="filter__select">
     <div class="form-row justify-content-end filter__row">
       <div class="col-auto">
@@ -127,9 +127,6 @@
   <div class="has-text-centered pagination_number_container" *ngIf="isDataLoaded && (messageConversation | async)?.length">
       <div class="spinner" [ngClass]="{ 'hidden': !isLoadingMessagesPagination }"></div>
       <pagination-controls (pageChange)="getPage($event)" id="messageConvo"></pagination-controls>
-  </div>
-  <div class="has-text-centered" *ngIf="((messageConversation | async)?.length==0) && isDataLoaded">
-    <h4 class="text-center">No Message Found</h4>
   </div>
 </section>
 <!-- TODO:

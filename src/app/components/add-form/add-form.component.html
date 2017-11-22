@@ -1,38 +1,26 @@
 <div class="add__form--page" appClickOutside (clickOutside)="clickOutside($event)">
-  <div class="row bs-wizard" style="border-bottom:0;">
-    <div class="col-6 bs-wizard-step" [ngClass]="isOrganizationUnitSelected ? 'complete':'active'">
-      <!-- complete -->
-      <div class="progress">
-        <div class="progress-bar"></div>
-      </div>
-      <span class="bs-wizard-dot text-center font-weight-bold text-dark align-baseline">1</span>
-      <div class="bs-wizard-info text-center">Select Organization Unit.</div>
-    </div>
-
-    <div class="col-6 bs-wizard-step" [ngClass]="isOrganizationUnitSelected ? 'active':'disabled'">
-      <!-- active -->
-      <div class="progress">
-        <div class="progress-bar"></div>
-      </div>
-      <span class="bs-wizard-dot text-center font-weight-bold text-dark align-baseline">2</span>
-      <div class="bs-wizard-info text-center">Add/Remove Form of for selected organization unit</div>
-    </div>
+  <div class="arrow-steps clearfix bs-wizard" style="border-bottom:0;">
+     <div class="step" [ngClass]="isOrganizationUnitSelected ? 'done':'current'"><span>1. Select Organization Unit.</span> </div>
+     <div class="step" [ngClass]="isOrganizationUnitSelected ? 'current':''"> <span>2. Add/Remove Form of for selected organization unit</span> </div>
   </div>
   <div class="content__wrapper">
     <form [formGroup]="datasetRequestForm" novalidate class="full-width" *ngIf="!isSendingDataToDataStore && !isSendingFeedback">
       <div formArrayName="datasets" class="full-width">
-        <div *ngFor="let dataset of datasetRequestForm.controls.datasets.controls; let i=index" class="card">
+        <div *ngFor="let dataset of datasetRequestForm.controls.datasets.controls; let i=index" class="card mb-1" [ngClass]="requestErrorArr[i].noChange ? 'border-warning' : 'border-success'">
           <div class="card-header request_header">
             <span>Request {{i + 1}}</span>
-            <span class="pull-right" *ngIf="datasetRequestForm.controls.datasets.controls.length > 1" (click)="removeDatasetComponent(i, $event)"><i class="fa fa-times" aria-hidden="true"></i></span>
+            <div class="pull-right">
+              <span class="text-warning font-12" *ngIf="requestErrorArr[i].noChange"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> No form was added/removed</span>
+              <span *ngIf="datasetRequestForm.controls.datasets.controls.length > 1" (click)="removeDatasetComponent(i, $event)"><i class="fa fa-times" aria-hidden="true"></i></span>
+            </div>
           </div>
-          <app-dataset-select [formGroupName]="i" (onChangeRegistered)="componentDataUpdateEvent(i,$event)"></app-dataset-select>
+          <app-dataset-select [formGroupName]="i" (onChangeRegistered)="componentDataUpdateEvent(i,$event)" (onOrgUnitSelect)="onSelectOrgUnit($event)"></app-dataset-select>
         </div>
       </div>
       <div class="mt-1">
         <button (click)="addDatasetComponent($event)" type="button" class="btn btn-outline-primary btn-sm" [disabled]="!isFormValid">Add another Request +</button>
       </div>
-      <button (click)="onSubmit(datasetRequestForm)" class="btn btn-success pull-right m-20" [disabled]="!isFormValid">Request change in dataset</button>
+      <button (click)="onSubmit(datasetRequestForm)" class="btn btn-success pull-right m-20" [disabled]="!isFormValid">Request changes in dataset(s)</button>
     </form>
 
     <div class="sendingData" *ngIf="isSendingDataToDataStore || isSendingFeedback">

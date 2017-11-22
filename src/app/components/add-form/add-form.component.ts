@@ -21,7 +21,7 @@ export class AddFormComponent implements OnInit {
   @Output() onDataStoreUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onFiltersClosed: EventEmitter<any> = new EventEmitter<any>();
   @Input()  activeComponent: string;
-  @Input()  isOrganizationUnitSelected: boolean = false;
+  public isOrganizationUnitSelected: boolean = false;
   public isSendingDataToDataStore: boolean = false;
   public isSendingFeedback: boolean = false;
   public loading: boolean = false;
@@ -29,6 +29,7 @@ export class AddFormComponent implements OnInit {
   private feedbackRecipients: any;
   private firstClick: boolean;
   public isFormValid: boolean = false;
+  public requestErrorArr: any = [];
 
   // our form model
   public datasetRequestForm: FormGroup;
@@ -50,7 +51,7 @@ export class AddFormComponent implements OnInit {
     this._sharedDataService.getFeedbackReceipients().subscribe(response => {
       this.feedbackRecipients = response;
     })
-
+    this.requestErrorArr.push({noChange: true});
     this.datasetRequestForm = this._fb.group({
       datasets: this._fb.array([
         this.initDatasetFilterForm(),
@@ -70,6 +71,7 @@ export class AddFormComponent implements OnInit {
   addDatasetComponent(event) {
     event.stopPropagation();
     const control = <FormArray>this.datasetRequestForm.controls['datasets'];
+    this.requestErrorArr.push({noChange: true});
     control.push(this.initDatasetFilterForm());
   }
 
@@ -77,6 +79,7 @@ export class AddFormComponent implements OnInit {
     event.stopPropagation();
     const control = <FormArray>this.datasetRequestForm.controls['datasets'];
     const isLastIndex = (control.controls.length - i) == 1;
+    this.requestErrorArr.splice(i, 1);
     control.removeAt(i);
     // if the form is invalid and removed item is the last onChange
     // make the form valid again
@@ -85,8 +88,13 @@ export class AddFormComponent implements OnInit {
     }
   }
 
+  onSelectOrgUnit(event){
+    this.isOrganizationUnitSelected = event;
+  }
+
 
   componentDataUpdateEvent(componentIndex, event) {
+    let noChange = true;
     const formGroup = <FormArray>this.datasetRequestForm.controls['datasets'];
 
     formGroup.controls[componentIndex].patchValue({
@@ -95,6 +103,10 @@ export class AddFormComponent implements OnInit {
       removedOrgDataSets: event.removedOrgDataSets
     });
 
+    if(event.addedOrgDataSets.length || event.removedOrgDataSets.length){
+      noChange = false;
+    }
+    this.requestErrorArr[componentIndex] = Object.assign({},{noChange: noChange});
     this.isFormValid = event.changeHappened;
   }
 
@@ -128,7 +140,7 @@ export class AddFormComponent implements OnInit {
           url: datasetUrlTosendTo,
           method: 'PUT',
           status: 'OPEN',
-          action: `Add ${dataset.name} form from ${selectedOrgUnit.name}.`,
+          action: `Add ${dataset.name} form from ${selectedOrgUnit.name}`,
           payload: _.pick(dataset, ['id', 'name', 'periodType', 'organisationUnits'])
         });
 
@@ -158,7 +170,7 @@ export class AddFormComponent implements OnInit {
           url: datasetUrlTosendTo,
           method: 'PUT',
           status: 'OPEN',
-          action: `Remove ${dataset.name} form from ${selectedOrgUnit.name}.`,
+          action: `Remove ${dataset.name} form from ${selectedOrgUnit.name}`,
           payload: _.pick(dataset, ['id', 'name', 'periodType', 'organisationUnits'])
         });
 
@@ -218,8 +230,6 @@ export class AddFormComponent implements OnInit {
 
 
   onSubmit({ value, valid }: { value: any, valid: boolean }) {
-    // call API to save customer
-    //console.log(value.datasets);
     const data = _.transform(value.datasets, (result, dataset) => {
       if (dataset.addedOrgDataSets.length || dataset.removedOrgDataSets.length) {
         const formatedDataStoreData = this.formatDataStorePayload(

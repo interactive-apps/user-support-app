@@ -10,6 +10,7 @@ import { OrganisationUnitsService } from '../../../services/organisation-units.s
 export class DatasetSelectComponent implements OnInit {
 
   @Output() onChangeRegistered: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onOrgUnitSelect: EventEmitter<boolean> = new EventEmitter<boolean>();
   public isOrganizationUnitSelected: boolean = false;
   public allowSelection: boolean = false;
   public showFilter: boolean = false;
@@ -22,7 +23,7 @@ export class DatasetSelectComponent implements OnInit {
   public loading: boolean = false;
 
   public orgunit_model: any = {
-    selection_mode: 'Usr_orgUnit',
+    selection_mode: 'orgUnit',
     selected_level: '',
     show_update_button: false,
     selected_group: '',
@@ -45,6 +46,7 @@ export class DatasetSelectComponent implements OnInit {
 
   getSelectedDataSets(orgUnitID: string) {
     this.isOrganizationUnitSelected = true;
+    this.onOrgUnitSelect.emit(this.isOrganizationUnitSelected);
     this.loading = true;
     this.showFilter = true;
     this._organisationUnitsService.getOrganisationUnit(orgUnitID).subscribe(response => {
