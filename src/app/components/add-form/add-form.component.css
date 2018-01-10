@@ -55,8 +55,12 @@
   margin: 20px !important;
 }
 
+.font-12 {
+  font-size: 12px;
+}
+
 .card-header.request_header {
-    padding: 0.25rem 1.25rem;
+    padding: 0.15rem 1rem;
 }
 
 .sendingData {
@@ -68,97 +72,86 @@
 }
 
 .bs-wizard {
-  margin-top: 5px;
+  margin: 5px 0;
   width: 100%;
 }
 
-/*Form Wizard*/
+/* Breadcrups CSS */
 
-.bs-wizard {
-  border-bottom: solid 1px #e0e0e0;
-  padding: 0;
+.arrow-steps .step {
+	font-size: 10px;
+	text-align: center;
+	color: #666;
+	cursor: default;
+	margin: 0 3px;
+	padding: 5px 10px;
+	min-width: 180px;
+  width: 47%;
+	float: left;
+	position: relative;
+	background-color: #d9e3f7;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+  transition: background-color 0.2s ease;
 }
 
-.bs-wizard>.bs-wizard-step {
-  padding: 0;
-  position: relative;
+.arrow-steps .step:after,
+.arrow-steps .step:before {
+	content: " ";
+	position: absolute;
+	top: 0;
+	right: -17px;
+	width: 0;
+	height: 0;
+	border-top: 13px solid transparent;
+	border-bottom: 12px solid transparent;
+	border-left: 17px solid #d9e3f7;
+	z-index: 2;
+  transition: border-color 0.2s ease;
 }
 
-.bs-wizard>.bs-wizard-step+.bs-wizard-step {}
-
-.bs-wizard>.bs-wizard-step .bs-wizard-stepnum {
-  color: #595959;
-  font-size: 14px;
-  margin-bottom: 5px;
+.arrow-steps .step:before {
+	right: auto;
+	left: 0;
+	border-left: 17px solid #fff;
+	z-index: 0;
 }
 
-.bs-wizard>.bs-wizard-step .bs-wizard-info {
-  color: #999;
-  font-size: 12px;
+.arrow-steps .step:first-child:before {
+	border: none;
 }
 
-.bs-wizard>.bs-wizard-step>.bs-wizard-dot {
-  position: absolute;
-  width: 21px;
-  height: 21px;
-  display: block;
-  background: #23ce6a;
-  top: 14px;
-  left: 50%;
-  margin-top: -15px;
-  margin-left: -15px;
-  border-radius: 50%;
+.arrow-steps .step:first-child {
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
 }
 
-.bs-wizard>.bs-wizard-step>.progress {
-  position: relative;
-  border-radius: 0px;
-  height: 6px;
-  box-shadow: none;
-  margin: 6px 0;
+.arrow-steps .step span {
+	position: relative;
 }
 
-.bs-wizard>.bs-wizard-step>.progress>.progress-bar {
-  width: 0px;
-  box-shadow: none;
-  background: #1abc6d;
+.arrow-steps .step.done span:before {
+	opacity: 1;
+	-webkit-transition: opacity 0.3s ease 0.5s;
+	-moz-transition: opacity 0.3s ease 0.5s;
+	-ms-transition: opacity 0.3s ease 0.5s;
+	transition: opacity 0.3s ease 0.5s;
 }
 
-.bs-wizard>.bs-wizard-step.complete>.progress>.progress-bar {
-  width: 100%;
+.arrow-steps .step.current {
+	color: #fff;
+	background-color: #23468c;
 }
 
-.bs-wizard>.bs-wizard-step.active>.progress>.progress-bar {
-  width: 50%;
+.arrow-steps .step.current:after {
+	border-left: 17px solid #23468c;
 }
 
-.bs-wizard>.bs-wizard-step:first-child.active>.progress>.progress-bar {
-  width: 0%;
+.clearfix:after {
+    clear: both;
+    content: "";
+    display: block;
+    height: 0;
 }
-
-.bs-wizard>.bs-wizard-step:last-child.active>.progress>.progress-bar {
-  width: 100%;
-}
-
-.bs-wizard>.bs-wizard-step.disabled>.bs-wizard-dot {
-  background-color: #f5f5f5;
-}
-
-.bs-wizard>.bs-wizard-step.disabled>.bs-wizard-dot:after {
-  opacity: 0;
-}
-
-.bs-wizard>.bs-wizard-step:first-child>.progress {
-  left: 50%;
-  width: 50%;
-}
-
-.bs-wizard>.bs-wizard-step:last-child>.progress {
-  width: 50%;
-}
-
-.bs-wizard>.bs-wizard-step.disabled a.bs-wizard-dot {
-  pointer-events: none;
-}
-
-/*END Step Wizard*/
