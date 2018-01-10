@@ -27,7 +27,7 @@
     "@ngrx/db": "^2.0.2",
     "@ngrx/effects": "^4.0.5",
     "@ngrx/router-store": "^4.0.4",
-    "@ngrx/store": "^4.0.3",
+    "@ngrx/store": "^4.0.4",
     "@ngrx/store-devtools": "^4.0.0",
     "angular-2-dropdown-multiselect": "^1.5.4",
     "angular-tree-component": "^4.1.0",
@@ -44,11 +44,12 @@
     "ngx-avatar": "^2.7.0",
     "ngx-pagination": "^3.0.1",
     "ngx-progressbar": "^2.0.8",
-    "rxjs": "^5.4.3",
+    "rxjs": "^5.5.6",
+    "webpack": "^3.10.0",
     "zone.js": "^0.8.17"
   },
   "devDependencies": {
-    "@angular/cli": "1.0.1",
+    "@angular/cli": "^1.5.3",
     "@angular/compiler-cli": "^4.4.3",
     "@types/jasmine": "2.5.38",
     "@types/node": "^6.0.88",
