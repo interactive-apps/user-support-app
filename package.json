@@ -1,11 +1,11 @@
 {
-  "name": "hisptz-messaginApp",
+  "name": "hisptz-usersupport-app",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve / --proxy proxy-config.json",
-    "build": "ng build",
+    "build": "ng build && cd dist && zip -r -D hisptz-usersupport-app.zip .",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -67,6 +67,6 @@
     "sw-precache": "^5.2.0",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
-    "typescript": "^2.5.2"
+    "typescript": "^2.3.4"
   }
 }
